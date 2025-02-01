@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://0p5ngvxrgafv"]
+
+[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="1_xcg2r"]
+[ext_resource type="AudioStream" uid="uid://bbvcdckykwio7" path="res://assets/sounds/type.mp3" id="2_shd32"]
+[ext_resource type="AudioStream" uid="uid://by536qsjt7t3d" path="res://assets/sounds/correct_letter.mp3" id="3_1b1el"]
+[ext_resource type="AudioStream" uid="uid://4w8fi14h2gar" path="res://assets/sounds/wrong_letter.mp3" id="4_7atbc"]
+[ext_resource type="AudioStream" uid="uid://bx7xvlfprs25m" path="res://assets/sounds/word_complete.mp3" id="5_tcpax"]
+[ext_resource type="AudioStream" uid="uid://ce47bl110i146" path="res://assets/sounds/background_music.mp3" id="6_2diof"]
+[ext_resource type="AudioStream" uid="uid://co24vwqh0cf5m" path="res://assets/sounds/next_level.mp3" id="7_enm5h"]
+[ext_resource type="AudioStream" uid="uid://bs2h4077klfj1" path="res://assets/sounds/game_over.mp3" id="8_3xphu"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_xcg2r")
+
+[node name="Type" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_shd32")
+bus = &"Shot"
+
+[node name="CorrectLetter" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_1b1el")
+bus = &"SFX"
+
+[node name="WrongLetter" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_7atbc")
+bus = &"SFX"
+
+[node name="WordComplete" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_tcpax")
+bus = &"SFX"
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_2diof")
+
+[node name="NextLevel" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_enm5h")
+bus = &"SFX"
+
+[node name="GameOver" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_3xphu")
+bus = &"SFX"
+
+[node name="AudioStreamPlayer8" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer9" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer10" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer11" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer12" type="AudioStreamPlayer" parent="."]

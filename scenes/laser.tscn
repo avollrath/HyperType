@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp22c4ffbjeio"]
+
+[ext_resource type="Script" path="res://scripts/laser.gd" id="1_ydxul"]
+
+[node name="Laser" type="Node2D"]
+script = ExtResource("1_ydxul")
+beam_color = Color(0, 0.608167, 0.89, 1)
+beam_width = 6.0
+glow_width = 12.0
+core_width = 3.0
