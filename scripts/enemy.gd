@@ -94,7 +94,8 @@ func die():
 	enemy_died.emit()
 	AudioManager.word_complete.play()
 	animated_sprite.play("death")
-	velocity = Vector2.ZERO
+	velocity.x = 0
+	set_physics_process(false)
 	await animated_sprite.animation_finished
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.2)

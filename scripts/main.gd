@@ -17,7 +17,7 @@ var next_word: String = ""
 @onready var mistakes_label: Label = $UI/MistakesLabel
 @onready var level_label: Label = $UI/LevelLabel
 
-var current_enemy_speed = 80
+var current_enemy_speed = 140
 var score = 0
 # Preload scenes
 var enemy_scene = preload("res://scenes/enemy.tscn")
@@ -91,7 +91,7 @@ func check_typed_letter(letter: String):
 func update_score(amount) -> void:
 	score += amount
 	score_label.text = "Score: %d" % score
-	var new_level = (score / 500) + 1
+	var new_level = (score / 1000) + 1
 	print(current_level, new_level)
 	if new_level > current_level:
 		current_level += 1
@@ -99,7 +99,7 @@ func update_score(amount) -> void:
 		AudioManager.next_level.play()
 	level_label.text = "Level: %d" % new_level
 	
-	var new_speed = 80 + int(score / 500) * 10
+	var new_speed = 80 + int(score / 1000) * 10
 
 	# If the new speed is higher, apply it to all enemies.
 	if new_speed > current_enemy_speed:
@@ -203,7 +203,7 @@ func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
 	enemy.word = next_word
 	enemy.speed = current_enemy_speed  # Always use the latest speed
-	enemy.position = Vector2(1300, 500)
+	enemy.position = Vector2(1700, 500)
 	enemy_container.add_child(enemy)
 	enemy.enemy_died.connect(_on_enemy_died)
 	
