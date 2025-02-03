@@ -138,5 +138,19 @@ func update_ui() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		get_tree().reload_current_scene()
+		var root = get_tree().root
+		
+		# Remove the Game Over scene
 		queue_free()
+		
+		# Remove the current Main scene if it exists
+		var main_scene = root.get_node_or_null("Main")
+		if main_scene:
+			main_scene.queue_free()
+		
+		# Load a fresh instance of the Main scene
+		var new_main_scene = load("res://scenes/main.tscn").instantiate()
+		root.add_child(new_main_scene)  # Add it to the root
+
+		# Set the new scene as the current one
+		get_tree().current_scene = new_main_scene

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://dcu65u7n4kvkh"]
+[gd_scene load_steps=19 format=4 uid="uid://dcu65u7n4kvkh"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_tooxf"]
 [ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="2_odlv3"]
@@ -126,6 +126,151 @@ adjustment_enabled = true
 adjustment_brightness = 0.93
 adjustment_contrast = 1.2
 
+[sub_resource type="Animation" id="Animation_jycpt"]
+resource_name = "start"
+length = 3.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/ScoreLabel:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/ScoreLabel:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-60.585, -0.25, 0, 0.4, 41.585, 65, -0.633333, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.23333)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/LevelLabel:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI/LevelLabel:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-93.15, -0.25, 0, 0.25, 0, 33, -0.9, -3, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.3)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UI/MistakesLabel:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("UI/MistakesLabel:position:x")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1529.06, -0.25, 0, 0.25, 0, 1224, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 1.96667)
+}
+
+[sub_resource type="Animation" id="Animation_aybab"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/ScoreLabel:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/ScoreLabel:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(68, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/LevelLabel:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI/LevelLabel:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(33, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UI/MistakesLabel:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("UI/MistakesLabel:position:x")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1224, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_utgjs"]
+_data = {
+"RESET": SubResource("Animation_aybab"),
+"start": SubResource("Animation_jycpt")
+}
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tooxf")
 
@@ -164,8 +309,8 @@ wait_time = 3.0
 [node name="ScoreLabel" type="Label" parent="UI"]
 offset_left = 68.0
 offset_top = 33.0
-offset_right = 183.0
-offset_bottom = 66.0
+offset_right = 312.0
+offset_bottom = 95.0
 theme = ExtResource("4_dsgsp")
 theme_override_font_sizes/font_size = 48
 text = "Score: 0"
@@ -174,10 +319,10 @@ text = "Score: 0"
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -198.0
+offset_left = -376.0
 offset_top = 33.0
 offset_right = -40.0
-offset_bottom = 66.0
+offset_bottom = 95.0
 grow_horizontal = 0
 theme = ExtResource("4_dsgsp")
 theme_override_font_sizes/font_size = 48
@@ -187,10 +332,10 @@ text = "Mistakes: 0"
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -80.0
+offset_left = -142.5
 offset_top = 33.0
-offset_right = 80.0
-offset_bottom = 84.0
+offset_right = 142.5
+offset_bottom = 115.0
 grow_horizontal = 2
 theme = ExtResource("4_dsgsp")
 theme_override_font_sizes/font_size = 64
@@ -207,3 +352,9 @@ anchor_mode = 0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5lfl1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_utgjs")
+}
+autoplay = "start"

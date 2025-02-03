@@ -41,6 +41,7 @@ var tank_present = false
 var tank_spawned_this_level = false
 
 func _ready():
+
 	randomize()
 	load_words()
 	mech_sound("play")
@@ -292,7 +293,6 @@ func spawn_tank_enemy():
 func spawn_regular_enemy():
 	var enemy = enemy_scene.instantiate()
 	enemy.speed = current_enemy_speed
-	print("Speed", enemy.speed)
 	enemy.word = next_word
 	enemy.position = Vector2(1700, 770)
 	enemy_container.add_child(enemy)
