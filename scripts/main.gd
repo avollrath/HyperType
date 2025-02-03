@@ -32,7 +32,7 @@ var typing_timer: float = 0.0
 @onready var level_label: Label = $UI/LevelLabel
 @onready var camera: Camera2D = $Camera2D
 
-var current_enemy_speed = 170
+var current_enemy_speed = 100
 var base_level_threshold: int = 1000
 var enemy_scene = preload("res://scenes/enemy.tscn")
 var laser_scene = preload("res://scenes/laser.tscn")
