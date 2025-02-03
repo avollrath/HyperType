@@ -7,3 +7,6 @@ extends Node
 @onready var background_music: AudioStreamPlayer = $BackgroundMusic
 @onready var next_level: AudioStreamPlayer = $NextLevel
 @onready var game_over: AudioStreamPlayer = $GameOver
+@onready var tank_sound: AudioStreamPlayer = $TankSound
+@onready var player_die: AudioStreamPlayer = $PlayerDie
+@onready var mech_step: AudioStreamPlayer = $MechStep

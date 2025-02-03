@@ -1,74 +1,50 @@
 extends Node2D
 
-@export var beam_color: Color = Color(1, 0, 0, 1)  # Default red
-@export var beam_width: float = 4.0
-@export var glow_width: float = 8.0
-@export var core_width: float = 2.0
+@export var projectile_speed: float = 5000.0  # Adjust speed as needed
+@export var frame_duration: float = 0.05  # Duration for each animation frame
 
-func shoot(start_pos: Vector2, target_pos: Vector2):
+# Reference to your sprite sheet
+var sprite: AnimatedSprite2D
+var target_pos: Vector2
+var velocity: Vector2
+
+func _ready():
+	# Create and setup the animated sprite
+	sprite = AnimatedSprite2D.new()
+	add_child(sprite)
+	
+	sprite.scale = Vector2(1, 3)
+	var frames = SpriteFrames.new()
+	frames.add_animation("default")
+	
+	# Load your sprite sheet
+	var texture = load("res://assets/sprites/explosions/projectile.png")
+	
+	# Create AtlasTexture for each frame
+	var frame_width = texture.get_width() / 2  # Divide by 2 since you have 2 frames
+	var frame_height = texture.get_height()
+	
+	for i in range(2):
+		var atlas = AtlasTexture.new()
+		atlas.atlas = texture
+		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height)
+		frames.add_frame("default", atlas)
+	
+	sprite.sprite_frames = frames
+	sprite.play("default")
+	sprite.speed_scale = 1.0 / frame_duration
+
+func shoot(start_pos: Vector2, end_pos: Vector2):
 	position = start_pos
-	var beam_vector = target_pos - start_pos
+	target_pos = end_pos
+	velocity = (target_pos - start_pos) / (5 * frame_duration)
 	
-	# Create the outer glow (wide, semi-transparent)
-	var glow_outer = Line2D.new()
-	glow_outer.add_point(Vector2.ZERO)
-	glow_outer.add_point(beam_vector)
-	glow_outer.width = glow_width
-	glow_outer.default_color = beam_color.lerp(Color.WHITE, 0.5)
-	glow_outer.default_color.a = 0.3
-	add_child(glow_outer)
+	sprite.rotation = velocity.angle() + PI/2  
 	
-	# Create the main beam
-	var main_beam = Line2D.new()
-	main_beam.add_point(Vector2.ZERO)
-	main_beam.add_point(beam_vector)
-	main_beam.width = beam_width
-	main_beam.default_color = beam_color
-	add_child(main_beam)
-	
-	# Create the inner core (bright white)
-	var core_beam = Line2D.new()
-	core_beam.add_point(Vector2.ZERO)
-	core_beam.add_point(beam_vector)
-	core_beam.width = core_width
-	core_beam.default_color = beam_color.lerp(Color.WHITE, 0.8)
-	add_child(core_beam)
-	
-	# Add a particle effect along the beam
-	var particles = GPUParticles2D.new()
-	var particle_material = ParticleProcessMaterial.new()
-	
-
-	
-	particle_material.particle_flag_disable_z = true
-	particle_material.direction = Vector3(0, 1, 0)
-	particle_material.spread = 180.0  # Emit in all directions
-	particle_material.gravity = Vector3.ZERO
-	particle_material.initial_velocity_min = 20
-	particle_material.initial_velocity_max = 40
-	particle_material.scale_min = 0.1
-	particle_material.scale_max = 0.3
-	particle_material.color = beam_color
-	
-	particles.process_material = particle_material
-	particles.amount = 500  # Increased amount to compensate for point emission
-	particles.lifetime = 0.2
-	particles.explosiveness = 0.0
-	add_child(particles)
-	
-	# Create tween for fade out effect
 	var tween = create_tween()
-	tween.set_parallel(true)
+	tween.tween_property(self, "position", target_pos, 2 * frame_duration)
 	
-	# Fade out all components
-	tween.tween_property(glow_outer, "modulate:a", 0.0, 0.2)
-	tween.tween_property(main_beam, "modulate:a", 0.0, 0.2)
-	tween.tween_property(core_beam, "modulate:a", 0.0, 0.2)
-	tween.tween_property(particles, "modulate:a", 0.0, 0.2)
-	
-	# Optional: Add a quick "flash" at the start
-	modulate = Color.WHITE
-	tween.tween_property(self, "modulate", beam_color, 0.1)
 	
 	await tween.finished
+	
 	queue_free()
