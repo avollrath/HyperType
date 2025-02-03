@@ -1,6 +1,8 @@
 extends Node2D
 
-const MAX_WRONG_LETTERS = 10
+var lives: int = 6
+var max_lives: int = 6
+
 var word_list = [] 
 var game_active = true
 var current_level = 1
@@ -16,35 +18,44 @@ var wrong_chars: int = 0
 var current_streak: int = 0
 var longest_streak: int = 0
 var correct_words: int = 0
+var is_current_word_correct: bool = true
 
 # Typing tracking
 var active_typing_time: float = 0.0
 var is_typing: bool = false
-var typing_timeout: float = 0.5
+var typing_timeout: float = 0.3
 var typing_timer: float = 0.0
+
+var wrong_chars_this_level: int = 0
+
+var displayed_score: int = 0
+var score_tween: Tween = null
 
 @onready var player = $Player
 @onready var spawn_timer = $SpawnTimer
 @onready var enemy_container = $EnemyContainer
 @onready var ui_layer = $UI
 @onready var score_label: Label = $UI/ScoreLabel
-@onready var mistakes_label: Label = $UI/MistakesLabel
 @onready var level_label: Label = $UI/LevelLabel
 @onready var camera: Camera2D = $Camera2D
+@onready var lives_container: HBoxContainer = $UI/LivesContainer
+@onready var world_environment: WorldEnvironment = $WorldEnvironment
 
-var current_enemy_speed = 100
+var current_enemy_speed: int
 var base_level_threshold: int = 1000
 var enemy_scene = preload("res://scenes/enemy.tscn")
 var laser_scene = preload("res://scenes/laser.tscn")
 var tank_enemy_scene = preload("res://scenes/tank_enemy.tscn")
+var heart_icon = preload("res://scenes/heart_icon.tscn") 
 var tank_present = false
 var tank_spawned_this_level = false
 
 func _ready():
-
 	randomize()
 	load_words()
 	mech_sound("play")
+	camera = get_node_or_null("Camera2D")
+	current_enemy_speed = GameSettings.enemy_speed
 	start_time = Time.get_unix_time_from_system()
 	if word_list.size() > 0:
 		next_word = word_list[randi() % word_list.size()]
@@ -52,17 +63,45 @@ func _ready():
 	player.shoot_laser.connect(_on_player_shoot)
 	player.player_hit.connect(_on_player_hit)
 	spawn_timer.start()
-	AudioManager.background_music.play()
+	setup_lives_display()
+	
+func setup_lives_display():
+	# Clear any existing hearts
+	for child in lives_container.get_children():
+		child.queue_free()
+	
+	# Add heart icons for each life
+	for i in range(max_lives):
+		var heart = heart_icon.instantiate()
+		lives_container.add_child(heart)
+	
+	update_lives_display()
+
+func update_lives_display():
+	var heart_icons = lives_container.get_children()
+	for i in range(heart_icons.size()):
+		heart_icons[i].modulate = Color.WHITE if i < lives else Color(0.2, 0.2, 0.2)
+
+func reset_lives():
+	lives = max_lives
+	wrong_chars_this_level = 0
+	update_lives_display()
 	
 	
 func mech_sound(action) -> void:
+	if not is_instance_valid(AudioManager):
+		return
 	if action == "play":
-		AudioManager.mech_step.pitch_scale = randf_range(1.1, 1.3)
-		AudioManager.mech_step.play()
-		await get_tree().create_timer(0.9).timeout
-		AudioManager.mech_step.pitch_scale = randf_range(1.1, 1.3)
-		AudioManager.mech_step.play()
-	else: AudioManager.mech_step.stop()
+		if AudioManager.mech_step:
+			AudioManager.mech_step.pitch_scale = randf_range(1.1, 1.3)
+			AudioManager.mech_step.play()
+			await get_tree().create_timer(0.9).timeout
+			if is_instance_valid(AudioManager) and AudioManager.mech_step:
+				AudioManager.mech_step.pitch_scale = randf_range(1.1, 1.3)
+				AudioManager.mech_step.play()
+	else: 
+		if AudioManager.mech_step:
+			AudioManager.mech_step.stop()
 
 func _process(delta: float) -> void:
 	if is_typing:
@@ -75,7 +114,6 @@ func _process(delta: float) -> void:
 func shake_camera(intensity: float = 10.0, duration: float = 0.4) -> void:
 	var original_position = camera.position
 	var tween = create_tween()
-	
 	for i in range(int(duration / 0.05)):
 		# Create random offset
 		var offset = Vector2(
@@ -83,48 +121,72 @@ func shake_camera(intensity: float = 10.0, duration: float = 0.4) -> void:
 			randf_range(-intensity, intensity)
 		)
 		
-		# Tween to offset
 		tween.tween_property(camera, "position", original_position + offset, 0.05)
 	
-	# Final tween back to original position
 	tween.tween_property(camera, "position", original_position, 0.05)
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if not game_active:
 		return
 		
 	if event is InputEventKey and event.pressed:
-		total_chars_typed += 1
-		is_typing = true
-		typing_timer = 0.0
-		AudioManager.type.pitch_scale = randf_range(0.85, 1.1)
-		AudioManager.type.play()
-		check_typed_letter(char(event.keycode).to_lower())
-
+		# Only handle letter keys (A-Z)
+		var keycode = event.keycode
+		if keycode >= KEY_A and keycode <= KEY_Z:
+			total_chars_typed += 1
+			if not is_typing:
+				is_typing = true
+				typing_timer = 0.0
+			
+			if is_instance_valid(AudioManager) and AudioManager.type:
+				AudioManager.type.pitch_scale = randf_range(0.85, 1.1)
+				AudioManager.type.play()
+				
+			check_typed_letter(char(keycode).to_lower())
+		
 func check_typed_letter(letter: String):
 	var enemies = enemy_container.get_children()
+	if enemies.is_empty():
+		return
+
+	var valid_enemy = null
 	for enemy in enemies:
-		if not enemy.current_letters.is_empty() and enemy.current_letters[0] == letter:
-			var first_letter_scene = enemy.letter_scenes[0]
-			if is_instance_valid(first_letter_scene):
-				update_score(10)
-				AudioManager.correct_letter.pitch_scale = randf_range(0.9, 1.1)
-				AudioManager.correct_letter.play()
-				correct_chars += 1
-				current_streak += 1
-				longest_streak = max(current_streak, longest_streak)
-				player.shoot(first_letter_scene.global_position)
-				enemy.destroy_letter(letter)
-				return
-				
+		if not enemy.is_dying:
+			valid_enemy = enemy
+			break
+
+	# If no enemy is available (they are all dying), you can choose to simply ignore the input.
+	if valid_enemy == null:
+		return
+
+	if not valid_enemy.current_letters.is_empty() and valid_enemy.current_letters[0] == letter:
+		var first_letter_scene = valid_enemy.letter_scenes[0]
+		if is_instance_valid(first_letter_scene):
+			update_score(10)
+			AudioManager.correct_letter.pitch_scale = randf_range(0.9, 1.1)
+			AudioManager.correct_letter.play()
+			correct_chars += 1
+			player.shoot(first_letter_scene.global_position)
+			valid_enemy.destroy_letter(letter)
+			if valid_enemy.current_letters.is_empty():
+				if is_current_word_correct:  # Only count if no mistakes were made
+					current_streak += 1
+					longest_streak = max(longest_streak, current_streak)
+				is_current_word_correct = true  # Reset for next word
+			return
+			
+	valid_enemy.flash_letter()
 	AudioManager.wrong_letter.play()
 	wrong_chars += 1
 	player.take_damage()
+	is_current_word_correct = false
 	current_streak = 0
-	update_mistakes_ui()
-	
-	if wrong_chars >= MAX_WRONG_LETTERS && game_active:
+	lives -= 1
+	update_lives_display()
+
+	if lives <= 0 and game_active:
 		game_over()
+
 
 func load_words():
 	var file: FileAccess = FileAccess.open("res://assets/en.json", FileAccess.READ)
@@ -149,27 +211,99 @@ func load_words():
 		push_error("Could not open en.json!")
 
 func update_score(amount: int) -> void:
+	var previous_score = score
 	score += amount
-	score_label.text = "Score: %d" % score
+	if score_tween and score_tween.is_valid():
+		score_tween.kill()
+
+	# Create a new tween
+	score_tween = create_tween()
+
+	# Animate the displayed score from previous value to the new score
+	score_tween.tween_method(
+		func(value): 
+			displayed_score = value
+			score_label.text = "Score: %d" % displayed_score, previous_score, score, 0.5  # 0.5s duration
+	)
+	show_floating_score(amount)
 	
-	# Instead of computing new_level from score directly,
-	# we check if score meets the threshold for the next level.
 	if score >= get_required_score_for_level(current_level + 1) and tank_spawned_this_level and not tank_present:
 		current_level += 1
-		# Reset the tank flag so that a new tank can be spawned in the new level.
 		tank_spawned_this_level = false
 		animate_level_label()
 		AudioManager.next_level.play()
 		level_label.text = "Level: %d" % current_level
-		
+		reset_lives()
 		var new_speed = 80 + (current_level - 1) * 10
 		if new_speed > current_enemy_speed:
 			current_enemy_speed = new_speed
 			update_enemy_speeds()
 			
+var floating_scores := [] 
+var score_font: Font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
+func show_floating_score(amount: int) -> void:
+	var floating_label = Label.new()
+	floating_label.text = "+%d" % amount
+	floating_label.add_theme_color_override("font_color", Color.MAGENTA)  
+	floating_label.add_theme_font_size_override("font_size", 20)
+	floating_label.add_theme_font_override("font", score_font)
+
+	var score_position = score_label.global_position
+	var base_y = score_position.y + 40  # First floating score appears **just under** the score label
+
+	# Calculate where the new score should appear
+	var offset_y = floating_scores.size() * 20
+	floating_label.position = Vector2(score_position.x + score_label.size.x  / 2 + 30, base_y + offset_y)  # Stack correctly
+
+	ui_layer.add_child(floating_label)
+	floating_scores.append(floating_label)
+
+	if floating_scores.size() == 1:
+		remove_oldest_score()
+
+
+func schedule_score_removal():
+	await get_tree().create_timer(0.05).timeout  # Wait for 0.5s before starting removal
+	if floating_scores.is_empty():
+		return
+	remove_oldest_score()
+	
+func remove_oldest_score():
+	if floating_scores.is_empty():
+		return
+	await get_tree().create_timer(0.08).timeout  # Wait 0.5s before removing the first one
+
+	if floating_scores.is_empty():
+		return
+	var oldest_label = floating_scores.pop_front()  
+	var remove_tween = create_tween()
+	remove_tween.tween_property(oldest_label, "modulate:a", 0.0, 0.1)  # Fade out
+	remove_tween.tween_property(oldest_label, "position:y", score_label.global_position.y, 0.1)  # Move into the score label
+	await remove_tween.finished
+
+	if is_instance_valid(oldest_label):
+		oldest_label.queue_free()
+
+	move_scores_up()
+
+	if not floating_scores.is_empty():
+		remove_oldest_score()
+
+func move_scores_up():
+	if floating_scores.is_empty():
+		return
+	var tween = create_tween()
+	tween.set_parallel(true)
+	var score_position = score_label.global_position
+	var base_y = score_position.y + 30  
+	for i in range(floating_scores.size()):
+		var target_label = floating_scores[i]
+		var new_y = base_y + (i * 20) - 20
+		tween.tween_property(target_label, "position:y", new_y, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+			
 func get_required_score_for_level(level: int) -> int:
 	# Using an exponent of 1.5 gives a slower increase.
-	# This is equivalent to: base_level_threshold * level * sqrt(level)
 	return int(base_level_threshold * pow(level, 1.2))
 
 func animate_level_label():
@@ -294,7 +428,7 @@ func spawn_regular_enemy():
 	var enemy = enemy_scene.instantiate()
 	enemy.speed = current_enemy_speed
 	enemy.word = next_word
-	enemy.position = Vector2(1700, 770)
+	enemy.position = Vector2(1800, 770)
 	enemy_container.add_child(enemy)
 	enemy.enemy_died.connect(_on_enemy_died)
 	
@@ -314,6 +448,11 @@ func _on_tank_died():
 	AudioManager.tank_sound.stop()
 	tank_present = false
 	update_score(150)
+	if is_current_word_correct:
+		current_streak += 3
+		longest_streak = max(longest_streak, current_streak)
+	
+	is_current_word_correct = true
 	correct_words += 3
 	spawn_timer.start()
 
@@ -331,16 +470,22 @@ func _on_player_hit():
 	game_over()
 
 func game_over():
-	AudioManager.player_die.play()
 	player.die()
+	shake_camera(25.0, 0.6)
+	if world_environment.environment:
+		var tween = get_tree().create_tween()
+		tween.tween_property(world_environment.environment, "adjustment_saturation", 0, 0.2)
+		tween.tween_property(world_environment.environment, "adjustment_saturation", 1, 0.4)
+	AudioManager.player_die.play()
 	AudioManager.tank_sound.stop()
 	AudioManager.game_over.play()
 	game_active = false
 	spawn_timer.stop()
+	
+	for enemy in enemy_container.get_children():
+		enemy.queue_free()
+	mech_sound("stop")
 	show_game_over_screen()
-
-func update_mistakes_ui():
-	mistakes_label.text = "Mistakes: %d" % wrong_chars
 
 func show_game_over_screen():
 	if not show_game_over:

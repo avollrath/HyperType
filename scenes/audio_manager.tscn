@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://0p5ngvxrgafv"]
+[gd_scene load_steps=15 format=3 uid="uid://0p5ngvxrgafv"]
 
 [ext_resource type="Script" path="res://scripts/audio_manager.gd" id="1_xcg2r"]
 [ext_resource type="AudioStream" uid="uid://bcv40xlq1eivu" path="res://assets/sounds/type(shot).mp3" id="2_oudpu"]
@@ -11,6 +11,9 @@
 [ext_resource type="AudioStream" uid="uid://e2ew8cbkfok8" path="res://assets/sounds/tank.mp3" id="9_jxaas"]
 [ext_resource type="AudioStream" uid="uid://oumsfopnt7k5" path="res://assets/sounds/mech-step.mp3" id="9_xuyqm"]
 [ext_resource type="AudioStream" uid="uid://b52g5fxngjj1e" path="res://assets/sounds/player_die.mp3" id="10_1ukdp"]
+[ext_resource type="AudioStream" uid="uid://7utnessr4lpb" path="res://assets/sounds/click-boom.mp3" id="12_c5adj"]
+[ext_resource type="AudioStream" uid="uid://cc0n4u7gaus1x" path="res://assets/sounds/ui-hit.mp3" id="13_exl4h"]
+[ext_resource type="AudioStream" uid="uid://ch2cw7tcnmyd2" path="res://assets/sounds/ui-hover.mp3" id="14_374eb"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_xcg2r")
@@ -59,6 +62,15 @@ volume_db = -21.6
 max_polyphony = 3
 bus = &"SFX"
 
-[node name="AudioStreamPlayer11" type="AudioStreamPlayer" parent="."]
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_c5adj")
+max_polyphony = 5
+bus = &"SFX"
 
-[node name="AudioStreamPlayer12" type="AudioStreamPlayer" parent="."]
+[node name="UI_hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_exl4h")
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="UI_hover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_374eb")

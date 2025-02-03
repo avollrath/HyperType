@@ -32,14 +32,14 @@ border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(1.622, 0, 0.54, 1)
+border_color = Color(3, 0, 1, 1)
 shadow_color = Color(0, 0, 0, 0.259)
 shadow_size = 3
 shadow_offset = Vector2(3, 3)
 anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4elij"]
-bg_color = Color(0, 0, 0, 0.631373)
+bg_color = Color(0, 0, 0, 0.52549)
 
 [resource]
 default_font = ExtResource("2_ssir0")

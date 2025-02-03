@@ -9,6 +9,7 @@ signal letter_destroyed(letter: String)
 @export var enemy_line_offset: Vector2 = Vector2(0, -60)
 @export var letter_line_offset: Vector2 = Vector2(0, 30)
 @export var line_start_extra_offset: float = 100
+var is_dying: bool = false
 
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var letter_container = $LetterContainer
@@ -86,11 +87,19 @@ func destroy_letter(letter: String):
 				die()
 
 func die():
+	is_dying = true
 	enemy_died.emit()
 	AudioManager.word_complete.play()
 	animated_sprite.play("death")
-	await animated_sprite.animation_finished
 	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.2)
+	tween.set_parallel()
+	tween.tween_property(animated_sprite, "modulate", Color(1.2, 1.2, 1.2), 0.2)
+	await animated_sprite.animation_finished
+	tween = create_tween()
+	tween.tween_property(animated_sprite, "modulate:a", 0.0, 0.2)
 	await tween.finished
 	queue_free()
+	
+func flash_letter():
+	if letter_scenes.size() > 0:
+		letter_scenes[0].flash()

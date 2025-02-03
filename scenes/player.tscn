@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b6430n4a65u6q"]
+[gd_scene load_steps=33 format=3 uid="uid://b6430n4a65u6q"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_4e6sd"]
 [ext_resource type="Texture2D" uid="uid://dp8mc3amuuowd" path="res://assets/sprites/spacemarine.png" id="2_hk1bs"]
@@ -48,6 +48,10 @@ region = Rect2(384, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_xghho"]
 atlas = ExtResource("3_l5q4x")
 region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ieo6u"]
+atlas = ExtResource("2_hk1bs")
+region = Rect2(561, 504, 187, 168)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lvtqq"]
 atlas = ExtResource("2_hk1bs")
@@ -120,10 +124,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xghho")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ieo6u")
 }],
 "loop": false,
 "name": &"die",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -210,10 +217,8 @@ script = ExtResource("1_4e6sd")
 position = Vector2(5.00001, -80.2572)
 scale = Vector2(3.36429, 3.36428)
 sprite_frames = SubResource("SpriteFrames_o3lxq")
-animation = &"die"
+animation = &"idle"
 autoplay = "idle"
-frame = 2
-frame_progress = 0.739009
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -39)

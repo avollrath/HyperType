@@ -8,6 +8,7 @@ extends Control
 @onready var longest_streak_label: Label = $VBoxContainer/LongestStreakLabel
 @onready var wpm_label: Label = $VBoxContainer/WPMLabel
 @onready var level_label: Label = $VBoxContainer/LevelLabel
+var can_restart: bool = false
 
 var stats: Dictionary
 
@@ -63,7 +64,7 @@ var display_longest_streak: int:
 		return _display_longest_streak
 	set(value):
 		_display_longest_streak = value
-		longest_streak_label.text = "%d" % _display_longest_streak
+		longest_streak_label.text = "%d words" % _display_longest_streak
 
 var _display_wpm: float = 0.0
 var display_wpm: float:
@@ -99,58 +100,68 @@ func update_ui() -> void:
 	display_accuracy = 0.0
 	display_longest_streak = 0
 	display_wpm = 0.0
+	
+	await get_tree().create_timer(1.4).timeout
 
-	# Animate each value sequentially.
-	# High Score
+	await animate_stat(high_score_label, "display_score", stats.score, 0.4)
+	await animate_stat(level_label, "display_level", stats.level, 0.2)
+	await animate_stat(time_played_label, "display_time", stats.time_played, 0.2)
+	await animate_stat(correct_words_label, "display_correct_words", stats.correct_words, 0.2)
+	await animate_stat(accuracy_label, "display_accuracy", stats.accuracy, 0.2)
+	await animate_stat(longest_streak_label, "display_longest_streak", stats.longest_streak, 0.2)
+	await animate_stat(wpm_label, "display_wpm", stats.wpm, 0.2)
+
+	can_restart = true
+	
+func animate_stat(label: Control, property_name: String, target_value: float, duration: float) -> void:
 	var tween = create_tween()
-	tween.tween_property(self, "display_score", stats.score, 2.0).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(self, property_name, target_value, duration).set_trans(Tween.TRANS_LINEAR)
 	await tween.finished
+	await shake_label(label)
+	
+func shake_label(label: Control) -> void:
+	AudioManager.click.pitch_scale = randf_range(0.95, 1.05)
+	AudioManager.click.play()
+	var original_position = label.position
+	var original_color = label.modulate
+	var tween = create_tween()
+	tween.tween_property(label, "position:x", original_position.x + 15, 0.05).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(label, "modulate", Color.MAGENTA, 0.05).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(label, "position:x", original_position.x, 0.05).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(label, "modulate", original_color, 0.05).set_trans(Tween.TRANS_LINEAR)
 
-	# Level
-	tween = create_tween()
-	tween.tween_property(self, "display_level", stats.level, 1.0).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
+	await tween.finished  
 
-	# Time Played
-	tween = create_tween()
-	tween.tween_property(self, "display_time", stats.time_played, 0.5).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
 
-	# Correct Words
-	tween = create_tween()
-	tween.tween_property(self, "display_correct_words", stats.correct_words, 0.5).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
-
-	# Accuracy (the animated value here is just the percent)
-	tween = create_tween()
-	tween.tween_property(self, "display_accuracy", stats.accuracy, 0.5).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
-
-	# Longest Streak
-	tween = create_tween()
-	tween.tween_property(self, "display_longest_streak", stats.longest_streak, 0.5).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
-
-	# WPM
-	tween = create_tween()
-	tween.tween_property(self, "display_wpm", stats.wpm, 0.5).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
 
 func _input(event: InputEvent) -> void:
+	if not can_restart:  # Ignore input if animations aren't done
+		return
+		
+	# Only handle space or enter key for restart
 	if event is InputEventKey and event.pressed:
-		var root = get_tree().root
-		
-		# Remove the Game Over scene
-		queue_free()
-		
-		# Remove the current Main scene if it exists
-		var main_scene = root.get_node_or_null("Main")
-		if main_scene:
-			main_scene.queue_free()
-		
-		# Load a fresh instance of the Main scene
-		var new_main_scene = load("res://scenes/main.tscn").instantiate()
-		root.add_child(new_main_scene)  # Add it to the root
+		if event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
+			restart_game()
 
-		# Set the new scene as the current one
-		get_tree().current_scene = new_main_scene
+func restart_game() -> void:
+	can_restart = false
+	var root = get_tree().root
+	
+	var current_main = root.get_node_or_null("Main")
+	if current_main:
+		current_main.free()
+	
+	for child in root.get_children():
+		if child.name.begins_with("@") or child == self or child.name == "AudioManager" or child.name == "GameSettings":
+			continue  # Skip internal nodes, self, and our singletons
+		child.free()
+	
+	# Wait one frame to ensure cleanup is complete
+	await get_tree().process_frame
+	
+	# Load and instance the new main scene
+	var new_main_scene = load("res://scenes/main.tscn").instantiate()
+	root.add_child(new_main_scene)
+	get_tree().current_scene = new_main_scene
+	AudioManager.ui_hit.play()
+	queue_free()

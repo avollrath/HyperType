@@ -11,6 +11,7 @@ var is_active = true
 var background: Panel
 var label: Label
 var initialized = false
+var flash_tween: Tween = null
 
 func _ready():
 	background = $Background
@@ -65,3 +66,45 @@ func hit():
 		tween.tween_property(self, "modulate", target_color, 0.02)
 		await tween.finished
 		queue_free()
+		
+
+func flash():
+	if not is_active:
+		return
+
+	# Stop and reset any previous tween
+	if flash_tween and flash_tween.is_valid():
+		flash_tween.kill()
+		flash_tween = null  # Ensure it's cleared
+
+	# Explicitly reset the properties before applying new tween
+	modulate = Color.WHITE
+	scale = Vector2(1, 1)
+	rotation = 0
+
+	var original_color = modulate
+	var original_scale = scale
+
+	# Create a new tween and store it
+	flash_tween = create_tween()
+	flash_tween.set_parallel()
+
+	# Flash color effect
+	flash_tween.tween_property(self, "modulate", Color.MAGENTA, 0.1)
+	flash_tween.tween_property(self, "modulate", original_color, 0.2).set_delay(0.1)
+
+	# Scale: enlarge then return to original size
+	flash_tween.tween_property(self, "scale", original_scale * 1.4, 0.1)
+	flash_tween.tween_property(self, "scale", original_scale, 0.1).set_delay(0.1)
+
+	# Shake effect using slight rotation
+	flash_tween.tween_property(self, "rotation", deg_to_rad(10), 0.05)
+	flash_tween.tween_property(self, "rotation", deg_to_rad(-10), 0.05).set_delay(0.05)
+	flash_tween.tween_property(self, "rotation", 0, 0.05).set_delay(0.1)
+
+	# Wait until the tween is finished, then ensure reset
+	await flash_tween.finished
+	flash_tween = null  # Reset the tween reference
+	modulate = original_color
+	scale = original_scale
+	rotation = 0

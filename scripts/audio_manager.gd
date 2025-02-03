@@ -10,3 +10,6 @@ extends Node
 @onready var tank_sound: AudioStreamPlayer = $TankSound
 @onready var player_die: AudioStreamPlayer = $PlayerDie
 @onready var mech_step: AudioStreamPlayer = $MechStep
+@onready var click: AudioStreamPlayer = $Click
+@onready var ui_hit: AudioStreamPlayer = $UI_hit
+@onready var ui_hover: AudioStreamPlayer = $UI_hover

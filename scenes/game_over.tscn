@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_0t601"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nk6dx"]
-bg_color = Color(0, 0, 0, 0.729)
+bg_color = Color(0, 0, 0, 0.505882)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -294,7 +294,7 @@ tracks/0/path = NodePath("VBoxContainer/HighScoreLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.7, 1.86667),
+"times": PackedFloat32Array(0, 1.4, 1.56667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -306,7 +306,7 @@ tracks/1/path = NodePath("VBoxContainer/LevelLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.13333, 2.3),
+"times": PackedFloat32Array(0, 1.56666, 1.73333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -318,7 +318,7 @@ tracks/2/path = NodePath("VBoxContainer/TimePlayedLabel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 2.56667, 2.73333),
+"times": PackedFloat32Array(0, 1.73334, 1.9),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -354,7 +354,7 @@ tracks/5/path = NodePath("VBoxContainer/CorrectWordsLabel:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 3.06667, 3.23333),
+"times": PackedFloat32Array(0, 1.93334, 2.1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -366,7 +366,7 @@ tracks/6/path = NodePath("VBoxContainer/AccuracyLabel:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 3.26667, 3.43333),
+"times": PackedFloat32Array(0, 2.10001, 2.26667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -378,7 +378,7 @@ tracks/7/path = NodePath("VBoxContainer/LongestStreakLabel:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 3.5, 3.66667),
+"times": PackedFloat32Array(0, 2.3, 2.46667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -390,7 +390,7 @@ tracks/8/path = NodePath("VBoxContainer/WPMLabel:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 3.73333, 3.9),
+"times": PackedFloat32Array(0, 2.46666, 2.63333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -486,7 +486,7 @@ tracks/16/path = NodePath("RestartButton:modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0, 3.06667, 3.43333),
+"times": PackedFloat32Array(0, 3.56667, 4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -545,7 +545,7 @@ tracks/21/loop_wrap = true
 tracks/21/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(914.12, -0.25, 0, 0.25, 0, 720, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(2.66667, 3.3)
+"times": PackedFloat32Array(3.33333, 4)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ccyct"]
@@ -710,7 +710,7 @@ modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 32
-text = "Correct"
+text = "Correct words"
 vertical_alignment = 1
 
 [node name="Accuracy" type="Label" parent="KeyLabels"]
@@ -753,7 +753,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 36
-text = "Press ANY KEY to restart"
+text = "Press ENTER to restart"
 
 [node name="GameOverLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -776,3 +776,6 @@ libraries = {
 "": SubResource("AnimationLibrary_ccyct")
 }
 autoplay = "game_over_appear"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+playback_type = 1

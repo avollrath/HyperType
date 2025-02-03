@@ -43,10 +43,10 @@ func shoot(target_pos: Vector2):
 func _on_hurt_box_area_entered(area: Area2D):
 	print(area)
 	if area.is_in_group("enemy_hitbox"):
-		die()
+		player_hit.emit()
 
 func die():
+	hurt_box.queue_free()
 	animated_sprite.play("die")
 	await animated_sprite.animation_finished
-	player_hit.emit()
 	queue_free()
