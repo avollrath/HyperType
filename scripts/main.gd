@@ -263,7 +263,7 @@ func show_floating_score(amount: int) -> void:
 
 
 func schedule_score_removal():
-	await get_tree().create_timer(0.05).timeout  # Wait for 0.5s before starting removal
+	await get_tree().create_timer(0.03).timeout  # Wait for 0.5s before starting removal
 	if floating_scores.is_empty():
 		return
 	remove_oldest_score()
@@ -271,7 +271,7 @@ func schedule_score_removal():
 func remove_oldest_score():
 	if floating_scores.is_empty():
 		return
-	await get_tree().create_timer(0.08).timeout  # Wait 0.5s before removing the first one
+	await get_tree().create_timer(0.03).timeout  # Wait 0.5s before removing the first one
 
 	if floating_scores.is_empty():
 		return
