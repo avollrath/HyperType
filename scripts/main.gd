@@ -9,6 +9,8 @@ var current_level = 1
 var next_word: String = ""
 var show_game_over = false
 
+var required_enemies_for_boss: int = 20
+
 # Statistics variables
 var score = 0
 var start_time: int
@@ -18,6 +20,7 @@ var wrong_chars: int = 0
 var current_streak: int = 0
 var longest_streak: int = 0
 var correct_words: int = 0
+var correct_words_this_level: int = 0
 var is_current_word_correct: bool = true
 
 # Typing tracking
@@ -55,9 +58,16 @@ var tank_present = false
 var tank_spawned_this_level = false
 
 func _ready():
+	distortion_shader.visible = true
+	var tween = create_tween()
+	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.1)
+	await tween.finished
+	tank_present = false
+	distortion_shader.visible = false
 	randomize()
 	load_words()
 	mech_sound("play")
+	required_enemies_for_boss = 20
 	camera = get_node_or_null("Camera2D")
 	current_enemy_speed = GameSettings.enemy_speed
 	start_time = Time.get_unix_time_from_system()
@@ -216,10 +226,34 @@ func load_words():
 			push_error("JSON file doesn't have a 'words' key!")
 	else:
 		push_error("Could not open en.json!")
+		
+func calculate_difficulty_multiplier() -> float:
+	match GameSettings.enemy_speed:
+		30:  return 0.5  # Beginner
+		80:  return 1.0  # Casual
+		180: return 1.5  # Challenging
+		230: return 2.0  # Expert
+		400: return 3.0  # Insane
+		_:   return 1.0  # Default case
+
+func calculate_streak_multiplier() -> float:
+	if current_streak <= 2:
+		return 1.0
+	elif current_streak <= 5:
+		return 1.5
+	elif current_streak <= 10:
+		return 2.0
+	elif current_streak <= 20:
+		return 3.0
+	else:
+		return 4.0 
 
 func update_score(amount: int) -> void:
-	var previous_score = score
-	score += amount
+	var difficulty_multiplier = calculate_difficulty_multiplier()
+	var streak_multiplier = calculate_streak_multiplier()
+	var final_amount = int(amount * difficulty_multiplier * streak_multiplier)
+	var previous_score =  final_amount
+	score += final_amount
 	if score_tween and score_tween.is_valid():
 		score_tween.kill()
 
@@ -232,19 +266,7 @@ func update_score(amount: int) -> void:
 			displayed_score = value
 			score_label.text = "Score: %d" % displayed_score, previous_score, score, 0.5  # 0.5s duration
 	)
-	show_floating_score(amount)
-	
-	if score >= get_required_score_for_level(current_level + 1) and tank_spawned_this_level and not tank_present:
-		current_level += 1
-		tank_spawned_this_level = false
-		animate_level_label()
-		AudioManager.next_level.play()
-		level_label.text = "Level: %d" % current_level
-		reset_lives()
-		var new_speed = 80 + (current_level - 1) * 10
-		if new_speed > current_enemy_speed:
-			current_enemy_speed = new_speed
-			update_enemy_speeds()
+	show_floating_score(final_amount)
 			
 var floating_scores := [] 
 var score_font: Font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
@@ -307,11 +329,6 @@ func move_scores_up():
 		var target_label = floating_scores[i]
 		var new_y = base_y + (i * 20) - 20
 		tween.tween_property(target_label, "position:y", new_y, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-
-			
-func get_required_score_for_level(level: int) -> int:
-	# Using an exponent of 1.5 gives a slower increase.
-	return int(base_level_threshold * pow(level, 1.2))
 
 func animate_level_label():
 	level_label.pivot_offset = level_label.size / 2
@@ -396,9 +413,9 @@ func _on_spawn_timer_timeout():
 func spawn_enemy():
 	if tank_present:
 		return
-	var points_to_next_level = get_required_score_for_level(current_level + 1) - score
-	if (points_to_next_level <= 150) and (not tank_spawned_this_level):
-		var random_value = randf()  
+		
+	if correct_words_this_level >= required_enemies_for_boss and not tank_spawned_this_level:
+		var random_value = randf()
 		if random_value < 0.7:
 			spawn_tank_enemy()
 		else:
@@ -492,6 +509,22 @@ func _on_tank_died():
 	
 	is_current_word_correct = true
 	correct_words += 3
+	
+	correct_words_this_level = 0
+	current_level += 1
+	tank_spawned_this_level = false
+	required_enemies_for_boss = 20 + (current_level - 1) * 5  # Increase requirement for next boss
+	animate_level_label()
+	AudioManager.next_level.play()
+	level_label.text = "Level: %d" % current_level
+	reset_lives()
+	
+	# Update enemy speed
+	var new_speed = 80 + (current_level - 1) * 10
+	if new_speed > current_enemy_speed:
+		current_enemy_speed = new_speed
+		update_enemy_speeds()
+	
 	spawn_timer.start()
 
 func _on_enemy_died():
@@ -499,6 +532,7 @@ func _on_enemy_died():
 	shake_camera(2.0, 0.2)
 	update_score(50)
 	correct_words += 1
+	correct_words_this_level += 1
 	
 var streak_labels = []
 var custom_font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
