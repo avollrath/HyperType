@@ -9,7 +9,7 @@ var current_level = 1
 var next_word: String = ""
 var show_game_over = false
 
-var required_enemies_for_boss: int = 20
+var required_enemies_for_boss: int = 15
 
 # Statistics variables
 var score = 0
@@ -67,7 +67,7 @@ func _ready():
 	randomize()
 	load_words()
 	mech_sound("play")
-	required_enemies_for_boss = 20
+	required_enemies_for_boss = 15
 	camera = get_node_or_null("Camera2D")
 	current_enemy_speed = GameSettings.enemy_speed
 	start_time = Time.get_unix_time_from_system()
@@ -513,14 +513,14 @@ func _on_tank_died():
 	correct_words_this_level = 0
 	current_level += 1
 	tank_spawned_this_level = false
-	required_enemies_for_boss = 20 + (current_level - 1) * 5  # Increase requirement for next boss
+	required_enemies_for_boss = 15 + (current_level - 1) * 3  # Increase requirement for next boss
 	animate_level_label()
 	AudioManager.next_level.play()
 	level_label.text = "Level: %d" % current_level
 	reset_lives()
 	
 	# Update enemy speed
-	var new_speed = 80 + (current_level - 1) * 10
+	var new_speed = 80 + (current_level - 1) * 7
 	if new_speed > current_enemy_speed:
 		current_enemy_speed = new_speed
 		update_enemy_speeds()
@@ -592,7 +592,7 @@ func show_streak_label():
 	AudioManager.streak.pitch_scale = base_pitch + pitch_increase
 	AudioManager.streak.play()
 	
-	ui_layer.add_child(streak_label)
+	get_parent().add_child(streak_label)
 	streak_label.position.x -= streak_label.size.x / 2
 	var tween = create_tween()
 	tween.tween_property(streak_label, "modulate:a", 0.0, 0.3).set_delay(0.5)

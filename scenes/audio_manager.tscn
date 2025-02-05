@@ -95,7 +95,7 @@ bus = &"SFX"
 
 [node name="HeartBeat" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("18_rcv7a")
-volume_db = 10.0
+volume_db = 1.0
 
 [node name="SpaceShip" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("19_jvn5t")
