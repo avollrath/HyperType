@@ -1,13 +1,16 @@
 # GameOverScreen.gd
 extends Control
 
-@onready var high_score_label: Label = $VBoxContainer/HighScoreLabel
-@onready var time_played_label: Label = $VBoxContainer/TimePlayedLabel
-@onready var correct_words_label: Label = $VBoxContainer/CorrectWordsLabel
-@onready var accuracy_label: Label = $VBoxContainer/AccuracyLabel
-@onready var longest_streak_label: Label = $VBoxContainer/LongestStreakLabel
-@onready var wpm_label: Label = $VBoxContainer/WPMLabel
-@onready var level_label: Label = $VBoxContainer/LevelLabel
+@onready var high_score_label: Label = $Panel2/VBoxContainer/HighScoreLabel
+@onready var time_played_label: Label = $Panel2/VBoxContainer/TimePlayedLabel
+@onready var correct_words_label: Label = $Panel2/VBoxContainer/CorrectWordsLabel
+@onready var accuracy_label: Label =$Panel2/VBoxContainer/AccuracyLabel
+@onready var longest_streak_label: Label = $Panel2/VBoxContainer/LongestStreakLabel
+@onready var wpm_label: Label = $Panel2/VBoxContainer/WPMLabel
+@onready var level_label: Label = $Panel2/VBoxContainer/LevelLabel
+@onready var difficulty_select: OptionButton = $DifficultySelect
+@onready var panel: Panel = $Panel2
+
 var can_restart: bool = false
 
 var stats: Dictionary
@@ -81,6 +84,10 @@ func _ready():
 		print("HighScoreLabel not found!")
 	if not level_label:
 		print("LevelLabel not found!")
+	for i in range(difficulty_select.item_count):
+		if difficulty_select.get_item_id(i) == GameSettings.enemy_speed:
+			difficulty_select.selected = i
+			break  # Stop the loop once the correct item is found
 
 func initialize_stats(game_stats: Dictionary) -> void:
 	stats = game_stats
@@ -104,6 +111,7 @@ func update_ui() -> void:
 	await get_tree().create_timer(1.4).timeout
 
 	await animate_stat(high_score_label, "display_score", stats.score, 0.4)
+	can_restart = true
 	await animate_stat(level_label, "display_level", stats.level, 0.2)
 	await animate_stat(time_played_label, "display_time", stats.time_played, 0.2)
 	await animate_stat(correct_words_label, "display_correct_words", stats.correct_words, 0.2)
@@ -111,8 +119,6 @@ func update_ui() -> void:
 	await animate_stat(longest_streak_label, "display_longest_streak", stats.longest_streak, 0.2)
 	await animate_stat(wpm_label, "display_wpm", stats.wpm, 0.2)
 
-	can_restart = true
-	
 func animate_stat(label: Control, property_name: String, target_value: float, duration: float) -> void:
 	var tween = create_tween()
 	tween.tween_property(self, property_name, target_value, duration).set_trans(Tween.TRANS_LINEAR)
@@ -123,15 +129,17 @@ func shake_label(label: Control) -> void:
 	AudioManager.click.pitch_scale = randf_range(0.95, 1.05)
 	AudioManager.click.play()
 	var original_position = label.position
+	var original_panel_position = panel.position
 	var original_color = label.modulate
 	var tween = create_tween()
 	tween.tween_property(label, "position:x", original_position.x + 15, 0.05).set_trans(Tween.TRANS_BOUNCE)
 	tween.tween_property(label, "modulate", Color.MAGENTA, 0.05).set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(label, "position:x", original_position.x, 0.05).set_trans(Tween.TRANS_BOUNCE)
 	tween.tween_property(label, "modulate", original_color, 0.05).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(panel, "position:x", original_panel_position.x - 10, 0.1).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(panel, "position:x", original_panel_position.x, 0.05).set_trans(Tween.TRANS_BOUNCE)
 
 	await tween.finished  
-
 
 
 func _input(event: InputEvent) -> void:
@@ -165,3 +173,14 @@ func restart_game() -> void:
 	get_tree().current_scene = new_main_scene
 	AudioManager.ui_hit.play()
 	queue_free()
+
+
+func _on_difficulty_select_item_selected(index: int):
+	var selected_id = difficulty_select.get_item_id(index)
+	GameSettings.enemy_speed = selected_id
+
+
+func _on_restart_button_pressed() -> void:
+	if not can_restart:  # Ignore input if animations aren't done
+		return
+	restart_game()

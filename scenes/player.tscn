@@ -1,9 +1,10 @@
-[gd_scene load_steps=33 format=3 uid="uid://b6430n4a65u6q"]
+[gd_scene load_steps=35 format=3 uid="uid://b6430n4a65u6q"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_4e6sd"]
 [ext_resource type="Texture2D" uid="uid://dp8mc3amuuowd" path="res://assets/sprites/spacemarine.png" id="2_hk1bs"]
 [ext_resource type="Texture2D" uid="uid://cay2prwgkvbat" path="res://assets/sprites/explosions/hit.png" id="3_2g3vo"]
 [ext_resource type="Texture2D" uid="uid://cwruurdcfyg6w" path="res://assets/sprites/explosions/explosion2.png" id="3_l5q4x"]
+[ext_resource type="Texture2D" uid="uid://dqilf5mponwgu" path="res://assets/sprites/light.webp" id="5_jfdr4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5dxes"]
 atlas = ExtResource("2_hk1bs")
@@ -190,6 +191,10 @@ region = Rect2(31, 0, 31, 32)
 atlas = ExtResource("3_2g3vo")
 region = Rect2(62, 0, 31, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rcwo"]
+atlas = ExtResource("2_hk1bs")
+region = Rect2(561, 504, 187, 168)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_sufnh"]
 animations = [{
 "frames": [{
@@ -201,6 +206,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_val4o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rcwo")
 }],
 "loop": false,
 "name": &"default",
@@ -217,8 +225,10 @@ script = ExtResource("1_4e6sd")
 position = Vector2(5.00001, -80.2572)
 scale = Vector2(3.36429, 3.36428)
 sprite_frames = SubResource("SpriteFrames_o3lxq")
-animation = &"idle"
+animation = &"die"
 autoplay = "idle"
+frame = 11
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -39)
@@ -229,6 +239,8 @@ visible = false
 position = Vector2(7, -93)
 scale = Vector2(2.98387, 2.98387)
 sprite_frames = SubResource("SpriteFrames_sufnh")
+frame = 2
+frame_progress = 1.0
 
 [node name="LaserOrigin" type="Marker2D" parent="."]
 position = Vector2(78.765, -81.995)
@@ -238,3 +250,11 @@ position = Vector2(78.765, -81.995)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2(10, -39)
 shape = SubResource("RectangleShape2D_rnnxc")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(46, -87)
+scale = Vector2(0.287937, 0.287937)
+enabled = false
+color = Color(1, 1, 0.376471, 1)
+energy = 1.5
+texture = ExtResource("5_jfdr4")

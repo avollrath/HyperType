@@ -236,6 +236,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -252,32 +253,37 @@ pivot_offset = Vector2(235, 215)
 theme_override_constants/separation = 20
 
 [node name="Beginner" type="Button" parent="ColorRect/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("1_5hhq5")
 text = "Beginner (What's WPM?)"
 
 [node name="Casual" type="Button" parent="ColorRect/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("1_5hhq5")
 text = "Casual (30 WPM)"
 
 [node name="Challenging" type="Button" parent="ColorRect/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("1_5hhq5")
 text = "Challenging (50 WPM)"
 
 [node name="Expert" type="Button" parent="ColorRect/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("1_5hhq5")
 text = "Expert (80 WPM)"
 
 [node name="Insane" type="Button" parent="ColorRect/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("1_5hhq5")
 text = "Insane (120 WPM)"
 

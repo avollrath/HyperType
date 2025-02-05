@@ -14,11 +14,14 @@ var is_dying: bool = false
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var letter_container = $LetterContainer
 @onready var hit_box = $HitBox
+@onready var point_light_2d: PointLight2D = $PointLight2D
 
 var current_letters = []
 var letter_scenes = []
 var letter_lines = []
 var letter_scene = preload("res://scenes/letter.tscn")
+
+var light_scale: Vector2 = Vector2(1.5, 1.5)
 
 func _ready():
 	velocity.x = -speed
@@ -93,6 +96,11 @@ func die():
 	animated_sprite.play("death")
 	var tween = create_tween()
 	tween.set_parallel()
+	if point_light_2d:
+		point_light_2d.enabled = true
+		tween.tween_property(point_light_2d, "scale", light_scale, 0.2).set_trans(Tween.TRANS_LINEAR)
+		await tween.finished  
+		point_light_2d.enabled = false
 	tween.tween_property(animated_sprite, "modulate", Color(1.2, 1.2, 1.2), 0.2)
 	await animated_sprite.animation_finished
 	tween = create_tween()

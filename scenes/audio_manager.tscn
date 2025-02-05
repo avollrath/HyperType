@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://0p5ngvxrgafv"]
+[gd_scene load_steps=21 format=3 uid="uid://0p5ngvxrgafv"]
 
 [ext_resource type="Script" path="res://scripts/audio_manager.gd" id="1_xcg2r"]
 [ext_resource type="AudioStream" uid="uid://bcv40xlq1eivu" path="res://assets/sounds/type(shot).mp3" id="2_oudpu"]
@@ -14,6 +14,12 @@
 [ext_resource type="AudioStream" uid="uid://7utnessr4lpb" path="res://assets/sounds/click-boom.mp3" id="12_c5adj"]
 [ext_resource type="AudioStream" uid="uid://cc0n4u7gaus1x" path="res://assets/sounds/ui-hit.mp3" id="13_exl4h"]
 [ext_resource type="AudioStream" uid="uid://ch2cw7tcnmyd2" path="res://assets/sounds/ui-hover.mp3" id="14_374eb"]
+[ext_resource type="AudioStream" uid="uid://bgnikh31ggpnt" path="res://assets/sounds/explosion.mp3" id="15_1pkqy"]
+[ext_resource type="AudioStream" uid="uid://ui01lr62trpl" path="res://assets/sounds/streak.mp3" id="16_kg8xj"]
+[ext_resource type="AudioStream" uid="uid://c284j1lo2bdcf" path="res://assets/sounds/mega-streak.mp3" id="17_tcost"]
+[ext_resource type="AudioStream" uid="uid://bbu8j7thnxho5" path="res://assets/sounds/heartbeat.mp3" id="18_rcv7a"]
+[ext_resource type="AudioStream" uid="uid://d1l13pst2b6ap" path="res://assets/sounds/spaceship.mp3" id="19_jvn5t"]
+[ext_resource type="AudioStream" uid="uid://b8d5p40l5jxfk" path="res://assets/sounds/boss-present.mp3" id="20_frxcr"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_xcg2r")
@@ -74,3 +80,27 @@ bus = &"SFX"
 
 [node name="UI_hover" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_374eb")
+
+[node name="Explosion" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_1pkqy")
+bus = &"SFX"
+
+[node name="Streak" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_kg8xj")
+bus = &"SFX"
+
+[node name="MegaStreak" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_tcost")
+bus = &"SFX"
+
+[node name="HeartBeat" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("18_rcv7a")
+volume_db = 10.0
+
+[node name="SpaceShip" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_jvn5t")
+
+[node name="Boss" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_frxcr")
+
+[node name="AudioStreamPlayer6" type="AudioStreamPlayer" parent="."]

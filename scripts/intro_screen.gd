@@ -15,9 +15,15 @@ extends CanvasLayer
 							   $ColorRect/VBoxContainer/Insane]
 
 
-func _on_button_mouse_entered():
+func _on_button_mouse_entered(button_node: Button):
+	var tween = create_tween()
+	tween.tween_property(button_node, "scale", Vector2(1.1, 1.1), 0.1).set_trans(Tween.TRANS_LINEAR)
 	AudioManager.ui_hover.pitch_scale = randf_range(0.9, 1.1)
 	AudioManager.ui_hover.play()
+	
+func _on_button_mouse_exited(button_node: Button):
+	var tween = create_tween()
+	tween.tween_property(button_node, "scale", Vector2(1, 1), 0.05).set_trans(Tween.TRANS_LINEAR)
 
 func _ready():
 	beginner.pressed.connect(func(): start_game(30))
@@ -26,7 +32,9 @@ func _ready():
 	expert.pressed.connect(func(): start_game(230))
 	insane.pressed.connect(func(): start_game(400))
 	for button in buttons:
-		button.mouse_entered.connect(_on_button_mouse_entered)
+		button.pivot_offset = button.size / 2
+		button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
+		button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
 
 func start_game(speed: int):
 	AudioManager.click.play()

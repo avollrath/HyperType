@@ -8,6 +8,7 @@ signal player_hit
 @onready var laser_origin = $LaserOrigin
 @onready var hurt_box: Area2D = $HurtBox
 @onready var hit: AnimatedSprite2D = $Hit
+@onready var point_light_2d: PointLight2D = $PointLight2D
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
@@ -35,13 +36,18 @@ func take_damage() -> void:
 	animated_sprite.play("idle")
 
 func shoot(target_pos: Vector2):
+	if point_light_2d:
+		point_light_2d.enabled = true
+		var tween = create_tween()
+		tween.tween_property(point_light_2d, "scale", Vector2(0.4, 0.4), 0.1).set_trans(Tween.TRANS_LINEAR)
+		await tween.finished  
+		point_light_2d.enabled = false
 	animated_sprite.play("shooting")
 	shoot_laser.emit(laser_origin.global_position, target_pos)
 	await animated_sprite.animation_finished
 	animated_sprite.play("idle")
 	
 func _on_hurt_box_area_entered(area: Area2D):
-	print(area)
 	if area.is_in_group("enemy_hitbox"):
 		player_hit.emit()
 

@@ -5,17 +5,15 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nk6dx"]
 bg_color = Color(0, 0, 0, 0.505882)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+border_width_top = 3
+border_color = Color(3, 0, 1, 1)
 
 [sub_resource type="Animation" id="Animation_j8fyq"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("VBoxContainer/HighScoreLabel:modulate")
+tracks/0/path = NodePath("Panel2/VBoxContainer/HighScoreLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -27,7 +25,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("VBoxContainer/LevelLabel:modulate")
+tracks/1/path = NodePath("Panel2/VBoxContainer/LevelLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -39,7 +37,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("VBoxContainer/TimePlayedLabel:modulate")
+tracks/2/path = NodePath("Panel2/VBoxContainer/TimePlayedLabel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -75,7 +73,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("VBoxContainer/CorrectWordsLabel:modulate")
+tracks/5/path = NodePath("Panel2/VBoxContainer/CorrectWordsLabel:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -87,7 +85,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("VBoxContainer/AccuracyLabel:modulate")
+tracks/6/path = NodePath("Panel2/VBoxContainer/AccuracyLabel:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -99,7 +97,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("VBoxContainer/LongestStreakLabel:modulate")
+tracks/7/path = NodePath("Panel2/VBoxContainer/LongestStreakLabel:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -111,7 +109,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("VBoxContainer/WPMLabel:modulate")
+tracks/8/path = NodePath("Panel2/VBoxContainer/WPMLabel:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -123,7 +121,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("KeyLabels/HighScore:modulate")
+tracks/9/path = NodePath("Panel2/KeyLabels/HighScore:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -135,7 +133,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("KeyLabels/Level:modulate")
+tracks/10/path = NodePath("Panel2/KeyLabels/Level:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -147,7 +145,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("KeyLabels/TimePlayed:modulate")
+tracks/11/path = NodePath("Panel2/KeyLabels/TimePlayed:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -159,7 +157,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("KeyLabels/CorrectWords:modulate")
+tracks/12/path = NodePath("Panel2/KeyLabels/CorrectWords:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -171,7 +169,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("KeyLabels/Accuracy:modulate")
+tracks/13/path = NodePath("Panel2/KeyLabels/Accuracy:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -183,7 +181,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("KeyLabels/LongestStreak:modulate")
+tracks/14/path = NodePath("Panel2/KeyLabels/LongestStreak:modulate")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -195,7 +193,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("KeyLabels/WPM:modulate")
+tracks/15/path = NodePath("Panel2/KeyLabels/WPM:modulate")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -283,6 +281,29 @@ tracks/22/keys = {
 "points": PackedFloat32Array(505.5, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("DifficultySelect:modulate")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/24/type = "bezier"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("DifficultySelect:position:x")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(661, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
 
 [sub_resource type="Animation" id="Animation_56rib"]
 resource_name = "game_over_appear"
@@ -290,7 +311,7 @@ length = 4.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("VBoxContainer/HighScoreLabel:modulate")
+tracks/0/path = NodePath("Panel2/VBoxContainer/HighScoreLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -302,7 +323,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("VBoxContainer/LevelLabel:modulate")
+tracks/1/path = NodePath("Panel2/VBoxContainer/LevelLabel:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -314,7 +335,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("VBoxContainer/TimePlayedLabel:modulate")
+tracks/2/path = NodePath("Panel2/VBoxContainer/TimePlayedLabel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -350,7 +371,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("VBoxContainer/CorrectWordsLabel:modulate")
+tracks/5/path = NodePath("Panel2/VBoxContainer/CorrectWordsLabel:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -362,7 +383,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("VBoxContainer/AccuracyLabel:modulate")
+tracks/6/path = NodePath("Panel2/VBoxContainer/AccuracyLabel:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -374,7 +395,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("VBoxContainer/LongestStreakLabel:modulate")
+tracks/7/path = NodePath("Panel2/VBoxContainer/LongestStreakLabel:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -386,7 +407,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("VBoxContainer/WPMLabel:modulate")
+tracks/8/path = NodePath("Panel2/VBoxContainer/WPMLabel:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -398,7 +419,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("KeyLabels/HighScore:modulate")
+tracks/9/path = NodePath("Panel2/KeyLabels/HighScore:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -410,7 +431,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("KeyLabels/Level:modulate")
+tracks/10/path = NodePath("Panel2/KeyLabels/Level:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -422,7 +443,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("KeyLabels/TimePlayed:modulate")
+tracks/11/path = NodePath("Panel2/KeyLabels/TimePlayed:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -434,7 +455,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("KeyLabels/CorrectWords:modulate")
+tracks/12/path = NodePath("Panel2/KeyLabels/CorrectWords:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -446,7 +467,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("KeyLabels/Accuracy:modulate")
+tracks/13/path = NodePath("Panel2/KeyLabels/Accuracy:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -458,7 +479,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("KeyLabels/LongestStreak:modulate")
+tracks/14/path = NodePath("Panel2/KeyLabels/LongestStreak:modulate")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -470,7 +491,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("KeyLabels/WPM:modulate")
+tracks/15/path = NodePath("Panel2/KeyLabels/WPM:modulate")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -533,7 +554,7 @@ tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(20, -0.25, 0, 0.25, 0, 68, -0.25, 0, 0.433333, -41.5),
+"points": PackedFloat32Array(-50, -0.25, 0, 0.25, 0, 20, -0.25, 0, 0.433333, -41.5),
 "times": PackedFloat32Array(0.333333, 0.8)
 }
 tracks/21/type = "bezier"
@@ -544,8 +565,31 @@ tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(914.12, -0.25, 0, 0.25, 0, 720, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(914.12, -0.25, 0, 0.567656, 22.9637, 740, -0.565681, -41.9708, 0.25, 0),
 "times": PackedFloat32Array(3.33333, 4)
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("DifficultySelect:modulate")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(2.5, 3.73333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/23/type = "bezier"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("DifficultySelect:position:x")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1600, -0.25, 0, 0.625213, 789.996, 661, -0.374787, -473.484, 0.325213, -1.52441),
+"times": PackedFloat32Array(2.23333, 3.43333)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ccyct"]
@@ -583,9 +627,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -415.0
-offset_top = -247.0
+offset_top = -325.0
 offset_right = 415.0
-offset_bottom = 247.0
+offset_bottom = 169.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.3, 0.3)
@@ -593,7 +637,7 @@ pivot_offset = Vector2(415, 247)
 theme = ExtResource("2_0t601")
 theme_override_styles/panel = SubResource("StyleBoxFlat_nk6dx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -610,7 +654,7 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="HighScoreLabel" type="Label" parent="VBoxContainer"]
+[node name="HighScoreLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -618,7 +662,7 @@ theme_override_font_sizes/font_size = 32
 text = "3495"
 vertical_alignment = 1
 
-[node name="LevelLabel" type="Label" parent="VBoxContainer"]
+[node name="LevelLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -626,14 +670,14 @@ theme_override_font_sizes/font_size = 32
 text = "7"
 vertical_alignment = 1
 
-[node name="TimePlayedLabel" type="Label" parent="VBoxContainer"]
+[node name="TimePlayedLabel" type="Label" parent="Panel2/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 32
 text = "234 seconds"
 vertical_alignment = 1
 
-[node name="CorrectWordsLabel" type="Label" parent="VBoxContainer"]
+[node name="CorrectWordsLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -641,7 +685,7 @@ theme_override_font_sizes/font_size = 32
 text = "81"
 vertical_alignment = 1
 
-[node name="AccuracyLabel" type="Label" parent="VBoxContainer"]
+[node name="AccuracyLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -649,7 +693,7 @@ theme_override_font_sizes/font_size = 32
 text = "583 / 696 (87%)"
 vertical_alignment = 1
 
-[node name="LongestStreakLabel" type="Label" parent="VBoxContainer"]
+[node name="LongestStreakLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -657,7 +701,7 @@ theme_override_font_sizes/font_size = 32
 text = "99"
 vertical_alignment = 1
 
-[node name="WPMLabel" type="Label" parent="VBoxContainer"]
+[node name="WPMLabel" type="Label" parent="Panel2/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -665,7 +709,7 @@ theme_override_font_sizes/font_size = 32
 text = "65.4"
 vertical_alignment = 1
 
-[node name="KeyLabels" type="VBoxContainer" parent="."]
+[node name="KeyLabels" type="VBoxContainer" parent="Panel2"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -681,7 +725,7 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="HighScore" type="Label" parent="KeyLabels"]
+[node name="HighScore" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -689,7 +733,7 @@ theme_override_font_sizes/font_size = 32
 text = "High Score"
 vertical_alignment = 1
 
-[node name="Level" type="Label" parent="KeyLabels"]
+[node name="Level" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -697,7 +741,7 @@ theme_override_font_sizes/font_size = 32
 text = "Level"
 vertical_alignment = 1
 
-[node name="TimePlayed" type="Label" parent="KeyLabels"]
+[node name="TimePlayed" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -705,7 +749,7 @@ theme_override_font_sizes/font_size = 32
 text = "Time Played"
 vertical_alignment = 1
 
-[node name="CorrectWords" type="Label" parent="KeyLabels"]
+[node name="CorrectWords" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -713,7 +757,7 @@ theme_override_font_sizes/font_size = 32
 text = "Correct words"
 vertical_alignment = 1
 
-[node name="Accuracy" type="Label" parent="KeyLabels"]
+[node name="Accuracy" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -721,7 +765,7 @@ theme_override_font_sizes/font_size = 32
 text = "Accuracy"
 vertical_alignment = 1
 
-[node name="LongestStreak" type="Label" parent="KeyLabels"]
+[node name="LongestStreak" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -729,7 +773,7 @@ theme_override_font_sizes/font_size = 32
 text = "Longest Streak"
 vertical_alignment = 1
 
-[node name="WPM" type="Label" parent="KeyLabels"]
+[node name="WPM" type="Label" parent="Panel2/KeyLabels"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
@@ -746,14 +790,42 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -294.5
-offset_top = -180.0
+offset_top = -160.0
 offset_right = 294.5
-offset_bottom = -65.0
+offset_bottom = -45.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 36
 text = "Press ENTER to restart"
+
+[node name="DifficultySelect" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -139.0
+offset_top = -251.0
+offset_right = 139.0
+offset_bottom = -202.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_0t601")
+alignment = 1
+selected = 3
+item_count = 5
+popup/item_0/text = "Beginner"
+popup/item_0/id = 30
+popup/item_1/text = "Casual"
+popup/item_1/id = 80
+popup/item_2/text = "Challenging"
+popup/item_2/id = 180
+popup/item_3/text = "Expert"
+popup/item_3/id = 230
+popup/item_4/text = "Insane"
+popup/item_4/id = 400
 
 [node name="GameOverLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -762,9 +834,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -398.0
-offset_top = 68.0
+offset_top = 20.0
 offset_right = 399.0
-offset_bottom = 160.0
+offset_bottom = 112.0
 grow_horizontal = 2
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 72
@@ -779,3 +851,6 @@ autoplay = "game_over_appear"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 playback_type = 1
+
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="item_selected" from="DifficultySelect" to="." method="_on_difficulty_select_item_selected"]

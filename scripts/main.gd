@@ -40,12 +40,16 @@ var score_tween: Tween = null
 @onready var camera: Camera2D = $Camera2D
 @onready var lives_container: HBoxContainer = $UI/LivesContainer
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
+@onready var distortion_shader: ColorRect = $DistortionShader
 
 var current_enemy_speed: int
 var base_level_threshold: int = 1000
 var enemy_scene = preload("res://scenes/enemy.tscn")
 var laser_scene = preload("res://scenes/laser.tscn")
 var tank_enemy_scene = preload("res://scenes/tank_enemy.tscn")
+var small_enemy_scene = preload("res://scenes/small_enemy.tscn")
+var robot_enemy_scene = preload("res://scenes/robot_enemy.tscn")
+var ship_enemy_scene = preload("res://scenes/ship_enemy.tscn")
 var heart_icon = preload("res://scenes/heart_icon.tscn") 
 var tank_present = false
 var tank_spawned_this_level = false
@@ -84,6 +88,7 @@ func update_lives_display():
 
 func reset_lives():
 	lives = max_lives
+	AudioManager.heart_beat.stop()
 	wrong_chars_this_level = 0
 	update_lives_display()
 	
@@ -183,7 +188,9 @@ func check_typed_letter(letter: String):
 	current_streak = 0
 	lives -= 1
 	update_lives_display()
-
+	if lives == 1: AudioManager.heart_beat.play()
+	else: AudioManager.heart_beat.stop()
+	
 	if lives <= 0 and game_active:
 		game_over()
 
@@ -389,19 +396,19 @@ func _on_spawn_timer_timeout():
 func spawn_enemy():
 	if tank_present:
 		return
-
-	# Calculate the points remaining until the next level.
 	var points_to_next_level = get_required_score_for_level(current_level + 1) - score
-
-	# When we're close enough to leveling up, spawn a tank enemy if one hasn't been spawned yet.
 	if (points_to_next_level <= 150) and (not tank_spawned_this_level):
-		spawn_tank_enemy()
+		var random_value = randf()  
+		if random_value < 0.7:
+			spawn_tank_enemy()
+		else:
+			spawn_ship_enemy()
 		tank_spawned_this_level = true
 		return
-
+		
 	spawn_regular_enemy()
 
-func get_random_tank_word() -> String:
+func get_random_long_word() -> String:
 	if word_list.is_empty():
 		return ""
 	while true:
@@ -415,17 +422,40 @@ func spawn_tank_enemy():
 	enemy.set_speed(current_enemy_speed * 0.7)
 	var tank_words = []
 	for i in range(3):
-		tank_words.append(get_random_tank_word())
+		tank_words.append(get_random_long_word())
 	enemy.word = "\n".join(tank_words)
-	enemy.position = Vector2(1800, 770)
+	enemy.position = Vector2(2000, 770)
 	enemy_container.add_child(enemy)
 	AudioManager.tank_sound.play()
+	AudioManager.boss.play()
+	enemy.enemy_died.connect(_on_tank_died)
+	tank_present = true
+	spawn_timer.stop()
+	
+func spawn_ship_enemy():
+	var enemy = ship_enemy_scene.instantiate()
+	enemy.set_speed(current_enemy_speed * 0.6)
+	var ship_words = []
+	for i in range(4):
+		ship_words.append(get_random_long_word())
+	enemy.word = "\n".join(ship_words)
+	enemy.position = Vector2(2000, 700)
+	enemy_container.add_child(enemy)
+	AudioManager.space_ship.play()
+	AudioManager.boss.play()
 	enemy.enemy_died.connect(_on_tank_died)
 	tank_present = true
 	spawn_timer.stop()
 
 func spawn_regular_enemy():
-	var enemy = enemy_scene.instantiate()
+	var enemy
+	if next_word.length() <= 3:
+		enemy = small_enemy_scene.instantiate()
+	elif next_word.length() == 4:
+		enemy = robot_enemy_scene.instantiate()
+	else:
+		enemy = enemy_scene.instantiate()
+		
 	enemy.speed = current_enemy_speed
 	enemy.word = next_word
 	enemy.position = Vector2(1800, 770)
@@ -444,9 +474,17 @@ func spawn_regular_enemy():
 	spawn_timer.start()
 
 func _on_tank_died():
-	shake_camera(8.0, 0.8)
 	AudioManager.tank_sound.stop()
+	AudioManager.space_ship.stop()
+	AudioManager.boss.stop()
+	AudioManager.explosion.play()
+	distortion_shader.visible = true
+	shake_camera(8.0, 0.8)
+	var tween = create_tween()
+	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.5)
+	await tween.finished
 	tank_present = false
+	distortion_shader.visible = false
 	update_score(150)
 	if is_current_word_correct:
 		current_streak += 3
@@ -457,9 +495,76 @@ func _on_tank_died():
 	spawn_timer.start()
 
 func _on_enemy_died():
+	show_streak_label()
 	shake_camera(2.0, 0.2)
 	update_score(50)
 	correct_words += 1
+	
+var streak_labels = []
+var custom_font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
+
+func show_streak_label():
+	if current_streak <= 0:
+		return 
+	var streak_label = RichTextLabel.new()
+	streak_label.bbcode_enabled = true
+	streak_label.scroll_active = false
+	streak_label.fit_content = true
+	streak_label.clip_contents = false
+	streak_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	streak_label.custom_minimum_size = Vector2(500, 100)
+	
+	var viewport_size = get_viewport_rect().size
+	streak_label.position = Vector2(
+		viewport_size.x / 2,
+		(viewport_size.y / 2) - 300
+	)
+	
+	streak_label.add_theme_font_override("normal_font", custom_font)
+	
+	var progress = clamp(float(current_streak - 1) / 19.0, 0.0, 1.0)
+	var font_size = int(lerp(32, 64, progress))
+	var color_progress = int(255 * (1.0 - progress))
+	var interpolated_color = "#ff%02x%02x" % [color_progress, 255]
+	
+	var formatted_text = "[center][font_size=%d][color=%s]" % [font_size, interpolated_color]
+	
+	if current_streak >= 25:
+		formatted_text += "[shake rate=20.0 level=5][wave amp=10.0 freq=2.0][rainbow freq=1.5 sat=0.9 val=1.0]"
+		formatted_text += "STREAK x %d" % current_streak
+		formatted_text += "[/rainbow][/wave][/shake]"
+		AudioManager.mega_streak.play()
+		
+	elif current_streak >= 10:
+		formatted_text += "[shake rate=20.0 level=5][wave amp=10.0 freq=2.0]"
+		formatted_text += "STREAK x %d" % current_streak
+		formatted_text += "[/wave][/shake]"
+	
+	elif current_streak >= 5:
+		formatted_text += "[shake rate=20.0 level=5]"
+		formatted_text += "STREAK x %d" % current_streak
+		formatted_text += "[/shake]"
+	
+	else:
+		formatted_text += "STREAK x %d" % current_streak
+		
+	formatted_text += "[/color][/font_size][/center]"
+	streak_label.text = formatted_text
+	
+	var base_pitch = 1.0
+	var max_pitch_increase = 1.0  # Maximum increase above base pitch
+	var steps = 30.0  # Number of steps to reach maximum
+	var pitch_increase = min((current_streak / steps) * max_pitch_increase, max_pitch_increase)
+	AudioManager.streak.pitch_scale = base_pitch + pitch_increase
+	AudioManager.streak.play()
+	
+	ui_layer.add_child(streak_label)
+	streak_label.position.x -= streak_label.size.x / 2
+	var tween = create_tween()
+	tween.tween_property(streak_label, "modulate:a", 0.0, 0.3).set_delay(0.5)
+	await tween.finished
+	streak_label.queue_free()
+
 	
 func _on_player_shoot(start_pos: Vector2, target_pos: Vector2):
 	var laser = laser_scene.instantiate()
@@ -478,13 +583,16 @@ func game_over():
 		tween.tween_property(world_environment.environment, "adjustment_saturation", 1, 0.4)
 	AudioManager.player_die.play()
 	AudioManager.tank_sound.stop()
+	AudioManager.boss.stop()
+	AudioManager.heart_beat.stop()
+	AudioManager.space_ship.stop()
 	AudioManager.game_over.play()
+	mech_sound("stop")
 	game_active = false
 	spawn_timer.stop()
 	
 	for enemy in enemy_container.get_children():
 		enemy.queue_free()
-	mech_sound("stop")
 	show_game_over_screen()
 
 func show_game_over_screen():

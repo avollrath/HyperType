@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://fp1h1j23uxgr"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://fp1h1j23uxgr"]
 
 [ext_resource type="FontFile" uid="uid://dy8k278nchsmc" path="res://assets/fonts/DepartureMonoNerdFont-Regular.otf" id="2_ssir0"]
 
@@ -27,6 +27,22 @@ shadow_offset = Vector2(3, 3)
 anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_620ip"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.314067, 0.0805, 0.35, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(3, 0, 1, 1)
+shadow_color = Color(0, 0, 0, 0.259)
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agm6b"]
 bg_color = Color(0.314067, 0.0805, 0.35, 1)
 border_width_left = 3
 border_width_top = 3
@@ -48,4 +64,9 @@ Button/styles/focus = SubResource("StyleBoxFlat_sqr2n")
 Button/styles/hover = SubResource("StyleBoxFlat_hgkfs")
 Button/styles/normal = SubResource("StyleBoxFlat_620ip")
 Label/fonts/font = ExtResource("2_ssir0")
+OptionButton/colors/font_color = Color(1, 1, 1, 1)
+OptionButton/constants/arrow_margin = 30
+OptionButton/constants/modulate_arrow = 10
+OptionButton/styles/normal = SubResource("StyleBoxFlat_agm6b")
 Panel/styles/panel = SubResource("StyleBoxFlat_4elij")
+PopupMenu/colors/font_color = Color(1, 1, 1, 1)
