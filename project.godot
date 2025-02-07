@@ -25,6 +25,8 @@ GameSettings="*res://scripts/game_settings.gd"
 window/size/viewport_width=1600
 window/size/viewport_height=900
 window/size/resizable=false
+window/size/window_width_override=3200
+window/size/window_height_override=1800
 window/stretch/mode="canvas_items"
 
 [rendering]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://dcu65u7n4kvkh"]
+[gd_scene load_steps=24 format=4 uid="uid://dcu65u7n4kvkh"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_tooxf"]
 [ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="2_odlv3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Shader" path="res://scenes/water_shader.gdshader" id="8_gdsrt"]
 [ext_resource type="Texture2D" uid="uid://covr7ivlhm0ff" path="res://assets/sprites/128x128_square.jpg" id="9_pjt0b"]
 [ext_resource type="Shader" path="res://scripts/distortion.gdshader" id="10_qbuny"]
+[ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="11_hd5oc"]
 
 [sub_resource type="Environment" id="Environment_5lfl1"]
 background_mode = 3
@@ -284,6 +285,13 @@ shader_parameter/aberration = 0.425
 shader_parameter/width = 0.04
 shader_parameter/feather = 0.135
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rq31a"]
+shader = ExtResource("11_hd5oc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_y2uil"]
+size = Vector2(1600, 900)
+center_offset = Vector3(800, 450, 0)
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tooxf")
 
@@ -381,3 +389,9 @@ offset_left = -72.0
 offset_top = -17.0
 offset_right = 1680.0
 offset_bottom = 944.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_rq31a")
+mesh = SubResource("QuadMesh_y2uil")
