@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://dcu65u7n4kvkh"]
+[gd_scene load_steps=26 format=4 uid="uid://dcu65u7n4kvkh"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_tooxf"]
 [ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="2_odlv3"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://covr7ivlhm0ff" path="res://assets/sprites/128x128_square.jpg" id="9_pjt0b"]
 [ext_resource type="Shader" path="res://scripts/distortion.gdshader" id="10_qbuny"]
 [ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="11_hd5oc"]
+[ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="12_4xrxp"]
 
 [sub_resource type="Environment" id="Environment_5lfl1"]
 background_mode = 3
@@ -292,6 +293,11 @@ shader = ExtResource("11_hd5oc")
 size = Vector2(1600, 900)
 center_offset = Vector3(800, 450, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j2jwx"]
+shader = ExtResource("12_4xrxp")
+shader_parameter/apply = true
+shader_parameter/amount = 0.1
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tooxf")
 
@@ -383,15 +389,25 @@ libraries = {
 autoplay = "start"
 
 [node name="DistortionShader" type="ColorRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_s1jjq")
 offset_left = -72.0
 offset_top = -17.0
 offset_right = 1680.0
 offset_bottom = 944.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CrtShader" type="CanvasLayer" parent="."]
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="CanvasLayer"]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CrtShader"]
 material = SubResource("ShaderMaterial_rq31a")
 mesh = SubResource("QuadMesh_y2uil")
+
+[node name="CroAbrShader" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CroAbrShader"]
+material = SubResource("ShaderMaterial_j2jwx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
