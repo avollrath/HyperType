@@ -38,3 +38,9 @@ func resume_game():
 	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	queue_free()
+	
+func playVoice():
+	AudioManager.hypertype_voice.play()
+	
+func playHit():
+	AudioManager.cinematic_hit.play()

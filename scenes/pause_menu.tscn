@@ -32,7 +32,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PauseMenu/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("PauseMenu/ColorRect/Pause:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -113,7 +113,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PauseMenu/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("PauseMenu/ColorRect/Pause:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -129,8 +129,8 @@ tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(17, -0.25, 0, 0.0666667, 161.401, 300, -0.1, -1.1333, 0.0666667, -2.90488),
-"times": PackedFloat32Array(0.2, 0.666667)
+"points": PackedFloat32Array(17, -0.25, 0, 0.366667, -105.5, 300, -0.266667, 90.5, 0.0666667, -2.90488),
+"times": PackedFloat32Array(0.333333, 0.8)
 }
 tracks/4/type = "bezier"
 tracks/4/imported = false
@@ -140,8 +140,8 @@ tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(64, -0.25, 0, 0.0333333, -37.9536, 184, -0.333333, -16.2288, 0.25, 0),
-"times": PackedFloat32Array(0.2, 0.9)
+"points": PackedFloat32Array(64, -0.25, 0, 0.366667, -8.5, 184, -0.166667, -139.5, 0.25, 0),
+"times": PackedFloat32Array(0.866667, 1.1)
 }
 tracks/5/type = "bezier"
 tracks/5/imported = false
@@ -165,6 +165,23 @@ tracks/6/keys = {
 "points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.5, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 0.233333)
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("PauseMenu")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.6, 1.13333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"playHit"
+}, {
+"args": [],
+"method": &"playVoice"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n8v4a"]
 _data = {
@@ -172,17 +189,17 @@ _data = {
 "intro": SubResource("Animation_s84vx")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g8jff"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vxwgb"]
 shader = ExtResource("3_2ow0j")
 
-[sub_resource type="QuadMesh" id="QuadMesh_pmvvx"]
+[sub_resource type="QuadMesh" id="QuadMesh_ffx2f"]
 size = Vector2(1600, 900)
 center_offset = Vector3(800, 450, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4r8c5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mh2s6"]
 shader = ExtResource("4_qdikl")
 shader_parameter/apply = true
-shader_parameter/amount = 0.1
+shader_parameter/amount = 0.05
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 3
@@ -214,15 +231,15 @@ text = "HyperType"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Difficulty" type="Label" parent="ColorRect"]
+[node name="Pause" type="Label" parent="ColorRect"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -182.0
-offset_top = 204.0
+offset_top = 225.515
 offset_right = 184.0
-offset_bottom = 245.0
+offset_bottom = 266.515
 grow_horizontal = 2
 theme = ExtResource("2_8vexn")
 theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
@@ -298,17 +315,17 @@ libraries = {
 }
 
 [node name="CrtShader" type="CanvasLayer" parent="."]
-layer = -1
+layer = 3
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="CrtShader"]
-material = SubResource("ShaderMaterial_g8jff")
-mesh = SubResource("QuadMesh_pmvvx")
+material = SubResource("ShaderMaterial_vxwgb")
+mesh = SubResource("QuadMesh_ffx2f")
 
 [node name="CroAbrShader" type="CanvasLayer" parent="."]
-layer = -1
+layer = 3
 
 [node name="ColorRect" type="ColorRect" parent="CroAbrShader"]
-material = SubResource("ShaderMaterial_4r8c5")
+material = SubResource("ShaderMaterial_mh2s6")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

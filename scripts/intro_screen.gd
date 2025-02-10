@@ -29,3 +29,9 @@ func start_game(speed: int):
 	await animation_player.animation_finished
 	AudioManager.background_music.play()
 	queue_free()
+	
+func playVoice():
+	AudioManager.hypertype_voice.play()
+	
+func playHit():
+	AudioManager.cinematic_hit.play()

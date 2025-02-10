@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode unshaded, skip_vertex_transform;
 
-const float curvature = 8.0;
+const float curvature = 10.0;
 const float vignette_multiplier = 0.2;
 const float blur_amount = 0.15;
 

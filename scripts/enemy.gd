@@ -14,7 +14,8 @@ var is_dying: bool = false
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var letter_container = $LetterContainer
 @onready var hit_box = $HitBox
-@onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var point_light_2d = get_node_or_null("PointLight2D")
+@onready var step_particles = get_node_or_null("StepParticles")
 
 var current_letters = []
 var letter_scenes = []
@@ -22,6 +23,9 @@ var letter_lines = []
 var letter_scene = preload("res://scenes/letter.tscn")
 
 var light_scale: Vector2 = Vector2(1.5, 1.5)
+
+var last_frame = 0
+var emission_frames = [2, 4] 
 
 func _ready():
 	if point_light_2d:
@@ -69,7 +73,32 @@ func setup_word():
 func _physics_process(_delta):
 	velocity.x = -speed
 	move_and_slide()
-	_after_physics_process()  # Hook for child classes
+	
+	if step_particles and animated_sprite:
+		var current_frame = animated_sprite.frame
+		if current_frame != last_frame:
+			if current_frame == 3:
+				# Frame 1: Create duplicate of original particle system
+				var new_original = step_particles.duplicate()
+				add_child(new_original)
+				new_original.emitting = true
+				
+				# Clean up after emission
+				await get_tree().create_timer(0.3).timeout
+				new_original.queue_free()
+				
+			elif current_frame == 1:
+				# Frame 3: Create duplicate for background particles
+				var new_back_particles = step_particles.duplicate()
+				add_child(new_back_particles)
+				new_back_particles.z_index = 0
+				new_back_particles.emitting = true
+				
+				# Clean up after emission
+				await get_tree().create_timer(0.3).timeout
+				new_back_particles.queue_free()
+		
+		last_frame = current_frame
 
 func _after_physics_process():
 	pass  # Override in child classes for custom movement

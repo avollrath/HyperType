@@ -19,6 +19,8 @@ extends Node
 @onready var heart_beat: AudioStreamPlayer = $HeartBeat
 @onready var space_ship: AudioStreamPlayer = $SpaceShip
 @onready var boss: AudioStreamPlayer = $Boss
+@onready var cinematic_hit: AudioStreamPlayer = $CinematicHit
+@onready var hypertype_voice: AudioStreamPlayer = $HypertypeVoice
 
 
 func _ready():
