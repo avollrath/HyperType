@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkktuhsu50c7l"]
+
+[ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="1_t8tkg"]
+[ext_resource type="Script" path="res://scripts/fancy_button.gd" id="1_ygqfi"]
+
+[node name="FancyButton" type="Button"]
+custom_minimum_size = Vector2(200, 60)
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_t8tkg")
+script = ExtResource("1_ygqfi")

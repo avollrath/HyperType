@@ -10,6 +10,7 @@ extends Control
 @onready var level_label: Label = $Panel2/VBoxContainer/LevelLabel
 @onready var difficulty_select: OptionButton = $DifficultySelect
 @onready var panel: Panel = $Panel2
+@onready var restart_button: FancyButton = $RestartButton
 
 var can_restart: bool = false
 
@@ -80,6 +81,7 @@ var display_wpm: float:
 # --- End of animated properties ---
 
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if not high_score_label:
 		print("HighScoreLabel not found!")
 	if not level_label:
@@ -118,6 +120,7 @@ func update_ui() -> void:
 	await animate_stat(accuracy_label, "display_accuracy", stats.accuracy, 0.2)
 	await animate_stat(longest_streak_label, "display_longest_streak", stats.longest_streak, 0.2)
 	await animate_stat(wpm_label, "display_wpm", stats.wpm, 0.2)
+	restart_button.grab_focus()
 
 func animate_stat(label: Control, property_name: String, target_value: float, duration: float) -> void:
 	var tween = create_tween()

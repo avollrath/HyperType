@@ -57,7 +57,10 @@ var heart_icon = preload("res://scenes/heart_icon.tscn")
 var tank_present = false
 var tank_spawned_this_level = false
 
+var is_paused = false
+
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	distortion_shader.visible = true
 	var tween = create_tween()
 	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.1)
@@ -144,6 +147,9 @@ func _input(event: InputEvent) -> void:
 	if not game_active:
 		return
 		
+	if event.is_action_pressed("ui_cancel"):  # ESC key
+		toggle_pause()
+		
 	if event is InputEventKey and event.pressed:
 		# Only handle letter keys (A-Z)
 		var keycode = event.keycode
@@ -158,6 +164,31 @@ func _input(event: InputEvent) -> void:
 				AudioManager.type.play()
 				
 			check_typed_letter(char(keycode).to_lower())
+			
+func toggle_pause():
+	is_paused = !is_paused
+	
+	var time_played = Time.get_unix_time_from_system() - start_time
+	var accuracy = (float(correct_chars) / total_chars_typed * 100) if total_chars_typed > 0 else 0.0
+	var wpm = (correct_chars / 5.0) / (active_typing_time / 60.0) if active_typing_time > 0 else 0.0
+	
+	var pause_menu = preload("res://scenes/pause_menu.tscn").instantiate()
+	pause_menu.process_mode = Node.PROCESS_MODE_ALWAYS
+	#pause_menu.initialize_stats({
+		#"score": score,
+		#"level": current_level,
+		#"time_played": time_played,
+		#"correct_words": correct_words,
+		#"total_chars": total_chars_typed,
+		#"correct_chars": correct_chars,
+		#"accuracy": accuracy,
+		#"longest_streak": longest_streak,
+		#"wpm": wpm
+	#})
+	
+	get_tree().get_root().add_child(pause_menu)
+	ui_layer.hide()
+	get_tree().paused = true
 		
 func check_typed_letter(letter: String):
 	var enemies = enemy_container.get_children()
@@ -564,10 +595,10 @@ func show_streak_label():
 	var formatted_text = "[center][font_size=%d][color=%s]" % [font_size, interpolated_color]
 	
 	if current_streak >= 25:
+		if current_streak == 25: AudioManager.mega_streak.play()
 		formatted_text += "[shake rate=20.0 level=5][wave amp=10.0 freq=2.0][rainbow freq=1.5 sat=0.9 val=1.0]"
 		formatted_text += "STREAK x %d" % current_streak
 		formatted_text += "[/rainbow][/wave][/shake]"
-		AudioManager.mega_streak.play()
 		
 	elif current_streak >= 10:
 		formatted_text += "[shake rate=20.0 level=5][wave amp=10.0 freq=2.0]"
@@ -586,7 +617,7 @@ func show_streak_label():
 	streak_label.text = formatted_text
 	
 	var base_pitch = 1.0
-	var max_pitch_increase = 1.0  # Maximum increase above base pitch
+	var max_pitch_increase = 1.5  # Maximum increase above base pitch
 	var steps = 30.0  # Number of steps to reach maximum
 	var pitch_increase = min((current_streak / steps) * max_pitch_increase, max_pitch_increase)
 	AudioManager.streak.pitch_scale = base_pitch + pitch_increase

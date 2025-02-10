@@ -2,39 +2,23 @@ extends CanvasLayer
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-@onready var beginner: Button = $ColorRect/VBoxContainer/Beginner
-@onready var casual: Button = $ColorRect/VBoxContainer/Casual
-@onready var challenging: Button = $ColorRect/VBoxContainer/Challenging
-@onready var expert: Button = $ColorRect/VBoxContainer/Expert
-@onready var insane: Button = $ColorRect/VBoxContainer/Insane
-
-@onready var buttons: Array = [$ColorRect/VBoxContainer/Beginner, 
-							   $ColorRect/VBoxContainer/Casual, 
-							   $ColorRect/VBoxContainer/Challenging, 
-							   $ColorRect/VBoxContainer/Expert, 
-							   $ColorRect/VBoxContainer/Insane]
-
-
-func _on_button_mouse_entered(button_node: Button):
-	var tween = create_tween()
-	tween.tween_property(button_node, "scale", Vector2(1.1, 1.1), 0.1).set_trans(Tween.TRANS_LINEAR)
-	AudioManager.ui_hover.pitch_scale = randf_range(0.9, 1.1)
-	AudioManager.ui_hover.play()
-	
-func _on_button_mouse_exited(button_node: Button):
-	var tween = create_tween()
-	tween.tween_property(button_node, "scale", Vector2(1, 1), 0.05).set_trans(Tween.TRANS_LINEAR)
+@onready var beginner: FancyButton = $ColorRect/VBoxContainer/Beginner
+@onready var casual: FancyButton = $ColorRect/VBoxContainer/Casual
+@onready var challenging: FancyButton = $ColorRect/VBoxContainer/Challenging
+@onready var expert: FancyButton = $ColorRect/VBoxContainer/Expert
+@onready var pro: FancyButton = $ColorRect/VBoxContainer/Pro
+@onready var insane: FancyButton = $ColorRect/VBoxContainer/Insane
 
 func _ready():
-	beginner.pressed.connect(func(): start_game(30))
-	casual.pressed.connect(func(): start_game(80))        
-	challenging.pressed.connect(func(): start_game(180)) 
-	expert.pressed.connect(func(): start_game(230))
+	# Connect the pressed signals for starting the game.
+	beginner.pressed.connect(func(): start_game(40))
+	casual.pressed.connect(func(): start_game(100))
+	challenging.pressed.connect(func(): start_game(190))
+	expert.pressed.connect(func(): start_game(240))
+	pro.pressed.connect(func(): start_game(310))
 	insane.pressed.connect(func(): start_game(400))
-	for button in buttons:
-		button.pivot_offset = button.size / 2
-		button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
-		button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
+	
+	challenging.grab_focus()
 
 func start_game(speed: int):
 	AudioManager.click.play()

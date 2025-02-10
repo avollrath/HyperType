@@ -19,3 +19,7 @@ extends Node
 @onready var heart_beat: AudioStreamPlayer = $HeartBeat
 @onready var space_ship: AudioStreamPlayer = $SpaceShip
 @onready var boss: AudioStreamPlayer = $Boss
+
+
+func _ready():
+	background_music.process_mode = Node.PROCESS_MODE_ALWAYS

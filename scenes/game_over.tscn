@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bubeh4ycf6ryi"]
+[gd_scene load_steps=8 format=3 uid="uid://bubeh4ycf6ryi"]
 
 [ext_resource type="Script" path="res://scripts/game_over.gd" id="1_mfbuj"]
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_0t601"]
+[ext_resource type="Script" path="res://scripts/fancy_button.gd" id="3_rxdb7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nk6dx"]
 bg_color = Color(0, 0, 0, 0.505882)
@@ -754,7 +755,7 @@ modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 32
-text = "Correct words"
+text = "Perfect words"
 vertical_alignment = 1
 
 [node name="Accuracy" type="Label" parent="Panel2/KeyLabels"]
@@ -790,14 +791,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -294.5
-offset_top = -160.0
+offset_top = -182.0
 offset_right = 294.5
-offset_bottom = -45.0
+offset_bottom = -67.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 36
 text = "Press ENTER to restart"
+script = ExtResource("3_rxdb7")
 
 [node name="DifficultySelect" type="OptionButton" parent="."]
 layout_mode = 1

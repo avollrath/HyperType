@@ -1,17 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://bwrxehprj18ec"]
+[gd_scene load_steps=11 format=3 uid="uid://w5ky8semj5u0"]
 
-[ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="1_5hhq5"]
-[ext_resource type="Script" path="res://scripts/intro_screen.gd" id="1_wgapw"]
-[ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="3_6ocqt"]
-[ext_resource type="PackedScene" uid="uid://bkktuhsu50c7l" path="res://scenes/FancyButton.tscn" id="3_fn42x"]
-[ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_3gr05"]
+[ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_vcho8"]
+[ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_8vexn"]
+[ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="3_2ow0j"]
+[ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_qdikl"]
 
 [sub_resource type="Animation" id="Animation_gr18u"]
 length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IntroScreen/ColorRect:modulate:a")
+tracks/0/path = NodePath("PauseMenu/ColorRect:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -22,7 +21,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IntroScreen/ColorRect/VBoxContainer:modulate:a")
+tracks/1/path = NodePath("PauseMenu/ColorRect/VBoxContainer:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -33,7 +32,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("PauseMenu/ColorRect/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -44,7 +43,7 @@ tracks/2/keys = {
 tracks/3/type = "bezier"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("IntroScreen/ColorRect/Title:position:y")
+tracks/3/path = NodePath("PauseMenu/ColorRect/Title:position:y")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -55,7 +54,7 @@ tracks/3/keys = {
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("IntroScreen/ColorRect/Title:theme_override_font_sizes/font_size")
+tracks/4/path = NodePath("PauseMenu/ColorRect/Title:theme_override_font_sizes/font_size")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -66,7 +65,7 @@ tracks/4/keys = {
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:x")
+tracks/5/path = NodePath("PauseMenu/ColorRect/VBoxContainer:scale:x")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -77,7 +76,7 @@ tracks/5/keys = {
 tracks/6/type = "bezier"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:y")
+tracks/6/path = NodePath("PauseMenu/ColorRect/VBoxContainer:scale:y")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -92,7 +91,7 @@ length = 1.5
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("IntroScreen/ColorRect:modulate:a")
+tracks/0/path = NodePath("PauseMenu/ColorRect:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -103,7 +102,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IntroScreen/ColorRect/VBoxContainer:modulate:a")
+tracks/1/path = NodePath("PauseMenu/ColorRect/VBoxContainer:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -114,7 +113,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("PauseMenu/ColorRect/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -125,29 +124,29 @@ tracks/2/keys = {
 tracks/3/type = "bezier"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("IntroScreen/ColorRect/Title:position:y")
+tracks/3/path = NodePath("PauseMenu/ColorRect/Title:position:y")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(17, -0.25, 0, 0.366667, -105.5, 300, -0.266667, 90.5, 0.0666667, -2.90488),
+"points": PackedFloat32Array(17, -0.25, 0, 0.0666667, 161.401, 300, -0.1, -1.1333, 0.0666667, -2.90488),
 "times": PackedFloat32Array(0.2, 0.666667)
 }
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("IntroScreen/ColorRect/Title:theme_override_font_sizes/font_size")
+tracks/4/path = NodePath("PauseMenu/ColorRect/Title:theme_override_font_sizes/font_size")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(64, -0.25, 0, 0.366667, -8.5, 184, -0.166667, -139.5, 0.25, 0),
-"times": PackedFloat32Array(0.666667, 0.9)
+"points": PackedFloat32Array(64, -0.25, 0, 0.0333333, -37.9536, 184, -0.333333, -16.2288, 0.25, 0),
+"times": PackedFloat32Array(0.2, 0.9)
 }
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:x")
+tracks/5/path = NodePath("PauseMenu/ColorRect/VBoxContainer:scale:x")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -158,7 +157,7 @@ tracks/5/keys = {
 tracks/6/type = "bezier"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:y")
+tracks/6/path = NodePath("PauseMenu/ColorRect/VBoxContainer:scale:y")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -174,19 +173,20 @@ _data = {
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g8jff"]
-shader = ExtResource("3_6ocqt")
+shader = ExtResource("3_2ow0j")
 
 [sub_resource type="QuadMesh" id="QuadMesh_pmvvx"]
 size = Vector2(1600, 900)
 center_offset = Vector3(800, 450, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4r8c5"]
-shader = ExtResource("4_3gr05")
+shader = ExtResource("4_qdikl")
 shader_parameter/apply = true
 shader_parameter/amount = 0.1
 
-[node name="IntroScreen" type="CanvasLayer"]
-script = ExtResource("1_wgapw")
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 3
+script = ExtResource("1_vcho8")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -207,7 +207,7 @@ offset_top = 17.0
 offset_right = 595.5
 offset_bottom = 282.0
 grow_horizontal = 2
-theme = ExtResource("1_5hhq5")
+theme = ExtResource("2_8vexn")
 theme_override_colors/font_color = Color(1, 0, 1, 1)
 theme_override_font_sizes/font_size = 64
 text = "HyperType"
@@ -215,7 +215,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Difficulty" type="Label" parent="ColorRect"]
-modulate = Color(1, 1, 1, 0.96843)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -225,10 +224,10 @@ offset_top = 204.0
 offset_right = 184.0
 offset_bottom = 245.0
 grow_horizontal = 2
-theme = ExtResource("1_5hhq5")
+theme = ExtResource("2_8vexn")
 theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
 theme_override_font_sizes/font_size = 32
-text = "Choose difficulty:"
+text = "PAUSE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -245,7 +244,7 @@ offset_right = 366.5
 offset_bottom = 55.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("1_5hhq5")
+theme = ExtResource("2_8vexn")
 theme_override_font_sizes/font_size = 16
 text = "Version 0.1
 by André Vollrath"
@@ -253,7 +252,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
-modulate = Color(1, 1, 1, 0.967196)
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -267,33 +265,31 @@ offset_right = 235.0
 offset_bottom = 243.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.98214, 0.98214)
 pivot_offset = Vector2(235, 215)
 theme_override_constants/separation = 20
 
-[node name="Beginner" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="Continue" type="Button" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
-text = "Beginner"
+size_flags_horizontal = 4
+theme = ExtResource("2_8vexn")
+text = "Continue"
 
-[node name="Casual" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="Settings" type="Button" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
-text = "Casual"
+size_flags_horizontal = 4
+theme = ExtResource("2_8vexn")
+text = "Settings
+"
 
-[node name="Challenging" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="Quit" type="Button" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
-text = "Challenging"
-
-[node name="Expert" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Expert"
-
-[node name="Pro" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Pro"
-
-[node name="Insane" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Insane"
+size_flags_horizontal = 4
+theme = ExtResource("2_8vexn")
+text = "Quit
+"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
@@ -302,12 +298,14 @@ libraries = {
 }
 
 [node name="CrtShader" type="CanvasLayer" parent="."]
+layer = -1
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="CrtShader"]
 material = SubResource("ShaderMaterial_g8jff")
 mesh = SubResource("QuadMesh_pmvvx")
 
 [node name="CroAbrShader" type="CanvasLayer" parent="."]
+layer = -1
 
 [node name="ColorRect" type="ColorRect" parent="CroAbrShader"]
 material = SubResource("ShaderMaterial_4r8c5")

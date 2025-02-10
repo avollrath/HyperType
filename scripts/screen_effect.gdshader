@@ -1,8 +1,8 @@
 shader_type canvas_item;
 render_mode unshaded, skip_vertex_transform;
 
-const float curvature = 7.0;
-const float vignette_multiplier = 0.4;
+const float curvature = 8.0;
+const float vignette_multiplier = 0.2;
 const float blur_amount = 0.15;
 
 uniform sampler2D screen_texture: hint_screen_texture, filter_linear_mipmap;

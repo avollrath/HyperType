@@ -279,17 +279,19 @@ _data = {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s1jjq"]
 shader = ExtResource("10_qbuny")
-shader_parameter/strength = 0.09
+shader_parameter/strength = 0.1
 shader_parameter/center = Vector2(0.5, 0.7)
-shader_parameter/radius = 0.0
-shader_parameter/aberration = 0.425
-shader_parameter/width = 0.04
-shader_parameter/feather = 0.135
+shader_parameter/radius = 1.0
+shader_parameter/aberration = 0.807
+shader_parameter/width = 0.0613
+shader_parameter/feather = 0.68
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rq31a"]
 shader = ExtResource("11_hd5oc")
 
 [sub_resource type="QuadMesh" id="QuadMesh_y2uil"]
+lightmap_size_hint = Vector2i(8002, 4502)
+add_uv2 = true
 size = Vector2(1600, 900)
 center_offset = Vector3(800, 450, 0)
 
@@ -410,4 +412,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 metadata/_edit_use_anchors_ = true
