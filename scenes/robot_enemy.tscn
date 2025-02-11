@@ -1,10 +1,31 @@
-[gd_scene load_steps=32 format=3 uid="uid://hu7txgloseo5"]
+[gd_scene load_steps=35 format=3 uid="uid://hu7txgloseo5"]
 
 [ext_resource type="Script" path="res://scripts/robot_enemy.gd" id="1_f26ew"]
 [ext_resource type="Texture2D" uid="uid://ryrsu3qkb2u0" path="res://assets/sprites/robot.png" id="2_ixnh3"]
 [ext_resource type="Texture2D" uid="uid://daeu4a040h1kf" path="res://assets/sprites/explosion-animation.png" id="2_okf6f"]
 [ext_resource type="Texture2D" uid="uid://dp8mc3amuuowd" path="res://assets/sprites/spacemarine.png" id="3_f8hwv"]
 [ext_resource type="Texture2D" uid="uid://dqilf5mponwgu" path="res://assets/sprites/light.webp" id="5_2fbpe"]
+
+[sub_resource type="Gradient" id="Gradient_qaeuv"]
+offsets = PackedFloat32Array(0, 0.128065, 0.711172, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.501407, 0.501406, 0.501406, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l8po7"]
+gradient = SubResource("Gradient_qaeuv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_64bnf"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(50, 10, 1)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(1, -1, 0)
+spread = 60.0
+initial_velocity_min = 30.0
+initial_velocity_max = 80.0
+gravity = Vector3(30, -200, 0)
+scale_min = 3.0
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_l8po7")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6gkg5"]
 atlas = ExtResource("2_ixnh3")
@@ -189,6 +210,14 @@ size = Vector2(101, 229)
 [node name="RobotEnemy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_f26ew")
+
+[node name="RollParticles" type="GPUParticles2D" parent="."]
+position = Vector2(40, -8)
+amount = 60
+process_material = SubResource("ParticleProcessMaterial_64bnf")
+lifetime = 0.2
+explosiveness = 0.1
+randomness = 0.1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-5, -110.385)

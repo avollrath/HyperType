@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cmg2xd7seh14r"]
+[gd_scene load_steps=32 format=3 uid="uid://cmg2xd7seh14r"]
 
 [ext_resource type="Script" path="res://scripts/small_enemy.gd" id="1_1iejs"]
 [ext_resource type="Texture2D" uid="uid://cap74ekfn13op" path="res://assets/sprites/mech-unit.png" id="1_gyve2"]
@@ -165,6 +165,27 @@ size = Vector2(49, 218)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23m84"]
 size = Vector2(101, 229)
 
+[sub_resource type="Gradient" id="Gradient_ludoy"]
+offsets = PackedFloat32Array(0, 0.0762943, 0.430518, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.758192, 0.758192, 0.758192, 1, 0.621524, 0.621524, 0.621524, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_picfs"]
+gradient = SubResource("Gradient_ludoy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j4xr0"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 1, 1)
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector3(10, -10, 0)
+spread = 50.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 20, 0)
+scale_min = 2.0
+scale_max = 6.0
+color_ramp = SubResource("GradientTexture1D_picfs")
+
 [node name="SmallEnemy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_1iejs")
@@ -175,7 +196,7 @@ scale = Vector2(2.16313, 2.16312)
 sprite_frames = SubResource("SpriteFrames_8f0rd")
 animation = &"walking"
 autoplay = "walking"
-frame_progress = 0.114118
+frame = 3
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -195,3 +216,14 @@ position = Vector2(-8, -76)
 scale = Vector2(0.0172812, 0.0172812)
 enabled = false
 texture = ExtResource("5_bus38")
+
+[node name="SmallStepParticles" type="GPUParticles2D" parent="."]
+z_index = 1
+position = Vector2(-42, -1)
+emitting = false
+amount = 5
+process_material = SubResource("ParticleProcessMaterial_j4xr0")
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+randomness = 0.1

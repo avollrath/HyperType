@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://kb0iaplmpqsp"]
+[gd_scene load_steps=26 format=3 uid="uid://kb0iaplmpqsp"]
 
 [ext_resource type="Script" path="res://scripts/tank_enemy.gd" id="1_ryhqm"]
 [ext_resource type="Texture2D" uid="uid://daeu4a040h1kf" path="res://assets/sprites/explosion-animation.png" id="2_e6p0g"]
@@ -123,6 +123,27 @@ size = Vector2(32, 46)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23m84"]
 size = Vector2(364, 125)
 
+[sub_resource type="Gradient" id="Gradient_e82o5"]
+offsets = PackedFloat32Array(0, 0.128065, 0.711172, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.1596, 0.306533, 0.38, 1, 0.55, 0.85, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wtk70"]
+gradient = SubResource("Gradient_e82o5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3crce"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(200, 5, 1)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(20, -1, 0)
+spread = 10.0
+initial_velocity_min = 30.0
+initial_velocity_max = 80.0
+gravity = Vector3(30, -20, 0)
+scale_min = 3.0
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_wtk70")
+
 [node name="TankEnemy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_ryhqm")
@@ -153,3 +174,11 @@ enabled = false
 color = Color(1, 1, 0.745098, 1)
 energy = 3.0
 texture = ExtResource("5_its5u")
+
+[node name="RollParticles" type="GPUParticles2D" parent="."]
+position = Vector2(-48, -1)
+amount = 60
+process_material = SubResource("ParticleProcessMaterial_3crce")
+lifetime = 0.2
+explosiveness = 0.1
+randomness = 0.1

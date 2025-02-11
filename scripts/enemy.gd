@@ -25,7 +25,6 @@ var letter_scene = preload("res://scenes/letter.tscn")
 var light_scale: Vector2 = Vector2(1.5, 1.5)
 
 var last_frame = 0
-var emission_frames = [2, 4] 
 
 func _ready():
 	if point_light_2d:
@@ -87,7 +86,7 @@ func _physics_process(_delta):
 				await get_tree().create_timer(0.3).timeout
 				new_original.queue_free()
 				
-			elif current_frame == 1:
+			elif current_frame == 0:
 				# Frame 3: Create duplicate for background particles
 				var new_back_particles = step_particles.duplicate()
 				add_child(new_back_particles)

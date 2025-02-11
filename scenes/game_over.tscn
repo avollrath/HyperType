@@ -800,6 +800,7 @@ theme = ExtResource("2_0t601")
 theme_override_font_sizes/font_size = 36
 text = "Press ENTER to restart"
 script = ExtResource("3_rxdb7")
+hover_rotation = 0.0
 
 [node name="DifficultySelect" type="OptionButton" parent="."]
 layout_mode = 1

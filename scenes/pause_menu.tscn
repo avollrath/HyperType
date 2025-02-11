@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://w5ky8semj5u0"]
+[gd_scene load_steps=13 format=3 uid="uid://w5ky8semj5u0"]
 
 [ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_vcho8"]
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_8vexn"]
 [ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="3_2ow0j"]
+[ext_resource type="Script" path="res://scripts/fancy_button.gd" id="3_mj5sj"]
 [ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_qdikl"]
 
 [sub_resource type="Animation" id="Animation_gr18u"]
@@ -84,10 +85,21 @@ tracks/6/keys = {
 "points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("PauseMenu:offset:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
 
 [sub_resource type="Animation" id="Animation_s84vx"]
-resource_name = "intro"
-length = 1.5
+resource_name = "Outro"
+length = 2.0
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -183,10 +195,36 @@ tracks/7/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_yqv5d"]
+resource_name = "intro"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PauseMenu:offset:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-1000, -0.25, 0, 0.466667, -163.277, 0, -0.3, 231.441, 0.25, 0),
+"times": PackedFloat32Array(0, 0.633333)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PauseMenu/ColorRect/VBoxContainer:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0.633333, 1)
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n8v4a"]
 _data = {
+"Outro": SubResource("Animation_s84vx"),
 "RESET": SubResource("Animation_gr18u"),
-"intro": SubResource("Animation_s84vx")
+"intro": SubResource("Animation_yqv5d")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vxwgb"]
@@ -220,7 +258,7 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -595.5
-offset_top = 17.0
+offset_top = 16.9999
 offset_right = 595.5
 offset_bottom = 282.0
 grow_horizontal = 2
@@ -291,6 +329,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_8vexn")
 text = "Continue"
+script = ExtResource("3_mj5sj")
+hover_rotation = 0.0
 
 [node name="Settings" type="Button" parent="ColorRect/VBoxContainer"]
 custom_minimum_size = Vector2(400, 70)
@@ -299,6 +339,8 @@ size_flags_horizontal = 4
 theme = ExtResource("2_8vexn")
 text = "Settings
 "
+script = ExtResource("3_mj5sj")
+hover_rotation = 0.0
 
 [node name="Quit" type="Button" parent="ColorRect/VBoxContainer"]
 custom_minimum_size = Vector2(400, 70)
@@ -307,6 +349,8 @@ size_flags_horizontal = 4
 theme = ExtResource("2_8vexn")
 text = "Quit
 "
+script = ExtResource("3_mj5sj")
+hover_rotation = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")

@@ -146,9 +146,9 @@ size = Vector2(42, 46)
 
 [sub_resource type="Gradient" id="Gradient_2q10r"]
 offsets = PackedFloat32Array(0, 0.0762943, 0.430518, 1)
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 0.621524, 0.621524, 0.621524, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0, 0, 0, 0, 0.758192, 0.758192, 0.758192, 1, 0.621524, 0.621524, 0.621524, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_picfs"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pihpi"]
 gradient = SubResource("Gradient_2q10r")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hy0eb"]
@@ -156,13 +156,14 @@ particle_flag_disable_z = true
 emission_shape_scale = Vector3(10, 1, 1)
 emission_shape = 2
 emission_sphere_radius = 1.0
-direction = Vector3(10, -10, 0)
-initial_velocity_min = 100.0
+direction = Vector3(1, -10, 0)
+spread = 90.0
+initial_velocity_min = 20.0
 initial_velocity_max = 200.0
 gravity = Vector3(0, 20, 0)
-scale_min = 4.0
-scale_max = 8.0
-color_ramp = SubResource("GradientTexture1D_picfs")
+scale_min = 3.0
+scale_max = 10.0
+color_ramp = SubResource("GradientTexture1D_pihpi")
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -202,9 +203,9 @@ texture = ExtResource("5_arlas")
 z_index = 1
 position = Vector2(-8, -2)
 emitting = false
-amount = 20
+amount = 3
 process_material = SubResource("ParticleProcessMaterial_hy0eb")
-lifetime = 0.3
+lifetime = 0.2
 one_shot = true
 explosiveness = 1.0
-randomness = 0.5
+randomness = 0.1
