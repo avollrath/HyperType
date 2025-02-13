@@ -46,3 +46,8 @@ func playVoice():
 	
 func playHit():
 	AudioManager.cinematic_hit.play()
+	
+func _input(event: InputEvent) -> void:
+
+	if event.is_action_pressed("ui_cancel"):  # ESC key
+		resume_game()

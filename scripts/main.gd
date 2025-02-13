@@ -167,28 +167,31 @@ func _input(event: InputEvent) -> void:
 			
 func toggle_pause():
 	is_paused = !is_paused
-	
+
 	var time_played = Time.get_unix_time_from_system() - start_time
 	var accuracy = (float(correct_chars) / total_chars_typed * 100) if total_chars_typed > 0 else 0.0
 	var wpm = (correct_chars / 5.0) / (active_typing_time / 60.0) if active_typing_time > 0 else 0.0
-	
+
 	var pause_menu = preload("res://scenes/pause_menu.tscn").instantiate()
 	pause_menu.process_mode = Node.PROCESS_MODE_ALWAYS
-	#pause_menu.initialize_stats({
-		#"score": score,
-		#"level": current_level,
-		#"time_played": time_played,
-		#"correct_words": correct_words,
-		#"total_chars": total_chars_typed,
-		#"correct_chars": correct_chars,
-		#"accuracy": accuracy,
-		#"longest_streak": longest_streak,
-		#"wpm": wpm
-	#})
-	
-	get_tree().get_root().add_child(pause_menu)
-	ui_layer.hide()
+
+	var main_node = get_node("/root/Main")
+
+	# Find the index of CrtShader manually
+	var crt_shader_index = -1
+	for i in range(main_node.get_child_count()):
+		if main_node.get_child(i) == $CrtShader:
+			crt_shader_index = i
+			break
+
+	# If CrtShader exists, insert pause_menu above it; otherwise, just add at the end
+	main_node.add_child(pause_menu)
+	if crt_shader_index > 0:
+		main_node.move_child(pause_menu, crt_shader_index)
+
 	get_tree().paused = true
+
+
 		
 func check_typed_letter(letter: String):
 	var enemies = enemy_container.get_children()

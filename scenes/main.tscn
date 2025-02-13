@@ -391,6 +391,7 @@ libraries = {
 autoplay = "start"
 
 [node name="DistortionShader" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_s1jjq")
 offset_left = -72.0
 offset_top = -17.0
@@ -398,12 +399,14 @@ offset_right = 1680.0
 offset_bottom = 944.0
 
 [node name="CrtShader" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="CrtShader"]
 material = SubResource("ShaderMaterial_rq31a")
 mesh = SubResource("QuadMesh_y2uil")
 
 [node name="CroAbrShader" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="ColorRect" type="ColorRect" parent="CroAbrShader"]
 material = SubResource("ShaderMaterial_j2jwx")
