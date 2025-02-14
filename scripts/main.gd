@@ -44,6 +44,9 @@ var score_tween: Tween = null
 @onready var lives_container: HBoxContainer = $UI/LivesContainer
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
 @onready var distortion_shader: ColorRect = $DistortionShader
+@onready var achievement_label: Label = $UI/AchievementsContainer/AchievementLabel
+@onready var debug_label: Label = $UI/DebugLabel
+
 
 var current_enemy_speed: int
 var base_level_threshold: int = 1000
@@ -58,6 +61,30 @@ var tank_present = false
 var tank_spawned_this_level = false
 
 var is_paused = false
+
+func update_debug_text():
+	debug_label.text = """
+	📊 **DEBUG STATS**
+	-------------------
+	🕒 Playtime: %d sec
+	⌨️ Words Typed: %d
+	🎯 Accuracy: %.1f%%
+	🏆 Bosses Defeated: %d
+	🔥 Highest Level: %d
+	💀 Total Deaths: %d
+	👹 Enemies Defeated: %d
+	""" % [
+		Achievements.stats["total_playtime"],
+		Achievements.stats["total_words_typed"],
+		Achievements.stats["overall_accuracy"],
+		Achievements.stats["bosses_defeated"],
+		Achievements.stats["highest_level"],
+		Achievements.stats["total_deaths"],
+		Achievements.stats["enemies_defeated"]
+	]
+
+func _on_achievement_unlocked(achievement_id):
+	achievement_label.text = "Achievement Unlocked: " + achievement_id
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -218,10 +245,11 @@ func check_typed_letter(letter: String):
 			player.shoot(first_letter_scene.global_position)
 			valid_enemy.destroy_letter(letter)
 			if valid_enemy.current_letters.is_empty():
-				if is_current_word_correct:  # Only count if no mistakes were made
+				Achievements.update_stat("total_words_typed", 1)
+				if is_current_word_correct:
 					current_streak += 1
 					longest_streak = max(longest_streak, current_streak)
-				is_current_word_correct = true  # Reset for next word
+				is_current_word_correct = true
 			return
 			
 	valid_enemy.flash_letter()
@@ -326,7 +354,7 @@ func show_floating_score(amount: int) -> void:
 
 
 func schedule_score_removal():
-	await get_tree().create_timer(0.03).timeout  # Wait for 0.5s before starting removal
+	await get_tree().create_timer(0.03).timeout 
 	if floating_scores.is_empty():
 		return
 	remove_oldest_score()
@@ -362,7 +390,7 @@ func move_scores_up():
 	for i in range(floating_scores.size()):
 		var target_label = floating_scores[i]
 		var new_y = base_y + (i * 20) - 20
-		tween.tween_property(target_label, "position:y", new_y, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(target_label, "position:y", new_y, 0.05).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func animate_level_label():
 	level_label.pivot_offset = level_label.size / 2
@@ -525,6 +553,7 @@ func spawn_regular_enemy():
 	spawn_timer.start()
 
 func _on_tank_died():
+	Achievements.update_stat("bosses_defeated", 1)
 	AudioManager.tank_sound.stop()
 	AudioManager.space_ship.stop()
 	AudioManager.boss.stop()
@@ -546,6 +575,7 @@ func _on_tank_died():
 	
 	correct_words_this_level = 0
 	current_level += 1
+	Achievements.update_stat("highest_level", current_level)
 	tank_spawned_this_level = false
 	required_enemies_for_boss = 15 + (current_level - 1) * 3  # Increase requirement for next boss
 	animate_level_label()
@@ -562,6 +592,8 @@ func _on_tank_died():
 	spawn_timer.start()
 
 func _on_enemy_died():
+	Achievements.update_stat("enemies_defeated", 1)
+	update_debug_text()
 	show_streak_label()
 	shake_camera(2.0, 0.2)
 	update_score(50)

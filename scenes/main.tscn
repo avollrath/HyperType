@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://dcu65u7n4kvkh"]
+[gd_scene load_steps=27 format=4 uid="uid://dcu65u7n4kvkh"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_tooxf"]
 [ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="2_odlv3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c3y7y27cfprmf" path="res://assets/sprites/buildings.png" id="3_m71s5"]
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="4_dsgsp"]
 [ext_resource type="Texture2D" uid="uid://cx7ko45sjlmp7" path="res://assets/sprites/tile-set-sci-fi-interior-platform.png" id="7_ecekt"]
+[ext_resource type="Texture2D" uid="uid://dif857j6fhw2a" path="res://assets/sprites/badges/crosshair.webp" id="8_5oncf"]
 [ext_resource type="Shader" path="res://scenes/water_shader.gdshader" id="8_gdsrt"]
 [ext_resource type="Texture2D" uid="uid://covr7ivlhm0ff" path="res://assets/sprites/128x128_square.jpg" id="9_pjt0b"]
 [ext_resource type="Shader" path="res://scripts/distortion.gdshader" id="10_qbuny"]
@@ -374,6 +375,48 @@ grow_horizontal = 0
 scale = Vector2(2, 2)
 theme_override_constants/separation = 3
 alignment = 1
+
+[node name="AchievementsContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -145.0
+offset_top = -355.0
+offset_right = 145.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = -170
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/AchievementsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("8_5oncf")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="AchievementLabel" type="Label" parent="UI/AchievementsContainer"]
+layout_mode = 2
+theme = ExtResource("4_dsgsp")
+text = "Enemies killed: 123"
+horizontal_alignment = 1
+
+[node name="DebugLabel" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -276.0
+offset_top = 94.0
+offset_right = -236.0
+offset_bottom = 117.0
+grow_horizontal = 0
+text = "Loading ..."
 
 [node name="128x128Square" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_8r1il")

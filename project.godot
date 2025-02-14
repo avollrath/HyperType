@@ -19,6 +19,7 @@ boot_splash/show_image=false
 
 AudioManager="*res://scenes/audio_manager.tscn"
 GameSettings="*res://scripts/game_settings.gd"
+Achievements="*res://scripts/Achievements.gd"
 
 [display]
 

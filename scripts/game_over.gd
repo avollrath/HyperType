@@ -163,7 +163,7 @@ func restart_game() -> void:
 		current_main.free()
 	
 	for child in root.get_children():
-		if child.name.begins_with("@") or child == self or child.name == "AudioManager" or child.name == "GameSettings":
+		if child.name.begins_with("@") or child == self or child.name == "AudioManager" or child.name == "GameSettings" or child.name == "Achievements":
 			continue  # Skip internal nodes, self, and our singletons
 		child.free()
 	
