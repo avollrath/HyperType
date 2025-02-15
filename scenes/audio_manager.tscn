@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://0p5ngvxrgafv"]
+[gd_scene load_steps=24 format=3 uid="uid://0p5ngvxrgafv"]
 
 [ext_resource type="Script" path="res://scripts/audio_manager.gd" id="1_xcg2r"]
 [ext_resource type="AudioStream" uid="uid://bcv40xlq1eivu" path="res://assets/sounds/type(shot).mp3" id="2_oudpu"]
@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://b8d5p40l5jxfk" path="res://assets/sounds/boss-present.mp3" id="20_frxcr"]
 [ext_resource type="AudioStream" uid="uid://bg26u7fx6xyvg" path="res://assets/sounds/hypertype-voice.mp3" id="21_nfi3w"]
 [ext_resource type="AudioStream" uid="uid://83ftse2khy1w" path="res://assets/sounds/cinematic-hit.mp3" id="22_is2bj"]
+[ext_resource type="AudioStream" uid="uid://vfpem4cfe6wh" path="res://assets/sounds/achievement.mp3" id="23_fta11"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_xcg2r")
@@ -107,10 +108,17 @@ stream = ExtResource("20_frxcr")
 
 [node name="HypertypeVoice" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("21_nfi3w")
-bus = &"Hypertype"
+bus = &"Voices"
 
 [node name="CinematicHit" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("22_is2bj")
 bus = &"SFX"
 
-[node name="AudioStreamPlayer8" type="AudioStreamPlayer" parent="."]
+[node name="Achievement" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("23_fta11")
+bus = &"SFX"
+
+[node name="AchievementVoice" type="AudioStreamPlayer" parent="."]
+bus = &"Voices"
+
+[node name="AudioStreamPlayer10" type="AudioStreamPlayer" parent="."]

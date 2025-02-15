@@ -45,7 +45,9 @@ var score_tween: Tween = null
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
 @onready var distortion_shader: ColorRect = $DistortionShader
 @onready var achievement_label: Label = $UI/AchievementsContainer/AchievementLabel
+@onready var achievement_badge: TextureRect = $UI/AchievementsContainer/AchievementBadge
 @onready var debug_label: Label = $UI/DebugLabel
+@onready var achievement_animation: AnimationPlayer = $UI/AchievementAnimation
 
 
 var current_enemy_speed: int
@@ -62,31 +64,125 @@ var tank_spawned_this_level = false
 
 var is_paused = false
 
+# ============================================================================
+# PLAYTIME TRACKING (only counts when game is active and not paused)
+# ============================================================================
+var active_playtime: float = 0.0
+var playtime_timer: float = 0.0
+# Update Achievements stat every 1 second of active gameplay:
+var playtime_update_interval: float = 1.0
+
 func update_debug_text():
-	debug_label.text = """
-	📊 **DEBUG STATS**
-	-------------------
-	🕒 Playtime: %d sec
-	⌨️ Words Typed: %d
-	🎯 Accuracy: %.1f%%
-	🏆 Bosses Defeated: %d
-	🔥 Highest Level: %d
-	💀 Total Deaths: %d
-	👹 Enemies Defeated: %d
-	""" % [
+	var persistent_text = """
+📊 **PERSISTENT STATS**
+-------------------
+🕒 Total Playtime: %d sec
+⌨️ Total Words Typed: %d
+🔥 Longest Streak: %d
+🎯 Overall Accuracy: %.1f%%
+🏆 Bosses Defeated: %d
+🚀 Highest Level: %d
+💀 Total Deaths: %d
+👹 Enemies Defeated: %d
+✅ Perfect Levels: %d
+💪 Comebacks: %d
+""" % [
 		Achievements.stats["total_playtime"],
 		Achievements.stats["total_words_typed"],
+		Achievements.stats["longest_streak"],
 		Achievements.stats["overall_accuracy"],
 		Achievements.stats["bosses_defeated"],
 		Achievements.stats["highest_level"],
 		Achievements.stats["total_deaths"],
-		Achievements.stats["enemies_defeated"]
+		Achievements.stats["enemies_defeated"],
+		Achievements.stats["perfect_levels_count"],
+		Achievements.stats["comebacks_count"]
 	]
+	
+	var run_text = """
+🏃 **RUN STATS**
+-------------------
+🏁 Words Typed This Run: %d
+🔥 Bosses Defeated This Run: %d
+""" % [
+		Achievements.run_stats["total_words_typed"],
+		Achievements.run_stats["bosses_defeated"]
+	]
+	
+	var achievement_text = "----- Unlocked Achievements -----\n"
+	for achievement_id in Achievements.ACHIEVEMENTS.keys():
+		if Achievements.is_unlocked(achievement_id):
+			var achievement = Achievements.ACHIEVEMENTS[achievement_id]
+			achievement_text += "✨ " + achievement.title + "\n"
+	for achievement_id in Achievements.RUN_ACHIEVEMENTS.keys():
+		if Achievements.is_unlocked(achievement_id):
+			var achievement = Achievements.RUN_ACHIEVEMENTS[achievement_id]
+			achievement_text += "✨ " + achievement.title + "\n"
+	if achievement_text == "----- Unlocked Achievements -----\n":
+		achievement_text += "None yet!\n"
+		
+	debug_label.text = persistent_text + "\n" + run_text + "\n" + achievement_text
 
-func _on_achievement_unlocked(achievement_id):
-	achievement_label.text = "Achievement Unlocked: " + achievement_id
+
+var achievement_queue: Array = []
+var is_playing_achievement = false
+
+func _on_achievement_unlocked(achievement_id: String) -> void:
+	print("Achievement queued:", achievement_id)  # Log each queued achievement
+	achievement_queue.append(achievement_id)
+	
+	# If an animation is NOT currently playing, start processing the queue
+	if not is_playing_achievement:
+		print("Starting achievement queue processing")
+		process_achievement_queue()
+	else:
+		print("Achievement queued, waiting for current animation to finish.")
+
+func process_achievement_queue():
+	if achievement_queue.is_empty():
+		is_playing_achievement = false
+		return
+	
+	is_playing_achievement = true
+	var achievement_id = achievement_queue.pop_front()
+
+	var achievement_data: Dictionary
+	if Achievements.ACHIEVEMENTS.has(achievement_id):
+		achievement_data = Achievements.ACHIEVEMENTS[achievement_id]
+	elif Achievements.RUN_ACHIEVEMENTS.has(achievement_id):
+		achievement_data = Achievements.RUN_ACHIEVEMENTS[achievement_id]
+	else:
+		achievement_data = {"title": achievement_id, "description": ""}
+
+	achievement_label.text = "Achievement Unlocked: " + achievement_data.title
+	achievement_badge.texture = Achievements.get_badge_texture(achievement_id)
+	
+	achievement_animation.stop()  # Stop any previous animation
+	achievement_animation.seek(0, true)  # Reset animation to start
+	achievement_animation.play("achievement_appear")
+	
+	print("Playing achievement sound")
+	AudioManager.achievement.play()
+	await AudioManager.achievement.finished
+	print("Achievement sound finished for:", achievement_data.title)
+
+	if achievement_data.has("voice_file"):
+		var voice_stream = load(achievement_data.voice_file) as AudioStream
+		if voice_stream:
+			AudioManager.achievement_voice.stream = voice_stream
+			AudioManager.achievement_voice.play()
+			await AudioManager.achievement_voice.finished
+
+	await achievement_animation.animation_finished
+
+	await get_tree().create_timer(0.3).timeout
+	
+	process_achievement_queue()
+
 
 func _ready():
+	Achievements.connect("achievement_unlocked", _on_achievement_unlocked)
+	achievement_badge.texture = load(Achievements.DEFAULT_BADGE) as Texture2D
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	distortion_shader.visible = true
 	var tween = create_tween()
@@ -108,6 +204,7 @@ func _ready():
 	player.player_hit.connect(_on_player_hit)
 	spawn_timer.start()
 	setup_lives_display()
+	Achievements.reset_run_stats()
 	
 func setup_lives_display():
 	# Clear any existing hearts
@@ -149,11 +246,22 @@ func mech_sound(action) -> void:
 			AudioManager.mech_step.stop()
 
 func _process(delta: float) -> void:
+	# Only count playtime when game is active and not paused.
+	if game_active and not get_tree().paused:
+		active_playtime += delta
+		playtime_timer += delta
+		# Update Achievements stat every playtime_update_interval seconds.
+		if playtime_timer >= playtime_update_interval:
+			# Increment the total playtime stat by the amount accumulated.
+			Achievements.update_stat("total_playtime", playtime_timer)
+			playtime_timer = 0.0
+	
 	if is_typing:
 		active_typing_time += delta
 		typing_timer += delta
 		if typing_timer > typing_timeout:
 			is_typing = false
+	update_debug_text()
 			
 			
 func shake_camera(intensity: float = 10.0, duration: float = 0.4) -> void:
@@ -171,6 +279,9 @@ func shake_camera(intensity: float = 10.0, duration: float = 0.4) -> void:
 	tween.tween_property(camera, "position", original_position, 0.05)
 
 func _input(event: InputEvent) -> void:
+	
+	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
+		debug_label.visible = not debug_label.visible
 	if not game_active:
 		return
 		
@@ -249,12 +360,14 @@ func check_typed_letter(letter: String):
 				if is_current_word_correct:
 					current_streak += 1
 					longest_streak = max(longest_streak, current_streak)
+					Achievements.set_stat("longest_streak", longest_streak)
 				is_current_word_correct = true
 			return
 			
 	valid_enemy.flash_letter()
 	AudioManager.wrong_letter.play()
 	wrong_chars += 1
+	wrong_chars_this_level += 1
 	player.take_damage()
 	is_current_word_correct = false
 	current_streak = 0
@@ -314,45 +427,53 @@ func update_score(amount: int) -> void:
 	var difficulty_multiplier = calculate_difficulty_multiplier()
 	var streak_multiplier = calculate_streak_multiplier()
 	var final_amount = int(amount * difficulty_multiplier * streak_multiplier)
-	var previous_score =  final_amount
+	var previous_score = score  # Store the current score before adding new amount
 	score += final_amount
+	
 	if score_tween and score_tween.is_valid():
 		score_tween.kill()
-
+	
 	# Create a new tween
 	score_tween = create_tween()
-
-	# Animate the displayed score from previous value to the new score
+	# Animate from previous_score to new score
 	score_tween.tween_method(
 		func(value): 
 			displayed_score = value
-			score_label.text = "Score: %d" % displayed_score, previous_score, score, 0.5  # 0.5s duration
+			score_label.text = "Score: %d" % displayed_score,
+		previous_score,  # Start from previous score
+		score,          # End at new score
+		0.5            # 0.5s duration
 	)
+	
 	show_floating_score(final_amount)
 			
 var floating_scores := [] 
 var score_font: Font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
+
+const MAX_FLOATING_SCORES = 5
+
 func show_floating_score(amount: int) -> void:
+	# If we already have MAX_FLOATING_SCORES labels, remove the oldest one first
+	if floating_scores.size() >= MAX_FLOATING_SCORES:
+		var oldest_label = floating_scores.pop_front()
+		oldest_label.queue_free()
+	
 	var floating_label = Label.new()
 	floating_label.text = "+%d" % amount
 	floating_label.add_theme_color_override("font_color", Color.MAGENTA)  
 	floating_label.add_theme_font_size_override("font_size", 20)
 	floating_label.add_theme_font_override("font", score_font)
-
 	var score_position = score_label.global_position
-	var base_y = score_position.y + 40  # First floating score appears **just under** the score label
-
-	# Calculate where the new score should appear
+	var base_y = score_position.y + 40
+	# Calculate offset based on current number of scores (max 4 since we're adding one)
 	var offset_y = floating_scores.size() * 20
-	floating_label.position = Vector2(score_position.x + score_label.size.x  / 2 + 30, base_y + offset_y)  # Stack correctly
-
+	floating_label.position = Vector2(score_position.x + score_label.size.x / 2 + 30, base_y + offset_y)
 	ui_layer.add_child(floating_label)
 	floating_scores.append(floating_label)
-
+	
 	if floating_scores.size() == 1:
 		remove_oldest_score()
-
-
+		
 func schedule_score_removal():
 	await get_tree().create_timer(0.03).timeout 
 	if floating_scores.is_empty():
@@ -362,13 +483,13 @@ func schedule_score_removal():
 func remove_oldest_score():
 	if floating_scores.is_empty():
 		return
-	await get_tree().create_timer(0.03).timeout  # Wait 0.5s before removing the first one
+	await get_tree().create_timer(0.03).timeout
 
 	if floating_scores.is_empty():
 		return
 	var oldest_label = floating_scores.pop_front()  
 	var remove_tween = create_tween()
-	remove_tween.tween_property(oldest_label, "modulate:a", 0.0, 0.1)  # Fade out
+	remove_tween.tween_property(oldest_label, "modulate:a", 0.0, 0.1) 
 	remove_tween.tween_property(oldest_label, "position:y", score_label.global_position.y, 0.1)  # Move into the score label
 	await remove_tween.finished
 
@@ -575,7 +696,9 @@ func _on_tank_died():
 	
 	correct_words_this_level = 0
 	current_level += 1
-	Achievements.update_stat("highest_level", current_level)
+	Achievements.set_stat("highest_level", current_level)
+	if lives == 1: Achievements.update_stat("comebacks_count", 1)
+	if wrong_chars_this_level == 0: Achievements.update_stat("perfect_levels_count", 1)
 	tank_spawned_this_level = false
 	required_enemies_for_boss = 15 + (current_level - 1) * 3  # Increase requirement for next boss
 	animate_level_label()
@@ -675,6 +798,7 @@ func _on_player_hit():
 	game_over()
 
 func game_over():
+	Achievements.update_stat("total_deaths", 1)
 	player.die()
 	shake_camera(25.0, 0.6)
 	if world_environment.environment:
@@ -700,7 +824,6 @@ func show_game_over_screen():
 		show_game_over = true
 		await get_tree().create_timer(1.0).timeout
 		
-		var time_played = Time.get_unix_time_from_system() - start_time
 		var accuracy = (float(correct_chars) / total_chars_typed * 100) if total_chars_typed > 0 else 0.0
 		var wpm = (correct_chars / 5.0) / (active_typing_time / 60.0) if active_typing_time > 0 else 0.0
 		
@@ -708,7 +831,7 @@ func show_game_over_screen():
 		game_over_screen.initialize_stats({
 			"score": score,
 			"level": current_level,
-			"time_played": time_played,
+			"time_played": active_playtime,
 			"correct_words": correct_words,
 			"total_chars": total_chars_typed,
 			"correct_chars": correct_chars,

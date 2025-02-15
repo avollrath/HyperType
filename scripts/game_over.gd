@@ -111,8 +111,17 @@ func update_ui() -> void:
 	display_wpm = 0.0
 	
 	await get_tree().create_timer(1.4).timeout
+	
+
 
 	await animate_stat(high_score_label, "display_score", stats.score, 0.4)
+	if stats.score > Achievements.stats["high_score"]:
+		Achievements.set_stat("high_score", stats.score)
+		var voice_stream = load("res://assets/sounds/achievements/new_highscore.mp3") as AudioStream
+		if voice_stream:
+			AudioManager.achievement_voice.stream = voice_stream
+			AudioManager.achievement_voice.play()
+		start_highscore_pulsate()
 	can_restart = true
 	await animate_stat(level_label, "display_level", stats.level, 0.2)
 	await animate_stat(time_played_label, "display_time", stats.time_played, 0.2)
@@ -121,6 +130,22 @@ func update_ui() -> void:
 	await animate_stat(longest_streak_label, "display_longest_streak", stats.longest_streak, 0.2)
 	await animate_stat(wpm_label, "display_wpm", stats.wpm, 0.2)
 	restart_button.grab_focus()
+	
+func start_highscore_pulsate() -> void:
+
+	high_score_label.add_theme_color_override("font_color", Color(1.2, 0, 1.2, 1))  # Bright magenta
+	high_score_label.add_theme_constant_override("outline_size", 2)
+	high_score_label.add_theme_color_override("font_outline_color", Color(1.2, 0, 1.2, 0.6))
+	
+	var glow_tween = create_tween()
+	glow_tween.set_loops()
+	
+	glow_tween.tween_property(high_score_label, "modulate", 
+		Color(1.2, 0, 1.2, 1), 0.5)\
+		.set_trans(Tween.TRANS_SINE)
+	glow_tween.tween_property(high_score_label, "modulate", 
+		Color(0.8, 0, 0.8, 0.8), 0.5)\
+		.set_trans(Tween.TRANS_SINE)
 
 func animate_stat(label: Control, property_name: String, target_value: float, duration: float) -> void:
 	var tween = create_tween()

@@ -21,6 +21,8 @@ extends Node
 @onready var boss: AudioStreamPlayer = $Boss
 @onready var cinematic_hit: AudioStreamPlayer = $CinematicHit
 @onready var hypertype_voice: AudioStreamPlayer = $HypertypeVoice
+@onready var achievement: AudioStreamPlayer = $Achievement
+@onready var achievement_voice: AudioStreamPlayer = $AchievementVoice
 
 
 func _ready():
