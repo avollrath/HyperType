@@ -200,6 +200,8 @@ func restart_game() -> void:
 	root.add_child(new_main_scene)
 	get_tree().current_scene = new_main_scene
 	AudioManager.ui_hit.play()
+	await get_tree().create_timer(0.5).timeout
+	AudioManager.hypertype_voice.play()
 	queue_free()
 
 

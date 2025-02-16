@@ -1,0 +1,499 @@
+[gd_scene load_steps=29 format=4 uid="uid://dcu65u7n4kvkh"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_tooxf"]
+[ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="2_odlv3"]
+[ext_resource type="Texture2D" uid="uid://b76ehvdrsug1i" path="res://assets/sprites/back.png" id="2_p12h2"]
+[ext_resource type="PackedScene" uid="uid://c04hb2twokhvn" path="res://scenes/platform.tscn" id="3_3e2yj"]
+[ext_resource type="Texture2D" uid="uid://c3y7y27cfprmf" path="res://assets/sprites/buildings.png" id="3_m71s5"]
+[ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="4_dsgsp"]
+[ext_resource type="Texture2D" uid="uid://cx7ko45sjlmp7" path="res://assets/sprites/tile-set-sci-fi-interior-platform.png" id="7_ecekt"]
+[ext_resource type="Texture2D" uid="uid://dif857j6fhw2a" path="res://assets/sprites/badges/crosshair.webp" id="8_5oncf"]
+[ext_resource type="Shader" path="res://scenes/water_shader.gdshader" id="8_gdsrt"]
+[ext_resource type="Texture2D" uid="uid://covr7ivlhm0ff" path="res://assets/sprites/128x128_square.jpg" id="9_pjt0b"]
+[ext_resource type="Shader" path="res://scripts/distortion.gdshader" id="10_qbuny"]
+[ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="11_hd5oc"]
+[ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="12_4xrxp"]
+
+[sub_resource type="Environment" id="Environment_5lfl1"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+glow_bloom = 0.2
+glow_hdr_threshold = 0.5
+glow_hdr_scale = 0.6
+adjustment_enabled = true
+adjustment_brightness = 0.8
+adjustment_contrast = 1.3
+adjustment_saturation = 1.3
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ykswu"]
+texture = ExtResource("7_ecekt")
+0:0/0 = 0
+0:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+0:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+14:2/0 = 0
+0:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+9:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+14:3/0 = 0
+16:3/0 = 0
+17:3/0 = 0
+18:3/0 = 0
+19:3/0 = 0
+0:4/0 = 0
+9:4/0 = 0
+10:4/0 = 0
+11:4/0 = 0
+12:4/0 = 0
+13:4/0 = 0
+14:4/0 = 0
+16:4/0 = 0
+17:4/0 = 0
+18:4/0 = 0
+19:4/0 = 0
+0:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+9:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+14:5/0 = 0
+16:5/0 = 0
+17:5/0 = 0
+18:5/0 = 0
+19:5/0 = 0
+0:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+11:6/0 = 0
+12:6/0 = 0
+13:6/0 = 0
+0:7/0 = 0
+0:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+8:8/0 = 0
+9:8/0 = 0
+11:8/0 = 0
+12:8/0 = 0
+14:8/0 = 0
+15:8/0 = 0
+16:8/0 = 0
+0:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+8:9/0 = 0
+9:9/0 = 0
+11:9/0 = 0
+12:9/0 = 0
+0:10/0 = 0
+11:10/0 = 0
+12:10/0 = 0
+0:11/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_m1fri"]
+sources/0 = SubResource("TileSetAtlasSource_ykswu")
+
+[sub_resource type="Animation" id="Animation_ffjv8"]
+resource_name = "achievement_appear"
+length = 3.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AchievementsContainer:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0),
+"points": PackedFloat32Array(750, -0.25, 0, 0.433333, 1.85382, 545, -0.7, -40.397, 0.25, 0, 545, -0.25, 0, 0.533333, -14.4425, 750, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.733333, 2.33333, 3)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AchievementsContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.833333, 2.16667, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0gm4v"]
+_data = {
+"achievement_appear": SubResource("Animation_ffjv8")
+}
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_022l2"]
+frequency = 0.0692
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wnlfq"]
+seamless = true
+noise = SubResource("FastNoiseLite_022l2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8r1il"]
+shader = ExtResource("8_gdsrt")
+shader_parameter/water_color = Color(0, 0.184314, 0.227451, 1)
+shader_parameter/wave_noise = SubResource("NoiseTexture2D_wnlfq")
+
+[sub_resource type="Animation" id="Animation_aybab"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/ScoreLabel:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/ScoreLabel:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(68, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/LevelLabel:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI/LevelLabel:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(33, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UI/LivesContainer:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("UI/LivesContainer:position:x")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1241, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_jycpt"]
+resource_name = "start"
+length = 3.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/ScoreLabel:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/ScoreLabel:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-60.585, -0.25, 0, 0.4, 41.585, 65, -0.633333, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.23333)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/LevelLabel:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UI/LevelLabel:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-93.15, -0.25, 0, 0.25, 0, 33, -0.9, -3, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.3)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UI/LivesContainer:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.96667)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("UI/LivesContainer:position:x")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1380, -0.25, 0, 0.4, 41.585, 1260, -0.633333, 0, 0.25, 0),
+"times": PackedFloat32Array(1.33333, 2.33333)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_utgjs"]
+_data = {
+"RESET": SubResource("Animation_aybab"),
+"start": SubResource("Animation_jycpt")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rq31a"]
+shader = ExtResource("11_hd5oc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_y2uil"]
+lightmap_size_hint = Vector2i(8002, 4502)
+add_uv2 = true
+size = Vector2(1600, 900)
+center_offset = Vector3(800, 450, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j2jwx"]
+shader = ExtResource("12_4xrxp")
+shader_parameter/apply = true
+shader_parameter/amount = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1jjq"]
+shader = ExtResource("10_qbuny")
+shader_parameter/strength = 0.1
+shader_parameter/center = Vector2(0.5, 0.7)
+shader_parameter/radius = 0.0
+shader_parameter/aberration = 0.807
+shader_parameter/width = 0.0613
+shader_parameter/feather = 0.68
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_tooxf")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5lfl1")
+
+[node name="Background1" type="TextureRect" parent="."]
+offset_left = -14.0
+offset_top = -4.0
+offset_right = 1610.0
+offset_bottom = 921.0
+texture = ExtResource("2_p12h2")
+
+[node name="Background2" type="TextureRect" parent="."]
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 1619.0
+offset_bottom = 920.0
+texture = ExtResource("3_m71s5")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAD//xYAAAACAAUAAAD//xcAAAACAAYAAAAAABYAAAADAAUAAAAAABcAAAADAAYAAAABABYAAAACAAUAAAABABcAAAACAAYAAAACABYAAAADAAUAAAACABcAAAADAAYAAAADABYAAAACAAUAAAADABcAAAACAAYAAAAEABYAAAADAAUAAAAEABcAAAADAAYAAAAFABYAAAACAAUAAAAFABcAAAACAAYAAAAGABYAAAADAAUAAAAGABcAAAADAAYAAAAHABYAAAACAAUAAAAHABcAAAACAAYAAAAIABYAAAADAAUAAAAIABcAAAADAAYAAAAJABYAAAACAAUAAAAJABcAAAACAAYAAAAKABYAAAADAAUAAAAKABcAAAADAAYAAAALABYAAAACAAUAAAALABcAAAACAAYAAAAMABYAAAADAAUAAAAMABcAAAADAAYAAAANABYAAAACAAUAAAANABcAAAACAAYAAAAOABYAAAADAAUAAAAOABcAAAADAAYAAAAPABYAAAACAAUAAAAPABcAAAACAAYAAAAQABYAAAADAAUAAAAQABcAAAADAAYAAAARABYAAAACAAUAAAARABcAAAACAAYAAAASABYAAAADAAUAAAASABcAAAADAAYAAAATABYAAAACAAUAAAATABcAAAACAAYAAAAUABYAAAADAAUAAAAUABcAAAADAAYAAAAVABYAAAACAAUAAAAVABcAAAACAAYAAAAWABYAAAADAAUAAAAWABcAAAADAAYAAAAXABYAAAACAAUAAAAXABcAAAACAAYAAAAYABYAAAADAAUAAAAYABcAAAADAAYAAAAZABYAAAACAAUAAAAZABcAAAACAAYAAAAaABYAAAADAAUAAAAaABcAAAADAAYAAAAbABYAAAACAAUAAAAbABcAAAACAAYAAAAcABYAAAADAAUAAAAcABcAAAADAAYAAAAdABYAAAACAAUAAAAdABcAAAACAAYAAAAeABYAAAADAAUAAAAeABcAAAADAAYAAAAfABYAAAACAAUAAAAfABcAAAACAAYAAAAgABYAAAADAAUAAAAgABcAAAADAAYAAAAhABYAAAACAAUAAAAhABcAAAACAAYAAAAiABYAAAADAAUAAAAiABcAAAADAAYAAAAjABYAAAACAAUAAAAjABcAAAACAAYAAAAkABYAAAADAAUAAAAkABcAAAADAAYAAAAlABYAAAACAAUAAAAlABcAAAACAAYAAAAmABYAAAADAAUAAAAmABcAAAADAAYAAAAnABYAAAACAAUAAAAnABcAAAACAAYAAAAoABYAAAADAAUAAAAoABcAAAADAAYAAAApABYAAAACAAUAAAApABcAAAACAAYAAAAqABYAAAADAAUAAAAqABcAAAADAAYAAAArABYAAAACAAUAAAArABcAAAACAAYAAAAsABYAAAADAAUAAAAsABcAAAADAAYAAAAtABYAAAACAAUAAAAtABcAAAACAAYAAAAuABYAAAADAAUAAAAuABcAAAADAAYAAAAvABYAAAACAAUAAAAvABcAAAACAAYAAAAwABYAAAADAAUAAAAwABcAAAADAAYAAAAxABYAAAACAAUAAAAxABcAAAACAAYAAAAyABYAAAADAAUAAAAyABcAAAADAAYAAAAzABYAAAACAAUAAAAzABcAAAACAAYAAAA0ABYAAAADAAUAAAA0ABcAAAADAAYAAAD//xgAAAAGAAgAAAD//xkAAAAGAAkAAAAAABgAAAAHAAgAAAAAABkAAAAHAAkAAAABABgAAAAIAAgAAAABABkAAAAIAAkAAAACABgAAAAJAAgAAAACABkAAAAJAAkAAAARABgAAAAGAAgAAAARABkAAAAGAAkAAAASABgAAAAHAAgAAAASABkAAAAHAAkAAAATABgAAAAIAAgAAAATABkAAAAIAAkAAAAUABgAAAAJAAgAAAAUABkAAAAJAAkAAAAfABgAAAAGAAgAAAAfABkAAAAGAAkAAAAgABgAAAAHAAgAAAAgABkAAAAHAAkAAAAhABgAAAAIAAgAAAAhABkAAAAIAAkAAAAiABgAAAAJAAgAAAAiABkAAAAJAAkAAAAtABgAAAAGAAgAAAAtABkAAAAGAAkAAAAuABgAAAAHAAgAAAAuABkAAAAHAAkAAAAvABgAAAAIAAgAAAAvABkAAAAIAAkAAAAwABgAAAAJAAgAAAAwABkAAAAJAAkAAAAjABgAAAALAAgAAAAjABkAAAALAAkAAAAkABgAAAAMAAgAAAAkABkAAAAMAAkAAAAXABoAAAAPAAgAAAAXABsAAAAPAAgAAAAYABoAAAAPAAgAAAAYABsAAAAPAAgAAAAKABgAAAALAAgAAAAKABkAAAALAAkAAAALABgAAAAMAAgAAAALABkAAAAMAAkAAAAQABgAAAAGAAgAABAPABgAAAAHAAgAABAOABgAAAAIAAgAABANABgAAAAJAAgAABAQABkAAAAGAAkAABAPABkAAAAHAAkAABAOABkAAAAIAAkAABANABkAAAAJAAkAABAeABgAAAAGAAgAABAeABkAAAAGAAkAABAsABgAAAAGAAgAABAsABkAAAAGAAkAABADABgAAAAHAAgAAAADABkAAAAHAAkAAAAEABgAAAAHAAgAAAAEABkAAAAHAAkAAAAFABgAAAAHAAgAAAAFABkAAAAHAAkAAAAGABgAAAAHAAgAAAAGABkAAAAHAAkAAAAHABgAAAAHAAgAAAAHABkAAAAHAAkAAAAIABgAAAAHAAgAAAAIABkAAAAHAAkAAAAJABgAAAAHAAgAAAAJABkAAAAHAAkAAAAMABgAAAAHAAgAAAAMABkAAAAHAAkAAAAVABgAAAAHAAgAAAAVABkAAAAHAAkAAAAWABgAAAAHAAgAAAAWABkAAAAHAAkAAAAXABgAAAAHAAgAAAAXABkAAAAHAAkAAAAYABgAAAAHAAgAAAAYABkAAAAHAAkAAAAZABgAAAAHAAgAAAAZABkAAAAHAAkAAAAaABgAAAAHAAgAAAAaABkAAAAHAAkAAAAbABgAAAAHAAgAAAAbABkAAAAHAAkAAAAcABgAAAAHAAgAAAAcABkAAAAHAAkAAAAdABgAAAAHAAgAAAAdABkAAAAHAAkAAAAlABgAAAAHAAgAAAAlABkAAAAHAAkAAAAmABgAAAAHAAgAAAAmABkAAAAHAAkAAAAnABgAAAAHAAgAAAAnABkAAAAHAAkAAAAoABgAAAAHAAgAAAAoABkAAAAHAAkAAAApABgAAAAHAAgAAAApABkAAAAHAAkAAAAqABgAAAAHAAgAAAAqABkAAAAHAAkAAAArABgAAAAHAAgAAAArABkAAAAHAAkAAAAxABgAAAAHAAgAAAAxABkAAAAHAAkAAAAyABgAAAAHAAgAAAAyABkAAAAHAAkAAAACABoAAAACAAkAAAADABoAAAADAAkAAAAEABoAAAADAAkAAAAFABoAAAADAAkAAAAGABoAAAADAAkAAAAHABoAAAADAAkAAAAIABoAAAADAAkAAAAJABoAAAADAAkAAAAKABoAAAADAAkAAAALABoAAAADAAkAAAAMABoAAAADAAkAAAANABoAAAADAAkAAAAOABoAAAADAAkAAAAPABoAAAADAAkAAAAQABoAAAADAAkAAAARABoAAAADAAkAAAASABoAAAADAAkAAAATABoAAAADAAkAAAAUABoAAAAEAAkAAAABABoAAAAPAAgAAAAAABoAAAAPAAgAAAD//xoAAAAPAAgAAAD//xsAAAAPAAgAAAAAABsAAAAPAAgAAAABABsAAAAPAAgAAAACABsAAAAPAAgAAAADABsAAAAPAAgAAAAEABsAAAAPAAgAAAAFABsAAAAPAAgAAAAGABsAAAAPAAgAAAAHABsAAAAPAAgAAAAIABsAAAAPAAgAAAAJABsAAAAPAAgAAAAKABsAAAAPAAgAAAALABsAAAAPAAgAAAAMABsAAAAPAAgAAAANABsAAAAPAAgAAAAOABsAAAAPAAgAAAAPABsAAAAPAAgAAAAQABsAAAAPAAgAAAARABsAAAAPAAgAAAASABsAAAAPAAgAAAATABsAAAAPAAgAAAAUABsAAAAPAAgAAAAVABsAAAAPAAgAAAAWABsAAAAPAAgAAAAZABsAAAAPAAgAAAAaABsAAAAPAAgAAAAbABsAAAAPAAgAAAAcABsAAAAPAAgAAAAdABsAAAAPAAgAAAAeABsAAAAPAAgAAAAfABsAAAAPAAgAAAAgABsAAAAPAAgAAAAhABsAAAAPAAgAAAAiABsAAAAPAAgAAAAjABsAAAAPAAgAAAAkABsAAAAPAAgAAAAlABsAAAAPAAgAAAAmABsAAAAPAAgAAAAnABsAAAAPAAgAAAAoABsAAAAPAAgAAAApABsAAAAPAAgAAAAqABsAAAAPAAgAAAArABsAAAAPAAgAAAAsABsAAAAPAAgAAAAtABsAAAAPAAgAAAAuABsAAAAPAAgAAAAvABsAAAAPAAgAAAAwABsAAAAPAAgAAAAxABsAAAAPAAgAAAAyABsAAAAPAAgAAAAVABoAAAAPAAgAAAAWABoAAAAPAAgAAAAZABoAAAAPAAgAAAAaABoAAAAPAAgAAAAbABoAAAAPAAgAAAAcABoAAAAPAAgAAAAdABoAAAAPAAgAAAAeABoAAAAPAAgAAAAfABoAAAAPAAgAAAAgABoAAAAPAAgAAAAhABoAAAAPAAgAAAAiABoAAAAPAAgAAAAjABoAAAAPAAgAAAAkABoAAAAPAAgAAAAlABoAAAAPAAgAAAAmABoAAAAPAAgAAAAnABoAAAAPAAgAAAAoABoAAAAPAAgAAAApABoAAAAPAAgAAAAqABoAAAAPAAgAAAArABoAAAAPAAgAAAAsABoAAAAPAAgAAAAtABoAAAAPAAgAAAAuABoAAAAPAAgAAAAvABoAAAAPAAgAAAAwABoAAAAPAAgAAAAxABoAAAAPAAgAAAAyABoAAAAPAAgAAAAzABoAAAAPAAgAAAA=")
+tile_set = SubResource("TileSet_m1fri")
+
+[node name="Player" parent="." instance=ExtResource("2_odlv3")]
+modulate = Color(1.2, 1.2, 1.2, 1)
+position = Vector2(196, 440)
+
+[node name="Platform" parent="." instance=ExtResource("3_3e2yj")]
+position = Vector2(-45, 257)
+
+[node name="EnemyContainer" type="Node2D" parent="."]
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+offset_left = 68.0
+offset_top = 33.0
+offset_right = 312.0
+offset_bottom = 95.0
+theme = ExtResource("4_dsgsp")
+theme_override_font_sizes/font_size = 32
+text = "Score: 0"
+
+[node name="LevelLabel" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -142.5
+offset_top = 33.0
+offset_right = 142.5
+offset_bottom = 115.0
+grow_horizontal = 2
+theme = ExtResource("4_dsgsp")
+theme_override_font_sizes/font_size = 32
+text = "Level 1"
+horizontal_alignment = 1
+
+[node name="LivesContainer" type="HBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -359.0
+offset_top = 36.225
+offset_right = -210.0
+offset_bottom = 54.225
+grow_horizontal = 0
+scale = Vector2(2, 2)
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="AchievementsContainer" type="VBoxContainer" parent="UI"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -145.0
+offset_top = -150.0
+offset_right = 145.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = -170
+alignment = 1
+
+[node name="AchievementBadge" type="TextureRect" parent="UI/AchievementsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("8_5oncf")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="AchievementLabel" type="Label" parent="UI/AchievementsContainer"]
+layout_mode = 2
+theme = ExtResource("4_dsgsp")
+text = "Enemy Slayer"
+horizontal_alignment = 1
+
+[node name="DebugLabel" type="Label" parent="UI"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -276.0
+offset_top = 94.0
+offset_right = -236.0
+offset_bottom = 117.0
+grow_horizontal = 0
+text = "Loading ..."
+
+[node name="AchievementAnimation" type="AnimationPlayer" parent="UI"]
+libraries = {
+"": SubResource("AnimationLibrary_0gm4v")
+}
+
+[node name="128x128Square" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_8r1il")
+position = Vector2(782.5, 924)
+scale = Vector2(13.3203, 2.60937)
+texture = ExtResource("9_pjt0b")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_utgjs")
+}
+autoplay = "start"
+
+[node name="CrtShader" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CrtShader"]
+material = SubResource("ShaderMaterial_rq31a")
+mesh = SubResource("QuadMesh_y2uil")
+
+[node name="CroAbrShader" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="ColorRect" type="ColorRect" parent="CroAbrShader"]
+material = SubResource("ShaderMaterial_j2jwx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="DistortionShader" type="ColorRect" parent="."]
+z_index = 10
+material = SubResource("ShaderMaterial_s1jjq")
+offset_right = 1752.0
+offset_bottom = 961.0

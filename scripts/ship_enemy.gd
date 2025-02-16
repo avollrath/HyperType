@@ -1,6 +1,9 @@
 # tank_enemy.gd
 extends "res://scripts/enemy.gd"
 
+func _after_ready():
+	light_scale = Vector2(20, 10)
+
 func setup_word():
 	var words = word.split("\n")
 	var spacing_x = 44

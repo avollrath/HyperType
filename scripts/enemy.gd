@@ -16,6 +16,7 @@ var is_dying: bool = false
 @onready var hit_box = $HitBox
 @onready var point_light_2d = get_node_or_null("PointLight2D")
 @onready var step_particles = get_node_or_null("StepParticles")
+@onready var die_particles = get_node_or_null("DieParticles")
 
 var current_letters = []
 var letter_scenes = []
@@ -27,6 +28,14 @@ var light_scale: Vector2 = Vector2(1.5, 1.5)
 var last_frame = 0
 
 func _ready():
+	if die_particles:
+		die_particles.visible = false
+		die_particles.emitting = true
+		die_particles.speed_scale = 10.0  # Fast forward the particle simulation
+		await get_tree().create_timer(0.5).timeout  # Simulate for 0.5s
+		die_particles.emitting = false  # Stop emission
+		die_particles.speed_scale = 1.0  # Reset speed
+		die_particles.visible = true  # Now it will start clean
 	if point_light_2d:
 		var tween = create_tween()
 		point_light_2d.enabled = true
@@ -127,6 +136,8 @@ func die():
 	is_dying = true
 	enemy_died.emit()
 	AudioManager.word_complete.play()
+	if step_particles: step_particles.visible = false
+	if die_particles: die_particles.emitting = true
 	animated_sprite.play("death")
 	var tween = create_tween()
 	tween.set_parallel()

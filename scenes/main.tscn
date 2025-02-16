@@ -310,15 +310,6 @@ _data = {
 "start": SubResource("Animation_jycpt")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1jjq"]
-shader = ExtResource("10_qbuny")
-shader_parameter/strength = 0.1
-shader_parameter/center = Vector2(0.5, 0.7)
-shader_parameter/radius = 1.0
-shader_parameter/aberration = 0.807
-shader_parameter/width = 0.0613
-shader_parameter/feather = 0.68
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rq31a"]
 shader = ExtResource("11_hd5oc")
 
@@ -332,6 +323,15 @@ center_offset = Vector3(800, 450, 0)
 shader = ExtResource("12_4xrxp")
 shader_parameter/apply = true
 shader_parameter/amount = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1jjq"]
+shader = ExtResource("10_qbuny")
+shader_parameter/strength = 0.1
+shader_parameter/center = Vector2(0.5, 0.7)
+shader_parameter/radius = 0.0
+shader_parameter/aberration = 0.807
+shader_parameter/width = 0.0613
+shader_parameter/feather = 0.68
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tooxf")
@@ -445,10 +445,10 @@ visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -276.0
-offset_top = 94.0
-offset_right = -236.0
-offset_bottom = 117.0
+offset_left = -503.0
+offset_top = 27.0
+offset_right = -424.0
+offset_bottom = 50.0
 grow_horizontal = 0
 text = "Loading ..."
 
@@ -472,14 +472,6 @@ libraries = {
 }
 autoplay = "start"
 
-[node name="DistortionShader" type="ColorRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_s1jjq")
-offset_left = -72.0
-offset_top = -17.0
-offset_right = 1680.0
-offset_bottom = 944.0
-
 [node name="CrtShader" type="CanvasLayer" parent="."]
 layer = 3
 
@@ -499,3 +491,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="DistortionShader" type="CanvasLayer" parent="."]
+
+[node name="DistortionShader" type="ColorRect" parent="DistortionShader"]
+z_index = 10
+material = SubResource("ShaderMaterial_s1jjq")
+offset_right = 1752.0
+offset_bottom = 961.0

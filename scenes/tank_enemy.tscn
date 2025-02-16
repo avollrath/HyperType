@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://kb0iaplmpqsp"]
+[gd_scene load_steps=31 format=3 uid="uid://kb0iaplmpqsp"]
 
 [ext_resource type="Script" path="res://scripts/tank_enemy.gd" id="1_ryhqm"]
 [ext_resource type="Texture2D" uid="uid://daeu4a040h1kf" path="res://assets/sprites/explosion-animation.png" id="2_e6p0g"]
@@ -144,6 +144,34 @@ scale_min = 3.0
 scale_max = 5.0
 color_ramp = SubResource("GradientTexture1D_wtk70")
 
+[sub_resource type="Gradient" id="Gradient_q0ohm"]
+offsets = PackedFloat32Array(0, 0.0993377, 0.271523, 0.430464, 0.715232, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.4, 0.0980392, 0.0980392, 1, 0.610435, 0.0478322, 0, 1, 1, 0.783333, 0, 1, 0.887417, 0.887417, 0.887417, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_18vnm"]
+gradient = SubResource("Gradient_q0ohm")
+
+[sub_resource type="Curve" id="Curve_pik71"]
+_data = [Vector2(0, 1), 0.0, -0.217352, 0, 0, Vector2(1, 0.175824), -4.19634, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aoalf"]
+curve = SubResource("Curve_pik71")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6mpyg"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(50, 50, 1)
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 180.0
+initial_velocity_min = 500.0
+initial_velocity_max = 1500.0
+gravity = Vector3(0, 0, 0)
+scale_max = 25.0
+scale_curve = SubResource("CurveTexture_aoalf")
+color_ramp = SubResource("GradientTexture1D_18vnm")
+
 [node name="TankEnemy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_ryhqm")
@@ -175,10 +203,20 @@ color = Color(1, 1, 0.745098, 1)
 energy = 3.0
 texture = ExtResource("5_its5u")
 
-[node name="RollParticles" type="GPUParticles2D" parent="."]
+[node name="StepParticles" type="GPUParticles2D" parent="."]
 position = Vector2(-48, -1)
 amount = 60
 process_material = SubResource("ParticleProcessMaterial_3crce")
 lifetime = 0.2
 explosiveness = 0.1
 randomness = 0.1
+
+[node name="DieParticles" type="GPUParticles2D" parent="."]
+position = Vector2(-6, -74)
+emitting = false
+amount = 2000
+process_material = SubResource("ParticleProcessMaterial_6mpyg")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 0.72

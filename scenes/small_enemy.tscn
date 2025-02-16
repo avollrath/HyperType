@@ -217,7 +217,7 @@ scale = Vector2(0.0172812, 0.0172812)
 enabled = false
 texture = ExtResource("5_bus38")
 
-[node name="SmallStepParticles" type="GPUParticles2D" parent="."]
+[node name="StepParticles" type="GPUParticles2D" parent="."]
 z_index = 1
 position = Vector2(-42, -1)
 emitting = false

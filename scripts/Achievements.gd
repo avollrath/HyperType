@@ -3,7 +3,7 @@ extends Node
 signal achievement_unlocked(achievement_id)
 
 const SAVE_FILE = "user://achievements.json"
-const DEFAULT_BADGE = "res://assets/sprites/badges/crosshair.webp"
+const DEFAULT_BADGE = "res://assets/sprites/badges/cup.png"
 
 # ------------------------------------------------------------------
 # Persistent Achievements (saved across runs)
@@ -111,7 +111,7 @@ const ACHIEVEMENTS = {
 		"condition": "bosses_defeated",
 		"required_value": 25,
 		"voice_file": "res://assets/sounds/achievements/boss_basher.mp3",
-		"badge": "res://assets/sprites/badges/boss_basher.png"
+		"badge": "res://assets/sprites/badges/crosshair.png"
 	},
 	"boss_demolisher": {
 		"title": "Boss Demolisher",
@@ -145,7 +145,7 @@ const ACHIEVEMENTS = {
 		"condition": "enemies_defeated",
 		"required_value": 100,
 		"voice_file": "res://assets/sounds/achievements/enemy_annihilator.mp3",
-		"badge": "res://assets/sprites/badges/enemy_annihilator.png"
+		"badge": "res://assets/sprites/badges/crosshair.png"
 	},
 	"word_warlord": {
 		"title": "Word Warlord",
@@ -292,17 +292,17 @@ const RUN_ACHIEVEMENTS = {
 	# ------------------- Word Count in a Run -------------------
 	"warmup_session": {
 		"title": "Warm-Up Session",
-		"description": "Type at least 50 words in a single run",
+		"description": "Type at least 20 words in a single run",
 		"condition": "total_words_typed",
-		"required_value": 50,
+		"required_value": 20,
 		"voice_file": "res://assets/sounds/achievements/warmup_session.mp3",
 		"badge": "res://assets/sprites/badges/warmup_session.png"
 	},
 	"word_whirlwind": {
 		"title": "Word Whirlwind",
-		"description": "Type at least 200 words in a single run",
+		"description": "Type at least 75 words in a single run",
 		"condition": "total_words_typed",
-		"required_value": 200,
+		"required_value": 75,
 		"voice_file": "res://assets/sounds/achievements/word_whirlwind.mp3",
 		"badge": "res://assets/sprites/badges/word_whirlwind.png"
 	},
@@ -328,15 +328,15 @@ const RUN_ACHIEVEMENTS = {
 		"title": "Slaughter",
 		"description": "Defeat 10 enemies in one run",
 		"condition": "enemies_defeated",
-		"required_value": 20,
+		"required_value": 50,
 		"voice_file": "res://assets/sounds/achievements/slaughter.mp3",
-		"badge": "res://assets/sprites/badges/slaughter.png"
+		"badge": "res://assets/sprites/badges/crosshair.png"
 	},
 	"rampage": {
 		"title": "Rampage",
 		"description": "Defeat 50 enemies in one run",
 		"condition": "enemies_defeated",
-		"required_value": 50,
+		"required_value": 100,
 		"voice_file": "res://assets/sounds/achievements/rampage.mp3",
 		"badge": "res://assets/sprites/badges/rampage.png"
 	},
@@ -384,27 +384,43 @@ const RUN_ACHIEVEMENTS = {
 	},
 
 	# ------------------- Streaks in a Run -------------------
+	"not_bad_kid": {
+	"title": "Not bad, kid!",
+	"description": "Achieve a 10-word streak in one run",
+	"condition": "longest_streak",
+	"required_value": 11,
+	"voice_file": "res://assets/sounds/achievements/not_bad_kid.mp3",
+	"badge": "res://assets/sprites/badges/streak_spark.png"
+	},
 	"streak_spark": {
-		"title": "Streak Spark",
-		"description": "Achieve a 10-word streak in one run",
-		"condition": "longest_streak",
-		"required_value": 20,
-		"voice_file": "res://assets/sounds/achievements/streak_spark.mp3",
-		"badge": "res://assets/sprites/badges/streak_spark.png"
+	"title": "Streak Spark",
+	"description": "Achieve a 20-word streak in one run",
+	"condition": "longest_streak",
+	"required_value": 21,
+	"voice_file": "res://assets/sounds/achievements/streak_spark.mp3",
+	"badge": "res://assets/sprites/badges/streak_spark.png"
+	},
+	"rainbow_streak": {
+	"title": "Rainbow streak",
+	"description": "Achieve a 20-word streak in one run",
+	"condition": "longest_streak",
+	"required_value": 26,
+	"voice_file": "res://assets/sounds/achievements/rainbow_streak.mp3",
+	"badge": "res://assets/sprites/badges/streak_spark.png"
 	},
 	"streak_smasher": {
 		"title": "Streak Smasher",
-		"description": "Achieve a 25-word streak in one run",
+		"description": "Achieve a 50-word streak in one run",
 		"condition": "longest_streak",
-		"required_value": 50,
+		"required_value": 51,
 		"voice_file": "res://assets/sounds/achievements/streak_smasher.mp3",
 		"badge": "res://assets/sprites/badges/streak_smasher.png"
 	},
 	"streak_master": {
 		"title": "Streak Master",
-		"description": "Achieve a 50-word streak in one run",
+		"description": "Achieve a 100-word streak in one run",
 		"condition": "longest_streak",
-		"required_value": 100,
+		"required_value": 101,
 		"voice_file": "res://assets/sounds/achievements/streak_master.mp3",
 		"badge": "res://assets/sprites/badges/streak_master.png"
 	},

@@ -211,7 +211,7 @@ size = Vector2(101, 229)
 collision_layer = 2
 script = ExtResource("1_f26ew")
 
-[node name="RollParticles" type="GPUParticles2D" parent="."]
+[node name="StepParticles" type="GPUParticles2D" parent="."]
 position = Vector2(40, -8)
 amount = 60
 process_material = SubResource("ParticleProcessMaterial_64bnf")

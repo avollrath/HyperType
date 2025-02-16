@@ -43,7 +43,7 @@ var score_tween: Tween = null
 @onready var camera: Camera2D = $Camera2D
 @onready var lives_container: HBoxContainer = $UI/LivesContainer
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
-@onready var distortion_shader: ColorRect = $DistortionShader
+@onready var distortion_shader: ColorRect = $DistortionShader/DistortionShader
 @onready var achievement_label: Label = $UI/AchievementsContainer/AchievementLabel
 @onready var achievement_badge: TextureRect = $UI/AchievementsContainer/AchievementBadge
 @onready var debug_label: Label = $UI/DebugLabel
@@ -184,12 +184,8 @@ func _ready():
 	Achievements.connect("achievement_unlocked", _on_achievement_unlocked)
 	achievement_badge.texture = load(Achievements.DEFAULT_BADGE) as Texture2D
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	distortion_shader.visible = true
-	var tween = create_tween()
-	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.1)
-	await tween.finished
+	renderDistortionShader()
 	tank_present = false
-	distortion_shader.visible = false
 	randomize()
 	load_words()
 	mech_sound("play")
@@ -277,11 +273,25 @@ func shake_camera(intensity: float = 10.0, duration: float = 0.4) -> void:
 		tween.tween_property(camera, "position", original_position + offset, 0.05)
 	
 	tween.tween_property(camera, "position", original_position, 0.05)
+	
+func renderDistortionShader() -> void:
+	distortion_shader.visible = true
+	var tween = create_tween()
+	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.5)
+	await tween.finished
+	var return_tween = create_tween()
+	return_tween.tween_property(distortion_shader.material, "shader_parameter/radius", 0, 0)
+	await return_tween.finished
+	distortion_shader.visible = false
 
 func _input(event: InputEvent) -> void:
 	
 	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
 		debug_label.visible = not debug_label.visible
+		
+	if event is InputEventKey and event.pressed and event.keycode == KEY_2:
+		renderDistortionShader()
+
 	if not game_active:
 		return
 		
@@ -679,13 +689,9 @@ func _on_tank_died():
 	AudioManager.space_ship.stop()
 	AudioManager.boss.stop()
 	AudioManager.explosion.play()
-	distortion_shader.visible = true
 	shake_camera(8.0, 0.8)
-	var tween = create_tween()
-	tween.tween_property(distortion_shader, "material:shader_parameter/radius", 1, 0.5)
-	await tween.finished
+	renderDistortionShader()
 	tank_present = false
-	distortion_shader.visible = false
 	update_score(150)
 	if is_current_word_correct:
 		current_streak += 3
