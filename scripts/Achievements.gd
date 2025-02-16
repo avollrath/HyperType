@@ -253,7 +253,7 @@ const ACHIEVEMENTS = {
 	},
 	"the_comeback_kid": {
 		"title": "The Comeback Kid",
-		"description": "Achieve 5 comebacks",
+		"description": "Achieve 10 comebacks",
 		"condition": "comebacks_count",
 		"required_value": 10,
 		"voice_file": "res://assets/sounds/achievements/the_comeback_kid.mp3",
@@ -261,7 +261,7 @@ const ACHIEVEMENTS = {
 	},
 	"rising_from_the_ashes": {
 		"title": "Rising from the Ashes",
-		"description": "Achieve 10 comebacks",
+		"description": "Achieve 20 comebacks",
 		"condition": "comebacks_count",
 		"required_value": 20,
 		"voice_file": "res://assets/sounds/achievements/rising_from_the_ashes.mp3",
@@ -326,7 +326,7 @@ const RUN_ACHIEVEMENTS = {
 	# ------------------- Enemies Defeated in a Run -------------------
 	"slaughter": {
 		"title": "Slaughter",
-		"description": "Defeat 10 enemies in one run",
+		"description": "Defeat 50 enemies in one run",
 		"condition": "enemies_defeated",
 		"required_value": 50,
 		"voice_file": "res://assets/sounds/achievements/slaughter.mp3",
@@ -334,7 +334,7 @@ const RUN_ACHIEVEMENTS = {
 	},
 	"rampage": {
 		"title": "Rampage",
-		"description": "Defeat 50 enemies in one run",
+		"description": "Defeat 100 enemies in one run",
 		"condition": "enemies_defeated",
 		"required_value": 100,
 		"voice_file": "res://assets/sounds/achievements/rampage.mp3",
@@ -342,9 +342,9 @@ const RUN_ACHIEVEMENTS = {
 	},
 	"carnage_unleashed": {
 		"title": "Carnage Unleashed",
-		"description": "Defeat 200 enemies in one run",
+		"description": "Defeat 300 enemies in one run",
 		"condition": "enemies_defeated",
-		"required_value": 200,
+		"required_value": 300,
 		"voice_file": "res://assets/sounds/achievements/carnage_unleashed.mp3",
 		"badge": "res://assets/sprites/badges/carnage_unleashed.png"
 	},
@@ -352,33 +352,33 @@ const RUN_ACHIEVEMENTS = {
 	# ------------------- Bosses Defeated in a Run -------------------
 	"boss_buster": {
 		"title": "Boss Buster",
-		"description": "Defeat 1 boss in a single run",
+		"description": "Defeat 3 boss in a single run",
 		"condition": "bosses_defeated",
-		"required_value": 1,
+		"required_value": 3,
 		"voice_file": "res://assets/sounds/achievements/boss_buster.mp3",
 		"badge": "res://assets/sprites/badges/boss_buster.png"
 	},
 	"boss_basher": {
 		"title": "Boss Basher",
-		"description": "Defeat 3 bosses in one run",
+		"description": "Defeat 10 bosses in one run",
 		"condition": "bosses_defeated",
-		"required_value": 3,
+		"required_value": 10,
 		"voice_file": "res://assets/sounds/achievements/boss_basher.mp3",
 		"badge": "res://assets/sprites/badges/boss_basher.png"
 	},
 	"boss_annihilator": {
 		"title": "Boss Annihilator",
-		"description": "Defeat 5 bosses in one run",
+		"description": "Defeat 15 bosses in one run",
 		"condition": "bosses_defeated",
-		"required_value": 10,
+		"required_value": 15,
 		"voice_file": "res://assets/sounds/achievements/boss_annihilator.mp3",
 		"badge": "res://assets/sprites/badges/boss_annihilator.png"
 	},
 	"boss_crusher": {
 		"title": "Boss Crusher",
-		"description": "Defeat 2 bosses in one run",
+		"description": "Defeat 25 bosses in one run",
 		"condition": "bosses_defeated",
-		"required_value": 5,
+		"required_value": 25,
 		"voice_file": "res://assets/sounds/achievements/run_boss_crusher.mp3",
 		"badge": "res://assets/sprites/badges/run_boss_crusher.png"
 	},
@@ -394,9 +394,9 @@ const RUN_ACHIEVEMENTS = {
 	},
 	"streak_spark": {
 	"title": "Streak Spark",
-	"description": "Achieve a 20-word streak in one run",
+	"description": "Achieve a 40-word streak in one run",
 	"condition": "longest_streak",
-	"required_value": 21,
+	"required_value": 41,
 	"voice_file": "res://assets/sounds/achievements/streak_spark.mp3",
 	"badge": "res://assets/sprites/badges/streak_spark.png"
 	},
@@ -410,9 +410,9 @@ const RUN_ACHIEVEMENTS = {
 	},
 	"streak_smasher": {
 		"title": "Streak Smasher",
-		"description": "Achieve a 50-word streak in one run",
+		"description": "Achieve a 75-word streak in one run",
 		"condition": "longest_streak",
-		"required_value": 51,
+		"required_value": 76,
 		"voice_file": "res://assets/sounds/achievements/streak_smasher.mp3",
 		"badge": "res://assets/sprites/badges/streak_smasher.png"
 	},
