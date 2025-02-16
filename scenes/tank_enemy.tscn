@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://kb0iaplmpqsp"]
+[gd_scene load_steps=33 format=3 uid="uid://kb0iaplmpqsp"]
 
 [ext_resource type="Script" path="res://scripts/tank_enemy.gd" id="1_ryhqm"]
 [ext_resource type="Texture2D" uid="uid://daeu4a040h1kf" path="res://assets/sprites/explosion-animation.png" id="2_e6p0g"]
@@ -148,14 +148,23 @@ color_ramp = SubResource("GradientTexture1D_wtk70")
 offsets = PackedFloat32Array(0, 0.0993377, 0.271523, 0.430464, 0.715232, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0.4, 0.0980392, 0.0980392, 1, 0.610435, 0.0478322, 0, 1, 1, 0.783333, 0, 1, 0.887417, 0.887417, 0.887417, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_18vnm"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nni8h"]
 gradient = SubResource("Gradient_q0ohm")
+
+[sub_resource type="Curve" id="Curve_1gbgd"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -94.5055), 0.0, 0.0, 0, 0, Vector2(0.603352, 200), -1001.4, -1001.4, 0, 0, Vector2(0.77095, -63.7363), 6.81223, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_36j2q"]
+curve = SubResource("Curve_1gbgd")
 
 [sub_resource type="Curve" id="Curve_pik71"]
 _data = [Vector2(0, 1), 0.0, -0.217352, 0, 0, Vector2(1, 0.175824), -4.19634, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_aoalf"]
+[sub_resource type="CurveTexture" id="CurveTexture_ho1oi"]
 curve = SubResource("Curve_pik71")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6mpyg"]
@@ -164,13 +173,17 @@ particle_flag_disable_z = true
 emission_shape_scale = Vector3(50, 50, 1)
 emission_shape = 1
 emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
 spread = 180.0
 initial_velocity_min = 500.0
 initial_velocity_max = 1500.0
 gravity = Vector3(0, 0, 0)
+linear_accel_min = 85.58
+linear_accel_max = 85.58
+linear_accel_curve = SubResource("CurveTexture_36j2q")
 scale_max = 25.0
-scale_curve = SubResource("CurveTexture_aoalf")
-color_ramp = SubResource("GradientTexture1D_18vnm")
+scale_curve = SubResource("CurveTexture_ho1oi")
+color_ramp = SubResource("GradientTexture1D_nni8h")
 
 [node name="TankEnemy" type="CharacterBody2D"]
 collision_layer = 2

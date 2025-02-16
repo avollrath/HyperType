@@ -1,13 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://bubeh4ycf6ryi"]
+[gd_scene load_steps=10 format=3 uid="uid://bubeh4ycf6ryi"]
 
 [ext_resource type="Script" path="res://scripts/game_over.gd" id="1_mfbuj"]
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_0t601"]
 [ext_resource type="Script" path="res://scripts/fancy_button.gd" id="3_rxdb7"]
+[ext_resource type="Shader" path="res://scripts/synthwave.gdshader" id="4_2su67"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nk6dx"]
-bg_color = Color(0, 0, 0, 0.505882)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wx4u"]
+shader = ExtResource("4_2su67")
+shader_parameter/brightness = 0.56
+shader_parameter/anchor = -0.5
+shader_parameter/speed_scale = 1.0
+shader_parameter/fov = 0.099
+shader_parameter/line_count = 4.0
+shader_parameter/background_color = Vector4(0, 0, 0, 1)
+shader_parameter/grid_color = Vector4(0, 1, 2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xlbrh"]
+bg_color = Color(0, 0, 0, 0.767)
+border_width_left = 3
 border_width_top = 3
-border_color = Color(3, 0, 1, 1)
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(2, 0, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="Animation" id="Animation_j8fyq"]
 length = 0.001
@@ -305,6 +323,28 @@ tracks/24/keys = {
 "points": PackedFloat32Array(661, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/25/type = "bezier"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("WaveShader:scale:x")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/26/type = "bezier"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("WaveShader:scale:y")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
 
 [sub_resource type="Animation" id="Animation_56rib"]
 resource_name = "game_over_appear"
@@ -592,6 +632,28 @@ tracks/23/keys = {
 "points": PackedFloat32Array(1600, -0.25, 0, 0.625213, 789.996, 661, -0.374787, -473.484, 0.325213, -1.52441),
 "times": PackedFloat32Array(2.23333, 3.43333)
 }
+tracks/24/type = "bezier"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("WaveShader:scale:x")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.233333)
+}
+tracks/25/type = "bezier"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("WaveShader:scale:y")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.233333)
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ccyct"]
 _data = {
@@ -607,6 +669,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mfbuj")
+
+[node name="WaveShader" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_4wx4u")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.01, 0.01)
+pivot_offset = Vector2(800, 450)
+size_flags_vertical = 4
+color = Color(1, 0, 1, 1)
 
 [node name="Panel" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -636,7 +711,7 @@ grow_vertical = 2
 scale = Vector2(0.3, 0.3)
 pivot_offset = Vector2(415, 247)
 theme = ExtResource("2_0t601")
-theme_override_styles/panel = SubResource("StyleBoxFlat_nk6dx")
+theme_override_styles/panel = SubResource("StyleBoxFlat_xlbrh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
 custom_minimum_size = Vector2(400, 0)
@@ -818,17 +893,19 @@ grow_vertical = 0
 theme = ExtResource("2_0t601")
 alignment = 1
 selected = 3
-item_count = 5
+item_count = 6
 popup/item_0/text = "Beginner"
-popup/item_0/id = 30
+popup/item_0/id = 40
 popup/item_1/text = "Casual"
-popup/item_1/id = 80
+popup/item_1/id = 100
 popup/item_2/text = "Challenging"
-popup/item_2/id = 180
+popup/item_2/id = 190
 popup/item_3/text = "Expert"
-popup/item_3/id = 230
-popup/item_4/text = "Insane"
-popup/item_4/id = 400
+popup/item_3/id = 240
+popup/item_4/text = "Pro"
+popup/item_4/id = 310
+popup/item_5/text = "Insane"
+popup/item_5/id = 400
 
 [node name="GameOverLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)

@@ -1,10 +1,33 @@
-[gd_scene load_steps=12 format=3 uid="uid://bwrxehprj18ec"]
+[gd_scene load_steps=15 format=3 uid="uid://bwrxehprj18ec"]
 
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="1_5hhq5"]
 [ext_resource type="Script" path="res://scripts/intro_screen.gd" id="1_wgapw"]
 [ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="3_6ocqt"]
 [ext_resource type="PackedScene" uid="uid://bkktuhsu50c7l" path="res://scenes/FancyButton.tscn" id="3_fn42x"]
 [ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_3gr05"]
+[ext_resource type="Shader" path="res://scripts/synthwave.gdshader" id="4_tgpkh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s2rlw"]
+shader = ExtResource("4_tgpkh")
+shader_parameter/brightness = 0.56
+shader_parameter/anchor = -0.5
+shader_parameter/speed_scale = 1.0
+shader_parameter/fov = 0.099
+shader_parameter/line_count = 4.0
+shader_parameter/background_color = Vector4(0, 0, 0, 1)
+shader_parameter/grid_color = Vector4(0, 0.75, 1.5, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jm5u0"]
+bg_color = Color(0, 0, 0, 0.914)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(2, 0, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="Animation" id="Animation_gr18u"]
 length = 0.001
@@ -85,6 +108,42 @@ tracks/6/keys = {
 "points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("IntroScreen/ColorRect/Panel:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("IntroScreen/WaveShader:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("IntroScreen/ColorRect:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_s84vx"]
 resource_name = "intro"
@@ -96,9 +155,9 @@ tracks/0/path = NodePath("IntroScreen/ColorRect:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.9, 1.46667)
+"handle_modes": PackedInt32Array(0, 0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.266667, 1.13333, 1.46667)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
@@ -183,6 +242,42 @@ tracks/7/keys = {
 "method": &"playVoice"
 }]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("IntroScreen/ColorRect/Panel:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("IntroScreen/WaveShader:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("IntroScreen/ColorRect:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n8v4a"]
 _data = {
@@ -205,13 +300,41 @@ shader_parameter/amount = 0.05
 [node name="IntroScreen" type="CanvasLayer"]
 script = ExtResource("1_wgapw")
 
+[node name="WaveShader" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_s2rlw")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+color = Color(1, 0, 1, 1)
+
 [node name="ColorRect" type="ColorRect" parent="."]
+self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="Panel" type="Panel" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -392.0
+offset_right = 380.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("1_5hhq5")
+theme_override_styles/panel = SubResource("StyleBoxFlat_jm5u0")
 
 [node name="Title" type="Label" parent="ColorRect"]
 modulate = Color(1.5, 0, 0.75, 1)

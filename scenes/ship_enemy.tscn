@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cmh53citx35vj"]
+[gd_scene load_steps=37 format=3 uid="uid://cmh53citx35vj"]
 
 [ext_resource type="Script" path="res://scripts/ship_enemy.gd" id="1_2tlji"]
 [ext_resource type="Texture2D" uid="uid://daeu4a040h1kf" path="res://assets/sprites/explosion-animation.png" id="2_qme0s"]
@@ -172,6 +172,47 @@ size = Vector2(32, 46)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23m84"]
 size = Vector2(378, 352)
 
+[sub_resource type="Gradient" id="Gradient_faotl"]
+offsets = PackedFloat32Array(0, 0.0993377, 0.271523, 0.430464, 0.715232, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.4, 0.0980392, 0.0980392, 1, 0.610435, 0.0478322, 0, 1, 1, 0.783333, 0, 1, 0.887417, 0.887417, 0.887417, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_18vnm"]
+gradient = SubResource("Gradient_faotl")
+
+[sub_resource type="Curve" id="Curve_vbgu7"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -94.5055), 0.0, 0.0, 0, 0, Vector2(0.603352, 200), -1001.4, -1001.4, 0, 0, Vector2(0.77095, -63.7363), 6.81223, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rg744"]
+curve = SubResource("Curve_vbgu7")
+
+[sub_resource type="Curve" id="Curve_ymw4q"]
+_data = [Vector2(0, 1), 0.0, -0.217352, 0, 0, Vector2(1, 0.175824), -4.19634, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aoalf"]
+curve = SubResource("Curve_ymw4q")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7vkhx"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(50, 50, 1)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 500.0
+initial_velocity_max = 1500.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 85.58
+linear_accel_max = 85.58
+linear_accel_curve = SubResource("CurveTexture_rg744")
+scale_max = 25.0
+scale_curve = SubResource("CurveTexture_aoalf")
+color_ramp = SubResource("GradientTexture1D_18vnm")
+
 [node name="ShipEnemy" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_2tlji")
@@ -184,7 +225,7 @@ animation = &"walking"
 frame_progress = 0.880542
 flip_h = true
 
-[node name="SteamParticles" type="GPUParticles2D" parent="."]
+[node name="StepParticles" type="GPUParticles2D" parent="."]
 position = Vector2(149, -54)
 amount = 200
 process_material = SubResource("ParticleProcessMaterial_lwp1y")
@@ -211,3 +252,13 @@ enabled = false
 color = Color(1, 1, 0.745098, 1)
 energy = 3.0
 texture = ExtResource("5_w1pf7")
+
+[node name="DieParticles" type="GPUParticles2D" parent="."]
+position = Vector2(-38, -156)
+emitting = false
+amount = 2000
+process_material = SubResource("ParticleProcessMaterial_7vkhx")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 0.72

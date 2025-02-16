@@ -1,8 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://w5ky8semj5u0"]
+[gd_scene load_steps=11 format=3 uid="uid://w5ky8semj5u0"]
 
 [ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_vcho8"]
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="2_8vexn"]
+[ext_resource type="Shader" path="res://scripts/synthwave.gdshader" id="2_lfdfm"]
 [ext_resource type="Script" path="res://scripts/fancy_button.gd" id="3_mj5sj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mq75u"]
+shader = ExtResource("2_lfdfm")
+shader_parameter/brightness = 0.56
+shader_parameter/anchor = -0.5
+shader_parameter/speed_scale = 1.0
+shader_parameter/fov = 0.099
+shader_parameter/line_count = 4.0
+shader_parameter/background_color = Vector4(0, 0, 0, 1)
+shader_parameter/grid_color = Vector4(0, 0.75, 1.5, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_740qr"]
+bg_color = Color(0, 0, 0, 0.914)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(2, 0, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="Animation" id="Animation_s84vx"]
 resource_name = "Outro"
@@ -101,6 +124,42 @@ tracks/7/keys = {
 "method": &"playVoice"
 }]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PauseMenu/WaveShader:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("PauseMenu/Panel:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("PauseMenu/ColorRect:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_gr18u"]
 length = 0.001
@@ -192,6 +251,42 @@ tracks/7/keys = {
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PauseMenu/WaveShader:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("PauseMenu/Panel:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("PauseMenu/ColorRect:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_yqv5d"]
 resource_name = "intro"
@@ -229,7 +324,34 @@ _data = {
 layer = 3
 script = ExtResource("1_vcho8")
 
+[node name="WaveShader" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_mq75u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+color = Color(1, 0, 1, 1)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -392.0
+offset_right = 380.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_8vexn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_740qr")
+
 [node name="ColorRect" type="ColorRect" parent="."]
+self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

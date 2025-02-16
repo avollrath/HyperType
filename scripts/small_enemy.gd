@@ -1,5 +1,5 @@
 extends "res://scripts/enemy.gd"
-@onready var small_step_particles: GPUParticles2D = $SmallStepParticles
+@onready var small_step_particles: GPUParticles2D = $StepParticles
 
 func _after_ready():
 	light_scale = Vector2(1, 1)
