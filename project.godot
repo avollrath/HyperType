@@ -17,6 +17,8 @@ boot_splash/show_image=false
 
 [autoload]
 
+Talo="*res://addons/talo/talo_manager.gd"
+PlayerData="*res://scripts/PlayerData.gd"
 AudioManager="*res://scenes/audio_manager.tscn"
 GameSettings="*res://scripts/game_settings.gd"
 Achievements="*res://scripts/Achievements.gd"
@@ -29,6 +31,10 @@ window/size/resizable=false
 window/size/window_width_override=1600
 window/size/window_height_override=900
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/talo/plugin.cfg")
 
 [rendering]
 

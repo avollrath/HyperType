@@ -110,18 +110,25 @@ func update_ui() -> void:
 	display_longest_streak = 0
 	display_wpm = 0.0
 	
-	await get_tree().create_timer(1.4).timeout
+	var current_high_score = PlayerData.stats["high_score"]
+	print("[GAME OVER] Current high score from PlayerData: ", current_high_score)
 	
-
-
 	await animate_stat(high_score_label, "display_score", stats.score, 0.4)
-	if stats.score > Achievements.stats["high_score"]:
-		Achievements.set_stat("high_score", stats.score)
+	
+	if stats.score > current_high_score:
+		print("[GAME OVER] Run score (", stats.score, ") is greater than persistent high_score (", current_high_score, "). Updating high_score.")
+		PlayerData.update_stat("high_score", stats.score)
 		var voice_stream = load("res://assets/sounds/achievements/new_highscore.mp3") as AudioStream
 		if voice_stream:
 			AudioManager.achievement_voice.stream = voice_stream
 			AudioManager.achievement_voice.play()
 		start_highscore_pulsate()
+	else:
+		print("[GAME OVER] Run score (", stats.score, ") is NOT greater than persistent high_score (", current_high_score, "). No update.")
+
+	
+	await get_tree().create_timer(1.4).timeout
+
 	can_restart = true
 	await animate_stat(level_label, "display_level", stats.level, 0.2)
 	await animate_stat(time_played_label, "display_time", stats.time_played, 0.2)
@@ -188,7 +195,7 @@ func restart_game() -> void:
 		current_main.free()
 	
 	for child in root.get_children():
-		if child.name.begins_with("@") or child == self or child.name == "AudioManager" or child.name == "GameSettings" or child.name == "Achievements":
+		if child.name.begins_with("@") or child == self or child.name == "AudioManager" or child.name == "GameSettings" or child.name == "Achievements" or child.name == "PlayerData" or child.name == "Talo":
 			continue  # Skip internal nodes, self, and our singletons
 		child.free()
 	

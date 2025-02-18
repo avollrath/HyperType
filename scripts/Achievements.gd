@@ -485,8 +485,6 @@ var unlocked_achievements = {}
 # ============================================================================
 # _ready() – Load persistent data on startup
 # ============================================================================
-func _ready():
-	load_achievements()
 
 # ============================================================================
 # UPDATE FUNCTION (updates both persistent and run stats if key exists)
@@ -506,7 +504,6 @@ func update_stat(stat_name: String, value):
 			run_stats[stat_name] += value
 		else:
 			run_stats[stat_name] = value
-	save_achievements()
 	check_for_achievements()
 	check_run_achievements()
 
@@ -514,14 +511,24 @@ func update_stat(stat_name: String, value):
 # SET FUNCTION (overwrites stat value rather than adding)
 # ============================================================================
 func set_stat(stat_name: String, value):
-	if stats.has(stat_name):
+	if stat_name == "high_score":
+		var current_high = stats.get("high_score", 0)
+		print("[SET_STAT] Attempting to update high_score. Current: ", current_high, ", New Value: ", value)
+		# Only update if the new value is greater
+		if value > current_high:
+			stats["high_score"] = value
+			if run_stats.has("high_score"):
+				run_stats["high_score"] = value
+			print("[SET_STAT] high_score updated to: ", value)
+		else:
+			print("[SET_STAT] high_score remains at: ", current_high)
+	elif stats.has(stat_name):
 		stats[stat_name] = value
-	if run_stats.has(stat_name):
+	if run_stats.has(stat_name) and stat_name != "high_score":
 		run_stats[stat_name] = value
-	save_achievements()
 	check_for_achievements()
 	check_run_achievements()
-
+	
 # ============================================================================
 # PERSISTENT ACHIEVEMENT CHECK
 # ============================================================================
@@ -574,7 +581,7 @@ func reset_run_stats():
 func unlock_achievement(id: String):
 	if not unlocked_achievements.has(id):
 		unlocked_achievements[id] = true
-		save_achievements()
+		PlayerData.unlocked_achievements[id] = true
 		emit_signal("achievement_unlocked", id)
 		var title = ACHIEVEMENTS[id].title if ACHIEVEMENTS.has(id) else RUN_ACHIEVEMENTS[id].title
 		print("Achievement unlocked:", title)
@@ -603,32 +610,26 @@ func get_badge_texture(achievement_id: String) -> Texture2D:
 # ============================================================================
 # SAVE / LOAD FUNCTIONS (Persistent stats only)
 # ============================================================================
-func save_achievements():
-	var save_data = {
-		"achievements": unlocked_achievements,
-		"stats": stats
-	}
-	var file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
-	file.store_string(JSON.stringify(save_data))
-	file.close()
+func save_achievements_batch() -> void:
+	if not PlayerData.is_logged_in or not Talo.current_player:
+		print("Cannot save achievements: Player not logged in")
+		return
 
-func load_achievements():
-	if FileAccess.file_exists(SAVE_FILE):
-		var file = FileAccess.open(SAVE_FILE, FileAccess.READ)
-		var json_string = file.get_as_text()
-		file.close()
+	var result = null  # Declare 'result' in the function scope.
 
-		# Debugging: Print what was read from file
-		print("Loaded JSON:", json_string)
-
-		# Parse JSON safely
-		var result = JSON.parse_string(json_string)
-
-		# Check if parsing failed
-		if result == null:
-			print("Error parsing achievements JSON: Data is null. File might be corrupted.")
-			return
-
-		# Load saved data
-		unlocked_achievements = result.get("achievements", {})
-		stats = result.get("stats", stats)
+	# Save each persistent stat remotely
+	for stat_name in stats.keys():
+		var value_str = str(stats[stat_name])
+		print("[SAVE] Saving stat ", stat_name, " with value: ", value_str)
+		result = await Talo.current_player.set_prop("stat_" + stat_name, value_str)
+		if result != null:
+			print("[SAVE ERROR] Error saving stat ", stat_name, ":", result)
+	
+	# Save the unlocked achievements as a JSON string
+	var achievements_value = JSON.stringify(unlocked_achievements)
+	print("[SAVE] Saving achievements: ", achievements_value)
+	result = await Talo.current_player.set_prop("achievements", achievements_value)
+	if result != null:
+		print("[SAVE ERROR] Error saving achievements:", result)
+	else:
+		print("[SAVE] Achievements and stats saved successfully in batch!")

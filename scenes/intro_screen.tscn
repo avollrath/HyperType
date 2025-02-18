@@ -56,7 +56,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("IntroScreen/ColorRect/VBoxContainer/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -173,7 +173,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/Difficulty:modulate:a")
+tracks/2/path = NodePath("IntroScreen/ColorRect/VBoxContainer/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -354,23 +354,6 @@ text = "HyperType"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Difficulty" type="Label" parent="ColorRect"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -182.0
-offset_top = 204.0
-offset_right = 184.0
-offset_bottom = 245.0
-grow_horizontal = 2
-theme = ExtResource("1_5hhq5")
-theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "Choose difficulty:"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Version" type="Label" parent="ColorRect"]
 layout_mode = 1
 anchors_preset = 7
@@ -392,6 +375,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+visible = false
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -399,14 +383,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -235.0
-offset_top = -132.0
-offset_right = 235.0
-offset_bottom = 243.0
+offset_left = -300.0
+offset_top = -234.0
+offset_right = 300.0
+offset_bottom = 287.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(235, 215)
 theme_override_constants/separation = 20
+
+[node name="Difficulty" type="Label" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Choose difficulty:"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Beginner" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
 layout_mode = 2
@@ -437,6 +430,70 @@ hover_rotation = 0.0
 layout_mode = 2
 text = "Insane"
 hover_rotation = 0.0
+
+[node name="AuthContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -337.0
+offset_top = -176.0
+offset_right = 337.0
+offset_bottom = 305.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Difficulty" type="Label" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Player setup"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Username" type="LineEdit" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+placeholder_text = "Username"
+alignment = 1
+
+[node name="Password" type="LineEdit" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+placeholder_text = "Password"
+alignment = 1
+secret = true
+
+[node name="Email" type="LineEdit" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+placeholder_text = "Email"
+alignment = 1
+
+[node name="LoginButton" type="Button" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Login"
+
+[node name="RegisterButton" type="Button" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Register"
+
+[node name="DisableVerificationButton" type="Button" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Disable Verification"
+
+[node name="Message" type="Label" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Please fill in all fields"
+horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")

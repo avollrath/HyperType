@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+# Original difficulty selection nodes
+@onready var difficulty_container: VBoxContainer = $ColorRect/VBoxContainer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var beginner: FancyButton = $ColorRect/VBoxContainer/Beginner
 @onready var casual: FancyButton = $ColorRect/VBoxContainer/Casual
@@ -8,19 +10,27 @@ extends CanvasLayer
 @onready var pro: FancyButton = $ColorRect/VBoxContainer/Pro
 @onready var insane: FancyButton = $ColorRect/VBoxContainer/Insane
 
-# Preload all enemy scenes
-var enemy_scene = preload("res://scenes/enemy.tscn")
-var tank_enemy_scene = preload("res://scenes/tank_enemy.tscn")
-var small_enemy_scene = preload("res://scenes/small_enemy.tscn")
-var robot_enemy_scene = preload("res://scenes/robot_enemy.tscn")
-var ship_enemy_scene = preload("res://scenes/ship_enemy.tscn")
-
-# Keep track of warmed up enemies
-var warmed_up_enemies = {}
-var warmup_container: Node2D
+# Auth UI nodes
+@onready var auth_container: VBoxContainer = $ColorRect/AuthContainer
+@onready var username_input: LineEdit = $ColorRect/AuthContainer/Username
+@onready var password_input: LineEdit = $ColorRect/AuthContainer/Password
+@onready var email_input: LineEdit = $ColorRect/AuthContainer/Email
+@onready var login_button: Button = $ColorRect/AuthContainer/LoginButton
+@onready var register_button: Button = $ColorRect/AuthContainer/RegisterButton
+@onready var message_label: Label = $ColorRect/AuthContainer/Message
+@onready var disable_verification_button: Button = $ColorRect/AuthContainer/DisableVerificationButton
 
 func _ready():
-	# Connect the pressed signals for starting the game
+	PlayerData.auth_state_changed.connect(_on_auth_state_changed)
+	
+	check_existing_auth()
+	
+	# Connect auth buttons
+	login_button.pressed.connect(_on_login_pressed)
+	register_button.pressed.connect(_on_register_pressed)
+	disable_verification_button.pressed.connect(disable_verification)
+	
+	# Connect difficulty buttons
 	beginner.pressed.connect(func(): start_game(40))
 	casual.pressed.connect(func(): start_game(100))
 	challenging.pressed.connect(func(): start_game(190))
@@ -28,85 +38,102 @@ func _ready():
 	pro.pressed.connect(func(): start_game(310))
 	insane.pressed.connect(func(): start_game(400))
 	
+	# Check initial auth state
+	_on_auth_state_changed(PlayerData.is_logged_in)
+	
+	# Focus username field initially if not logged in
+	if not PlayerData.is_logged_in:
+		username_input.grab_focus()
+		
+func check_existing_auth() -> void:
+	# You might wait a few frames until the async identification completes.
+	while not Talo.current_player:
+		await get_tree().process_frame  # Wait for the next frame.
+	# Now we have a player, update our state:
+	PlayerData.is_logged_in = true
+	PlayerData.auth_state_changed.emit(true)
+
+func _on_auth_state_changed(is_logged_in: bool):
+	if is_logged_in:
+		auth_container.hide()
+		difficulty_container.show()
+		challenging.grab_focus()
+		load_achievements()
+		await PlayerData.load_stats()
+	else:
+		auth_container.show()
+		difficulty_container.hide()
+		username_input.grab_focus()
+		
+func load_achievements():
+	var achievements_json = await Talo.current_player.get_prop("achievements", "{}")
+	var parsed = JSON.parse_string(achievements_json)
+	Achievements.unlocked_achievements = parsed
+
+func _on_login_pressed():
+	if username_input.text.is_empty() or password_input.text.is_empty():
+		message_label.text = "Please fill in all fields"
+		return
+		
+	var result = await PlayerData.login(username_input.text, password_input.text)
+	if result[0] != OK:
+		match Talo.player_auth.last_error.get_code():
+			TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
+				message_label.text = "Invalid username or password"
+			_:
+				message_label.text = Talo.player_auth.last_error.get_string()
+	else:
+		if result[1]: # Needs verification
+			message_label.text = "Please check your email for verification code"
+			# You might want to show a verification code input here
+		else:
+			_on_auth_success()
+			
+func disable_verification():
+	var result = await Talo.player_auth.toggle_verification(
+		password_input.text, # Current password
+		false # Disable verification
+	)
+	if result == OK:
+		message_label.text = "Verification disabled, try logging in again"
+
+func _on_register_pressed():
+	if username_input.text.is_empty() or password_input.text.is_empty():
+		message_label.text = "Please fill in all fields"
+		return
+		
+	var result = await Talo.player_auth.register(
+		username_input.text, 
+		password_input.text,
+		"", # Empty email
+		false # Explicitly disable verification
+	)
+	
+	if result != OK:
+		match Talo.player_auth.last_error.get_code():
+			TaloAuthError.ErrorCode.IDENTIFIER_TAKEN:
+				message_label.text = "Username already taken"
+			_:
+				message_label.text = Talo.player_auth.last_error.get_string()
+	else:
+		_on_auth_success()
+
+func _on_auth_success():
+	message_label.text = "Login successful!"
+	
+	# Hide auth UI and show difficulty selection
+	auth_container.hide()
+	difficulty_container.show()
 	challenging.grab_focus()
-	
-	# Start warming up particles in the background
-	warmup_container = Node2D.new()
-	warmup_container.position = Vector2(-10000, -10000)  # Way off screen
-	add_child(warmup_container)
-	warm_up_enemy_types()
 
-func warm_up_enemy_types():
-	var enemy_scenes = {
-		"basic": enemy_scene,
-		"tank": tank_enemy_scene,
-		"small": small_enemy_scene,
-		"robot": robot_enemy_scene,
-		"ship": ship_enemy_scene
-	}
-	
-	# Start the warm-up process for each enemy type
-	for enemy_type in enemy_scenes:
-		warm_up_enemy(enemy_type, enemy_scenes[enemy_type])
-
-func warm_up_enemy(type: String, scene: PackedScene):
-	var enemy = scene.instantiate()
-	warmup_container.add_child(enemy)
-	
-	# If the enemy has particles, warm them up
-	if enemy.has_node("StepParticles"):
-		var step_particles = enemy.get_node("StepParticles")
-		step_particles.visible = false
-		step_particles.emitting = true
-		step_particles.speed_scale = 10.0
-	
-	if enemy.has_node("DieParticles"):
-		var die_particles = enemy.get_node("DieParticles")
-		die_particles.visible = false
-		die_particles.emitting = true
-		die_particles.speed_scale = 10.0
-		
-	if enemy.has_node("PointLight2D"):
-		var point_light = enemy.get_node("PointLight2D")
-		point_light.enabled = true
-		
-		# Create and execute the scaling tween
-		var tween = create_tween()
-		tween.tween_property(point_light, "scale", Vector2(0.1, 0.1), 0.1).set_trans(Tween.TRANS_LINEAR)
-		await tween.finished
-		point_light.enabled = false
-	
-	# Store the warmed up enemy
-	warmed_up_enemies[type] = enemy
+# Rest of your methods remain the same...
 
 func start_game(speed: int):
 	AudioManager.click.play()
 	GameSettings.enemy_speed = speed
 	animation_player.play("intro")
 	
-	# Instance the main scene
 	var main_scene = load("res://scenes/main.tscn").instantiate()
-	
-	# Move our warmed up enemies to the main scene
-	if is_instance_valid(warmup_container):
-		for enemy in warmed_up_enemies.values():
-			if is_instance_valid(enemy):
-				# Reset particle states
-				if enemy.has_node("StepParticles"):
-					var step_particles = enemy.get_node("StepParticles")
-					step_particles.emitting = false
-					step_particles.speed_scale = 1.0
-					step_particles.visible = true
-				
-				if enemy.has_node("DieParticles"):
-					var die_particles = enemy.get_node("DieParticles")
-					die_particles.emitting = false
-					die_particles.speed_scale = 1.0
-					die_particles.visible = true
-		
-		# Clean up the warmup container
-		warmup_container.queue_free()
-	
 	get_parent().add_child(main_scene)
 	await animation_player.animation_finished
 	AudioManager.background_music.play()
