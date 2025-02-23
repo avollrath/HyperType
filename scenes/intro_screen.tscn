@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bwrxehprj18ec"]
+[gd_scene load_steps=21 format=3 uid="uid://bwrxehprj18ec"]
 
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="1_5hhq5"]
 [ext_resource type="Script" path="res://scripts/intro_screen.gd" id="1_wgapw"]
@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://bkktuhsu50c7l" path="res://scenes/FancyButton.tscn" id="3_fn42x"]
 [ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_3gr05"]
 [ext_resource type="Shader" path="res://scripts/synthwave.gdshader" id="4_tgpkh"]
+[ext_resource type="PackedScene" uid="uid://bkiqfdu48jwy" path="res://scenes/enemy.tscn" id="7_dqmug"]
+[ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="8_l01ar"]
+[ext_resource type="PackedScene" uid="uid://hu7txgloseo5" path="res://scenes/robot_enemy.tscn" id="9_idcu0"]
+[ext_resource type="PackedScene" uid="uid://cmh53citx35vj" path="res://scenes/ship_enemy.tscn" id="10_7kp5t"]
+[ext_resource type="PackedScene" uid="uid://cmg2xd7seh14r" path="res://scenes/small_enemy.tscn" id="11_74egp"]
+[ext_resource type="PackedScene" uid="uid://kb0iaplmpqsp" path="res://scenes/tank_enemy.tscn" id="12_x2mu8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s2rlw"]
 shader = ExtResource("4_tgpkh")
@@ -439,9 +445,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -337.0
-offset_top = -176.0
+offset_top = -207.0
 offset_right = 337.0
-offset_bottom = 305.0
+offset_bottom = 274.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
@@ -454,6 +460,11 @@ theme_override_font_sizes/font_size = 32
 text = "Player setup"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="GuestButton" type="Button" parent="ColorRect/AuthContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Play as guest"
 
 [node name="Username" type="LineEdit" parent="ColorRect/AuthContainer"]
 layout_mode = 2
@@ -518,3 +529,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="Node2D" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0.01)
+
+[node name="Enemy" parent="Node2D" instance=ExtResource("7_dqmug")]
+position = Vector2(1396, 842)
+
+[node name="Player" parent="Node2D" instance=ExtResource("8_l01ar")]
+position = Vector2(159, 787)
+
+[node name="RobotEnemy" parent="Node2D" instance=ExtResource("9_idcu0")]
+position = Vector2(1403, 552)
+
+[node name="ShipEnemy" parent="Node2D" instance=ExtResource("10_7kp5t")]
+position = Vector2(1401, 323)
+
+[node name="SmallEnemy" parent="Node2D" instance=ExtResource("11_74egp")]
+position = Vector2(178, 626)
+
+[node name="TankEnemy" parent="Node2D" instance=ExtResource("12_x2mu8")]
+position = Vector2(243, 304)

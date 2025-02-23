@@ -28,20 +28,6 @@ var light_scale: Vector2 = Vector2(1.5, 1.5)
 var last_frame = 0
 
 func _ready():
-	if die_particles:
-		die_particles.visible = false
-		die_particles.emitting = true
-		die_particles.speed_scale = 10.0  # Fast forward the particle simulation
-		await get_tree().create_timer(0.5).timeout  # Simulate for 0.5s
-		die_particles.emitting = false  # Stop emission
-		die_particles.speed_scale = 1.0  # Reset speed
-		die_particles.visible = true  # Now it will start clean
-	if point_light_2d:
-		var tween = create_tween()
-		point_light_2d.enabled = true
-		tween.tween_property(point_light_2d, "scale", Vector2(0.1, 0.1), 0.1).set_trans(Tween.TRANS_LINEAR)
-		await tween.finished  
-		point_light_2d.enabled = false
 	velocity.x = -speed
 	animated_sprite.play("walking")
 	setup_word()

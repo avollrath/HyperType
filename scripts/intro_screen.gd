@@ -19,6 +19,14 @@ extends CanvasLayer
 @onready var register_button: Button = $ColorRect/AuthContainer/RegisterButton
 @onready var message_label: Label = $ColorRect/AuthContainer/Message
 @onready var disable_verification_button: Button = $ColorRect/AuthContainer/DisableVerificationButton
+@onready var guest_button: Button = $ColorRect/AuthContainer/GuestButton
+
+@onready var enemy: CharacterBody2D = $Node2D/Enemy
+@onready var player: CharacterBody2D = $Node2D/Player
+@onready var ship_enemy: CharacterBody2D = $Node2D/ShipEnemy
+@onready var robot_enemy: CharacterBody2D = $Node2D/RobotEnemy
+@onready var small_enemy: CharacterBody2D = $Node2D/SmallEnemy
+@onready var tank_enemy: CharacterBody2D = $Node2D/TankEnemy
 
 func _ready():
 	PlayerData.auth_state_changed.connect(_on_auth_state_changed)
@@ -29,7 +37,7 @@ func _ready():
 	login_button.pressed.connect(_on_login_pressed)
 	register_button.pressed.connect(_on_register_pressed)
 	disable_verification_button.pressed.connect(disable_verification)
-	
+	guest_button.pressed.connect(_on_guest_mode_pressed)
 	# Connect difficulty buttons
 	beginner.pressed.connect(func(): start_game(40))
 	casual.pressed.connect(func(): start_game(100))
@@ -38,6 +46,12 @@ func _ready():
 	pro.pressed.connect(func(): start_game(310))
 	insane.pressed.connect(func(): start_game(400))
 	
+	enemy.die()
+	ship_enemy.die()
+	robot_enemy.die()
+	small_enemy.die()
+	tank_enemy.die()
+	player.take_damage()
 	# Check initial auth state
 	_on_auth_state_changed(PlayerData.is_logged_in)
 	
@@ -52,14 +66,24 @@ func check_existing_auth() -> void:
 	# Now we have a player, update our state:
 	PlayerData.is_logged_in = true
 	PlayerData.auth_state_changed.emit(true)
+	
+func _on_guest_mode_pressed():
+	# Hide authentication UI and show difficulty selection screen
+	auth_container.hide()
+	difficulty_container.show()
+	challenging.grab_focus()
+
+	# Ensure guest mode doesn't load/save achievements or stats
+	PlayerData.is_logged_in = false
 
 func _on_auth_state_changed(is_logged_in: bool):
 	if is_logged_in:
 		auth_container.hide()
 		difficulty_container.show()
 		challenging.grab_focus()
-		load_achievements()
-		await PlayerData.load_stats()
+		if PlayerData.is_logged_in:  # Only load stats if NOT guest mode
+			load_achievements()
+			await PlayerData.load_stats()
 	else:
 		auth_container.show()
 		difficulty_container.hide()
