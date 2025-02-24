@@ -462,7 +462,9 @@ var stats = {
 	"level_complete_no_mistakes": false,
 	"perfect_levels_count": 0,        # count of levels finished perfectly
 	"comebacks_count": 0,
-	"high_score": 0               # count of comebacks achieved
+	"high_score": 0,
+	"games_played": 0,                # new key if you need it
+	"total_score": 0   
 }
 
 # ------------------------------------------------------------------

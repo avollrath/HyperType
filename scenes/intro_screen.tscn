@@ -1,10 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://bwrxehprj18ec"]
+[gd_scene load_steps=22 format=3 uid="uid://bwrxehprj18ec"]
 
 [ext_resource type="Theme" uid="uid://fp1h1j23uxgr" path="res://main_theme.tres" id="1_5hhq5"]
 [ext_resource type="Script" path="res://scripts/intro_screen.gd" id="1_wgapw"]
 [ext_resource type="Shader" path="res://scripts/screen_effect.gdshader" id="3_6ocqt"]
 [ext_resource type="PackedScene" uid="uid://bkktuhsu50c7l" path="res://scenes/FancyButton.tscn" id="3_fn42x"]
 [ext_resource type="Shader" path="res://scripts/cro_abr_shader.gdshader" id="4_3gr05"]
+[ext_resource type="Script" path="res://scripts/fancy_button.gd" id="4_stx8q"]
 [ext_resource type="Shader" path="res://scripts/synthwave.gdshader" id="4_tgpkh"]
 [ext_resource type="PackedScene" uid="uid://bkiqfdu48jwy" path="res://scenes/enemy.tscn" id="7_dqmug"]
 [ext_resource type="PackedScene" uid="uid://b6430n4a65u6q" path="res://scenes/player.tscn" id="8_l01ar"]
@@ -51,7 +52,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IntroScreen/ColorRect/VBoxContainer:modulate:a")
+tracks/1/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -62,7 +63,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/VBoxContainer/Difficulty:modulate:a")
+tracks/2/path = NodePath("IntroScreen/ColorRect/DifficultyContainer/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -95,7 +96,7 @@ tracks/4/keys = {
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:x")
+tracks/5/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:scale:x")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -106,7 +107,7 @@ tracks/5/keys = {
 tracks/6/type = "bezier"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:y")
+tracks/6/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:scale:y")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -168,7 +169,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("IntroScreen/ColorRect/VBoxContainer:modulate:a")
+tracks/1/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -179,7 +180,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("IntroScreen/ColorRect/VBoxContainer/Difficulty:modulate:a")
+tracks/2/path = NodePath("IntroScreen/ColorRect/DifficultyContainer/Difficulty:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -212,7 +213,7 @@ tracks/4/keys = {
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:x")
+tracks/5/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:scale:x")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -223,7 +224,7 @@ tracks/5/keys = {
 tracks/6/type = "bezier"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("IntroScreen/ColorRect/VBoxContainer:scale:y")
+tracks/6/path = NodePath("IntroScreen/ColorRect/DifficultyContainer:scale:y")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -333,9 +334,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -380.0
-offset_top = -392.0
+offset_top = -407.0
 offset_right = 380.0
-offset_bottom = 334.0
+offset_bottom = 350.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -375,69 +376,51 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("1_5hhq5")
 theme_override_font_sizes/font_size = 16
-text = "Version 0.1
+text = "Version 0.0.2
 by André Vollrath"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
-visible = false
-custom_minimum_size = Vector2(600, 0)
+[node name="MainContainer" type="VBoxContainer" parent="ColorRect"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -234.0
-offset_right = 300.0
-offset_bottom = 287.0
+offset_left = -215.0
+offset_top = -168.0
+offset_right = 215.0
+offset_bottom = 104.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(235, 215)
-theme_override_constants/separation = 20
-
-[node name="Difficulty" type="Label" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
 theme = ExtResource("1_5hhq5")
-theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "Choose difficulty:"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="Beginner" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="LoginButton" type="Button" parent="ColorRect/MainContainer"]
 layout_mode = 2
-text = "Beginner"
-hover_rotation = 0.0
+size_flags_vertical = 3
+theme = ExtResource("1_5hhq5")
+text = "Login"
+script = ExtResource("4_stx8q")
 
-[node name="Casual" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="RegisterButton" type="Button" parent="ColorRect/MainContainer"]
 layout_mode = 2
-text = "Casual"
-hover_rotation = 0.0
+size_flags_vertical = 3
+theme = ExtResource("1_5hhq5")
+text = "Register"
+script = ExtResource("4_stx8q")
 
-[node name="Challenging" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
+[node name="GuestButton" type="Button" parent="ColorRect/MainContainer"]
 layout_mode = 2
-text = "Challenging"
-hover_rotation = 0.0
-
-[node name="Expert" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Expert"
-hover_rotation = 0.0
-
-[node name="Pro" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Pro"
-hover_rotation = 0.0
-
-[node name="Insane" parent="ColorRect/VBoxContainer" instance=ExtResource("3_fn42x")]
-layout_mode = 2
-text = "Insane"
-hover_rotation = 0.0
+size_flags_vertical = 3
+theme = ExtResource("1_5hhq5")
+text = "Play as guest"
+script = ExtResource("4_stx8q")
 
 [node name="AuthContainer" type="VBoxContainer" parent="ColorRect"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -461,11 +444,6 @@ text = "Player setup"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GuestButton" type="Button" parent="ColorRect/AuthContainer"]
-layout_mode = 2
-theme = ExtResource("1_5hhq5")
-text = "Play as guest"
-
 [node name="Username" type="LineEdit" parent="ColorRect/AuthContainer"]
 layout_mode = 2
 theme = ExtResource("1_5hhq5")
@@ -485,26 +463,97 @@ theme = ExtResource("1_5hhq5")
 placeholder_text = "Email"
 alignment = 1
 
-[node name="LoginButton" type="Button" parent="ColorRect/AuthContainer"]
+[node name="SubmitButton" type="Button" parent="ColorRect/AuthContainer"]
 layout_mode = 2
 theme = ExtResource("1_5hhq5")
-text = "Login"
+text = "Submit
+"
 
-[node name="RegisterButton" type="Button" parent="ColorRect/AuthContainer"]
+[node name="BackButton" type="Button" parent="ColorRect/AuthContainer"]
 layout_mode = 2
 theme = ExtResource("1_5hhq5")
-text = "Register"
-
-[node name="DisableVerificationButton" type="Button" parent="ColorRect/AuthContainer"]
-layout_mode = 2
-theme = ExtResource("1_5hhq5")
-text = "Disable Verification"
+text = "Back"
 
 [node name="Message" type="Label" parent="ColorRect/AuthContainer"]
 layout_mode = 2
 theme = ExtResource("1_5hhq5")
 text = "Please fill in all fields"
 horizontal_alignment = 1
+
+[node name="DifficultyContainer" type="VBoxContainer" parent="ColorRect"]
+visible = false
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -259.0
+offset_right = 300.0
+offset_bottom = 313.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(235, 215)
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="UserInfo" type="HBoxContainer" parent="ColorRect/DifficultyContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="Username" type="Label" parent="ColorRect/DifficultyContainer/UserInfo"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+text = "Playing as: Username"
+
+[node name="Difficulty" type="Label" parent="ColorRect/DifficultyContainer"]
+layout_mode = 2
+theme = ExtResource("1_5hhq5")
+theme_override_colors/font_color = Color(0.71341, 0.670116, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Choose difficulty:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Beginner" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Beginner"
+hover_rotation = 0.0
+
+[node name="Casual" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Casual"
+hover_rotation = 0.0
+
+[node name="Challenging" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Challenging"
+hover_rotation = 0.0
+
+[node name="Expert" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Expert"
+hover_rotation = 0.0
+
+[node name="Pro" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Pro"
+hover_rotation = 0.0
+
+[node name="Insane" parent="ColorRect/DifficultyContainer" instance=ExtResource("3_fn42x")]
+layout_mode = 2
+text = "Insane"
+hover_rotation = 0.0
+
+[node name="LogoutButton" type="Button" parent="ColorRect/DifficultyContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("1_5hhq5")
+text = "Logout"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")

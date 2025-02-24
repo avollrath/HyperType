@@ -125,7 +125,11 @@ func update_ui() -> void:
 		start_highscore_pulsate()
 	else:
 		print("[GAME OVER] Run score (", stats.score, ") is NOT greater than persistent high_score (", current_high_score, "). No update.")
-
+	
+	PlayerData.update_stat("games_played", PlayerData.stats["games_played"] + 1)
+	
+	# Merge run stats into persistent stats:
+	PlayerData.merge_run_stats(stats)
 	
 	await get_tree().create_timer(1.4).timeout
 
