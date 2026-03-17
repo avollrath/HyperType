@@ -210,6 +210,8 @@ func restart_game() -> void:
 	var new_main_scene = load("res://scenes/main.tscn").instantiate()
 	root.add_child(new_main_scene)
 	get_tree().current_scene = new_main_scene
+	if new_main_scene.has_method("warm_up_gpu"):
+		await new_main_scene.warm_up_gpu()
 	AudioManager.ui_hit.play()
 	await get_tree().create_timer(0.5).timeout
 	AudioManager.hypertype_voice.play()

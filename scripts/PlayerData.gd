@@ -40,7 +40,10 @@ func login(username: String, password: String) -> Array:
 		await load_stats()
 	return result
 
-func logout():
+func logout() -> void:
+	if Talo.player_auth:
+		await Talo.player_auth.logout()
+
 	is_logged_in = false
 	auth_state_changed.emit(false)
 

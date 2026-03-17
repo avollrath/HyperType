@@ -1,3 +1,3 @@
 extends Node
 
-var enemy_speed: int = 100  # Default speed
+var enemy_speed: int = 190  # Default speed

@@ -125,18 +125,18 @@ func die():
 	if step_particles: step_particles.visible = false
 	if die_particles: die_particles.emitting = true
 	animated_sprite.play("death")
-	var tween = create_tween()
-	tween.set_parallel()
 	if point_light_2d:
 		point_light_2d.enabled = true
-		tween.tween_property(point_light_2d, "scale", light_scale, 0.2).set_trans(Tween.TRANS_LINEAR)
-		await tween.finished  
+		var light_tween = create_tween()
+		light_tween.tween_property(point_light_2d, "scale", light_scale, 0.2).set_trans(Tween.TRANS_LINEAR)
+		await light_tween.finished
 		point_light_2d.enabled = false
-	tween.tween_property(animated_sprite, "modulate", Color(1.2, 1.2, 1.2), 0.2)
+	var flash_tween = create_tween()
+	flash_tween.tween_property(animated_sprite, "modulate", Color(1.2, 1.2, 1.2), 0.2)
 	await animated_sprite.animation_finished
-	tween = create_tween()
-	tween.tween_property(animated_sprite, "modulate:a", 0.0, 0.2)
-	await tween.finished
+	var fade_tween = create_tween()
+	fade_tween.tween_property(animated_sprite, "modulate:a", 0.0, 0.2)
+	await fade_tween.finished
 	queue_free()
 	
 func flash_letter():

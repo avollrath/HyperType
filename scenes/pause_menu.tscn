@@ -440,22 +440,21 @@ text = "Continue"
 script = ExtResource("3_mj5sj")
 hover_rotation = 0.0
 
-[node name="Settings" type="Button" parent="ColorRect/VBoxContainer"]
+[node name="Restart" type="Button" parent="ColorRect/VBoxContainer"]
 custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_8vexn")
-text = "Settings
-"
+text = "Restart"
 script = ExtResource("3_mj5sj")
 hover_rotation = 0.0
 
-[node name="Quit" type="Button" parent="ColorRect/VBoxContainer"]
+[node name="ReturnToMainMenu" type="Button" parent="ColorRect/VBoxContainer"]
 custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_8vexn")
-text = "Quit
+text = "Return to main menu
 "
 script = ExtResource("3_mj5sj")
 hover_rotation = 0.0

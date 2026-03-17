@@ -2,7 +2,6 @@ extends Node
 
 signal achievement_unlocked(achievement_id)
 
-const SAVE_FILE = "user://achievements.json"
 const DEFAULT_BADGE = "res://assets/sprites/badges/cup.png"
 
 # ------------------------------------------------------------------
@@ -598,12 +597,16 @@ func get_badge_texture(achievement_id: String) -> Texture2D:
 	if ACHIEVEMENTS.has(achievement_id):
 		var achievement = ACHIEVEMENTS[achievement_id]
 		if achievement.has("badge"):
+			if not ResourceLoader.exists(achievement.badge, "Texture2D"):
+				return load(DEFAULT_BADGE) as Texture2D
 			var badge = load(achievement.badge) as Texture2D
 			if badge:
 				return badge
 	elif RUN_ACHIEVEMENTS.has(achievement_id):
 		var achievement = RUN_ACHIEVEMENTS[achievement_id]
 		if achievement.has("badge"):
+			if not ResourceLoader.exists(achievement.badge, "Texture2D"):
+				return load(DEFAULT_BADGE) as Texture2D
 			var badge = load(achievement.badge) as Texture2D
 			if badge:
 				return badge
@@ -635,3 +638,17 @@ func save_achievements_batch() -> void:
 		print("[SAVE ERROR] Error saving achievements:", result)
 	else:
 		print("[SAVE] Achievements and stats saved successfully in batch!")
+
+func reset_guest_progress() -> void:
+	for stat_name in stats.keys():
+		match typeof(stats[stat_name]):
+			TYPE_BOOL:
+				stats[stat_name] = false
+			TYPE_FLOAT:
+				stats[stat_name] = 0.0
+			_:
+				stats[stat_name] = 0
+
+	reset_run_stats()
+	unlocked_achievements = {}
+	PlayerData.unlocked_achievements = {}

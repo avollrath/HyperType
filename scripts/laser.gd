@@ -7,6 +7,7 @@ extends Node2D
 var sprite: AnimatedSprite2D
 var target_pos: Vector2
 var velocity: Vector2
+static var cached_frames: SpriteFrames
 
 func _ready():
 	# Create and setup the animated sprite
@@ -14,23 +15,24 @@ func _ready():
 	add_child(sprite)
 	
 	sprite.scale = Vector2(1, 3)
-	var frames = SpriteFrames.new()
-	frames.add_animation("default")
+	if cached_frames == null:
+		cached_frames = SpriteFrames.new()
+		cached_frames.add_animation("default")
+		
+		# Load your sprite sheet
+		var texture := load("res://assets/sprites/explosions/projectile.png") as Texture2D
+		
+		# Create AtlasTexture for each frame
+		var frame_width := texture.get_width() / 2.0  # Divide by 2 since you have 2 frames
+		var frame_height := texture.get_height()
+		
+		for i in range(2):
+			var atlas := AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height)
+			cached_frames.add_frame("default", atlas)
 	
-	# Load your sprite sheet
-	var texture = load("res://assets/sprites/explosions/projectile.png")
-	
-	# Create AtlasTexture for each frame
-	var frame_width = texture.get_width() / 2  # Divide by 2 since you have 2 frames
-	var frame_height = texture.get_height()
-	
-	for i in range(2):
-		var atlas = AtlasTexture.new()
-		atlas.atlas = texture
-		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height)
-		frames.add_frame("default", atlas)
-	
-	sprite.sprite_frames = frames
+	sprite.sprite_frames = cached_frames
 	sprite.play("default")
 	sprite.speed_scale = 1.0 / frame_duration
 

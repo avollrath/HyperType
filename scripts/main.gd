@@ -63,6 +63,18 @@ var tank_present = false
 var tank_spawned_this_level = false
 
 var is_paused = false
+var is_warmed_up := false
+var gameplay_started := false
+
+const PARTICLE_WARMUP_SETTLE_FRAMES := 2
+const PARTICLE_WARMUP_DURATION := 0.35
+const WARMUP_SCENES := [
+	"res://scenes/enemy.tscn",
+	"res://scenes/small_enemy.tscn",
+	"res://scenes/robot_enemy.tscn",
+	"res://scenes/ship_enemy.tscn",
+	"res://scenes/tank_enemy.tscn"
+]
 
 # ============================================================================
 # PLAYTIME TRACKING (only counts when game is active and not paused)
@@ -188,7 +200,6 @@ func _ready():
 	tank_present = false
 	randomize()
 	load_words()
-	mech_sound("play")
 	required_enemies_for_boss = 15
 	camera = get_node_or_null("Camera2D")
 	current_enemy_speed = GameSettings.enemy_speed
@@ -198,9 +209,70 @@ func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	player.shoot_laser.connect(_on_player_shoot)
 	player.player_hit.connect(_on_player_hit)
-	spawn_timer.start()
 	setup_lives_display()
 	Achievements.reset_run_stats()
+	game_active = false
+
+func warm_up_gpu() -> void:
+	if is_warmed_up:
+		_start_gameplay()
+		return
+
+	var warmup_root := Node2D.new()
+	warmup_root.name = "WarmupRoot"
+	add_child(warmup_root)
+
+	var warmup_instances: Array[Node] = []
+	for scene_path in WARMUP_SCENES:
+		var packed_scene := load(scene_path) as PackedScene
+		if packed_scene == null:
+			continue
+
+		var instance := packed_scene.instantiate()
+		warmup_root.add_child(instance)
+		if instance is Node2D:
+			instance.position = Vector2(-5000, -5000)
+		warmup_instances.append(instance)
+
+	await _wait_process_frames(PARTICLE_WARMUP_SETTLE_FRAMES)
+	_warmup_player_feedback()
+
+	for instance in warmup_instances:
+		_warmup_particles_in_tree(instance)
+
+	await get_tree().create_timer(PARTICLE_WARMUP_DURATION).timeout
+	warmup_root.queue_free()
+	is_warmed_up = true
+	_start_gameplay()
+
+func _start_gameplay() -> void:
+	if gameplay_started:
+		return
+
+	gameplay_started = true
+	game_active = true
+	mech_sound("play")
+	spawn_timer.start()
+
+func _wait_process_frames(frame_count: int) -> void:
+	for _i in range(frame_count):
+		await get_tree().process_frame
+
+func _warmup_player_feedback() -> void:
+	if not is_instance_valid(player):
+		return
+
+	player.take_damage()
+
+func _warmup_particles_in_tree(root: Node) -> void:
+	if root is GPUParticles2D:
+		var particles := root as GPUParticles2D
+		particles.emitting = true
+		if particles.has_method("restart"):
+			particles.restart()
+
+	for child in root.get_children():
+		_warmup_particles_in_tree(child)
 	
 func setup_lives_display():
 	# Clear any existing hearts
@@ -318,7 +390,7 @@ func toggle_pause():
 
 	var time_played = Time.get_unix_time_from_system() - start_time
 	var accuracy = (float(correct_chars) / total_chars_typed * 100) if total_chars_typed > 0 else 0.0
-	var wpm = (correct_chars / 5.0) / (active_typing_time / 60.0) if active_typing_time > 0 else 0.0
+	var wpm = (total_chars_typed / 5.0) / (active_playtime / 60.0) if active_playtime > 0 else 0.0
 
 	var pause_menu = preload("res://scenes/pause_menu.tscn").instantiate()
 	pause_menu.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -831,7 +903,7 @@ func show_game_over_screen():
 		await get_tree().create_timer(1.0).timeout
 		
 		var accuracy = (float(correct_chars) / total_chars_typed * 100) if total_chars_typed > 0 else 0.0
-		var wpm = (correct_chars / 5.0) / (active_typing_time / 60.0) if active_typing_time > 0 else 0.0
+		var wpm = (total_chars_typed / 5.0) / (active_playtime / 60.0) if active_playtime > 0 else 0.0
 		
 		var game_over_screen = preload("res://scenes/game_over.tscn").instantiate()
 		game_over_screen.initialize_stats({

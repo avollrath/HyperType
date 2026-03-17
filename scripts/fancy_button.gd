@@ -6,8 +6,8 @@ class_name FancyButton
 @export var hover_time: float = 0.2
 
 func _ready() -> void:
-	# Center the pivot so animations occur about the center.
-	pivot_offset = size / 2
+	# Container layout can resize the button after _ready(), so keep the pivot synced.
+	_update_pivot_offset()
 	# Allow the button to receive keyboard focus.
 	focus_mode = Control.FOCUS_ALL
 	
@@ -16,6 +16,14 @@ func _ready() -> void:
 	self.mouse_exited.connect(Callable(self, "_on_mouse_exited"))
 	self.focus_entered.connect(Callable(self, "_on_focus_entered"))
 	self.focus_exited.connect(Callable(self, "_on_focus_exited"))
+	self.resized.connect(Callable(self, "_on_resized"))
+	call_deferred("_update_pivot_offset")
+
+func _on_resized() -> void:
+	_update_pivot_offset()
+
+func _update_pivot_offset() -> void:
+	pivot_offset = size / 2
 
 # --- Tween management ---
 func _kill_active_tween() -> void:
