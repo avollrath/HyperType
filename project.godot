@@ -25,7 +25,7 @@ buses/default_bus_layout="uid://cmwh807gvygnd"
 
 [autoload]
 
-Talo="*res://addons/talo/talo_manager.gd"
+Talo="*uid://duvxkqngyrcbm"
 PlayerData="*res://scripts/PlayerData.gd"
 AudioManager="*res://scenes/audio_manager.tscn"
 GameSettings="*res://scripts/game_settings.gd"

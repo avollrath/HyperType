@@ -14,6 +14,7 @@ enum GameState { MAIN_MENU, LOGIN, REGISTER, DIFFICULTY, ACHIEVEMENTS }
 @onready var achievements_divider: ColorRect = $ColorRect/DifficultyContainer/Divider
 @onready var guest_back_action: BaseButton = $ColorRect/DifficultyContainer/GuestBackButton
 @onready var quit_divider: ColorRect = $ColorRect/DifficultyContainer/BottomDivider
+@onready var god_mode_notice: Label = $ColorRect/GodModeNotice
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 # Main Menu Buttons
@@ -59,6 +60,8 @@ enum GameState { MAIN_MENU, LOGIN, REGISTER, DIFFICULTY, ACHIEVEMENTS }
 var current_state: GameState = GameState.MAIN_MENU
 var is_starting_game := false
 var achievement_card_stylebox: StyleBoxFlat
+var god_mode_code_buffer := ""
+var god_mode_notice_tween: Tween
 
 const DEFAULT_PANEL_SIZE := Vector2(760, 757)
 const ACHIEVEMENTS_PANEL_SIZE := Vector2(1160, 757)
@@ -116,6 +119,8 @@ func check_existing_auth() -> void:
 
 func _change_state(new_state: GameState):
 	current_state = new_state
+	if new_state != GameState.MAIN_MENU:
+		god_mode_code_buffer = ""
 	_update_ui()
 
 func _update_ui():
@@ -183,6 +188,26 @@ func _on_logout_pressed():
 
 func _on_quit_pressed():
 	get_tree().quit()
+
+func _input(event: InputEvent) -> void:
+	if current_state != GameState.MAIN_MENU:
+		return
+
+	if event is InputEventKey and event.pressed and not event.echo and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
+		var key_event := event as InputEventKey
+		var typed_char := char(key_event.unicode).to_lower()
+		if typed_char.is_empty():
+			return
+
+		var char_code := typed_char.unicode_at(0)
+		if char_code < 97 or char_code > 122:
+			return
+
+		god_mode_code_buffer = (god_mode_code_buffer + typed_char).substr(max(god_mode_code_buffer.length() - 2, 0))
+		if god_mode_code_buffer == "god":
+			GameSettings.god_mode_pending = true
+			_show_god_mode_notice()
+			god_mode_code_buffer = ""
 
 func _on_show_achievements_pressed():
 	if not PlayerData.is_logged_in:
@@ -273,6 +298,7 @@ func start_game(speed: int):
 		Achievements.reset_guest_progress()
 	AudioManager.click.play()
 	GameSettings.enemy_speed = speed
+	GameSettings.consume_god_mode()
 	_set_difficulty_buttons_enabled(false)
 	username_label.text = "Preparing shaders and particles..."
 	animation_player.play("intro")
@@ -286,6 +312,20 @@ func start_game(speed: int):
 		await animation_player.animation_finished
 	AudioManager.background_music.play()
 	queue_free()
+
+func _show_god_mode_notice() -> void:
+	if god_mode_notice_tween and god_mode_notice_tween.is_valid():
+		god_mode_notice_tween.kill()
+
+	god_mode_notice.show()
+	god_mode_notice.modulate = Color(1, 1, 1, 0)
+	god_mode_notice_tween = create_tween()
+	god_mode_notice_tween.tween_property(god_mode_notice, "modulate:a", 1.0, 0.18)
+	god_mode_notice_tween.tween_interval(1.8)
+	god_mode_notice_tween.tween_property(god_mode_notice, "modulate:a", 0.0, 0.28)
+	god_mode_notice_tween.finished.connect(func():
+		god_mode_notice.hide()
+	)
 
 func _set_difficulty_buttons_enabled(enabled: bool) -> void:
 	for difficulty in difficulty_buttons:

@@ -65,6 +65,7 @@ var tank_spawned_this_level = false
 var is_paused = false
 var is_warmed_up := false
 var gameplay_started := false
+var is_god_mode_round := false
 
 const PARTICLE_WARMUP_SETTLE_FRAMES := 2
 const PARTICLE_WARMUP_DURATION := 0.35
@@ -178,12 +179,11 @@ func process_achievement_queue():
 	await AudioManager.achievement.finished
 	print("Achievement sound finished for:", achievement_data.title)
 
-	if achievement_data.has("voice_file"):
-		var voice_stream = load(achievement_data.voice_file) as AudioStream
-		if voice_stream:
-			AudioManager.achievement_voice.stream = voice_stream
-			AudioManager.achievement_voice.play()
-			await AudioManager.achievement_voice.finished
+	var voice_stream := Achievements.get_voice_stream(achievement_id)
+	if voice_stream:
+		AudioManager.achievement_voice.stream = voice_stream
+		AudioManager.achievement_voice.play()
+		await AudioManager.achievement_voice.finished
 
 	await achievement_animation.animation_finished
 
@@ -196,6 +196,7 @@ func _ready():
 	Achievements.connect("achievement_unlocked", _on_achievement_unlocked)
 	achievement_badge.texture = load(Achievements.DEFAULT_BADGE) as Texture2D
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	is_god_mode_round = GameSettings.god_mode_active
 	renderDistortionShader()
 	tank_present = false
 	randomize()
@@ -212,6 +213,7 @@ func _ready():
 	setup_lives_display()
 	Achievements.reset_run_stats()
 	game_active = false
+	_update_score_display()
 
 func warm_up_gpu() -> void:
 	if is_warmed_up:
@@ -236,6 +238,7 @@ func warm_up_gpu() -> void:
 
 	await _wait_process_frames(PARTICLE_WARMUP_SETTLE_FRAMES)
 	_warmup_player_feedback()
+	Achievements.warm_up_popup_assets()
 
 	for instance in warmup_instances:
 		_warmup_particles_in_tree(instance)
@@ -382,8 +385,11 @@ func _input(event: InputEvent) -> void:
 			if is_instance_valid(AudioManager) and AudioManager.type:
 				AudioManager.type.pitch_scale = randf_range(0.85, 1.1)
 				AudioManager.type.play()
-				
-			check_typed_letter(char(keycode).to_lower())
+
+			if is_god_mode_round:
+				handle_god_mode_keystroke()
+			else:
+				check_typed_letter(char(keycode).to_lower())
 			
 func toggle_pause():
 	is_paused = !is_paused
@@ -461,6 +467,37 @@ func check_typed_letter(letter: String):
 	if lives <= 0 and game_active:
 		game_over()
 
+func handle_god_mode_keystroke() -> void:
+	var enemies = enemy_container.get_children()
+	if enemies.is_empty():
+		return
+
+	var valid_enemy = null
+	for enemy in enemies:
+		if not enemy.is_dying:
+			valid_enemy = enemy
+			break
+
+	if valid_enemy == null or valid_enemy.current_letters.is_empty():
+		return
+
+	var first_letter := str(valid_enemy.current_letters[0])
+	var first_letter_scene = valid_enemy.letter_scenes[0]
+	if is_instance_valid(first_letter_scene):
+		update_score(10)
+		AudioManager.correct_letter.pitch_scale = randf_range(0.9, 1.1)
+		AudioManager.correct_letter.play()
+		correct_chars += 1
+		player.shoot(first_letter_scene.global_position)
+		valid_enemy.destroy_letter(first_letter)
+		if valid_enemy.current_letters.is_empty():
+			Achievements.update_stat("total_words_typed", 1)
+			if is_current_word_correct:
+				current_streak += 1
+				longest_streak = max(longest_streak, current_streak)
+				Achievements.set_stat("longest_streak", longest_streak)
+			is_current_word_correct = true
+
 
 func load_words():
 	var file: FileAccess = FileAccess.open("res://assets/en.json", FileAccess.READ)
@@ -511,9 +548,13 @@ func update_score(amount: int) -> void:
 	var final_amount = int(amount * difficulty_multiplier * streak_multiplier)
 	var previous_score = score  # Store the current score before adding new amount
 	score += final_amount
+	_update_score_display()
 	
 	if score_tween and score_tween.is_valid():
 		score_tween.kill()
+
+	if is_god_mode_round:
+		return
 	
 	# Create a new tween
 	score_tween = create_tween()
@@ -528,6 +569,14 @@ func update_score(amount: int) -> void:
 	)
 	
 	show_floating_score(final_amount)
+
+func _update_score_display() -> void:
+	if is_god_mode_round:
+		score_label.text = "GOD MODE"
+		score_label.add_theme_color_override("font_color", Color(1, 0, 1, 1))
+	else:
+		score_label.text = "Score: %d" % displayed_score
+		score_label.remove_theme_color_override("font_color")
 			
 var floating_scores := [] 
 var score_font: Font = preload("res://assets/fonts/DepartureMonoNerdFont-Regular.otf")
@@ -915,7 +964,8 @@ func show_game_over_screen():
 			"correct_chars": correct_chars,
 			"accuracy": accuracy,
 			"longest_streak": longest_streak,
-			"wpm": wpm
+			"wpm": wpm,
+			"god_mode": is_god_mode_round
 		})
 		
 		get_tree().get_root().add_child(game_over_screen)

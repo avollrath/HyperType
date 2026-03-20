@@ -11,8 +11,11 @@ extends Control
 @onready var difficulty_select: OptionButton = $DifficultySelect
 @onready var panel: Panel = $Panel2
 @onready var restart_button: FancyButton = $RestartButton
+@onready var back_to_main_menu_button: BaseButton = $BackToMainMenuButton
+@onready var high_score_key_label: Label = $Panel2/KeyLabels/HighScore
 
 var can_restart: bool = false
+var back_to_main_menu_rest_position := Vector2.ZERO
 
 var stats: Dictionary
 
@@ -24,7 +27,11 @@ var display_score: int:
 		return _display_score
 	set(value):
 		_display_score = value
-		high_score_label.text = "%d" % _display_score
+		if stats.get("god_mode", false):
+			high_score_label.text = "GOD MODE"
+			high_score_label.add_theme_color_override("font_color", Color(1, 0, 1, 1))
+		else:
+			high_score_label.text = "%d" % _display_score
 
 var _display_level: int = 0
 var display_level: int:
@@ -90,6 +97,8 @@ func _ready():
 		if difficulty_select.get_item_id(i) == GameSettings.enemy_speed:
 			difficulty_select.selected = i
 			break  # Stop the loop once the correct item is found
+	back_to_main_menu_rest_position = back_to_main_menu_button.position
+	back_to_main_menu_button.hide()
 
 func initialize_stats(game_stats: Dictionary) -> void:
 	stats = game_stats
@@ -109,13 +118,18 @@ func update_ui() -> void:
 	display_accuracy = 0.0
 	display_longest_streak = 0
 	display_wpm = 0.0
+
+	if stats.get("god_mode", false):
+		high_score_key_label.text = "Mode"
+	else:
+		high_score_key_label.text = "High Score"
 	
 	var current_high_score = PlayerData.stats["high_score"]
 	print("[GAME OVER] Current high score from PlayerData: ", current_high_score)
 	
 	await animate_stat(high_score_label, "display_score", stats.score, 0.4)
 	
-	if stats.score > current_high_score:
+	if not stats.get("god_mode", false) and stats.score > current_high_score:
 		print("[GAME OVER] Run score (", stats.score, ") is greater than persistent high_score (", current_high_score, "). Updating high_score.")
 		PlayerData.update_stat("high_score", stats.score)
 		var voice_stream = load("res://assets/sounds/achievements/new_highscore.mp3") as AudioStream
@@ -140,6 +154,7 @@ func update_ui() -> void:
 	await animate_stat(accuracy_label, "display_accuracy", stats.accuracy, 0.2)
 	await animate_stat(longest_streak_label, "display_longest_streak", stats.longest_streak, 0.2)
 	await animate_stat(wpm_label, "display_wpm", stats.wpm, 0.2)
+	await _show_back_to_main_menu_link()
 	restart_button.grab_focus()
 	
 func start_highscore_pulsate() -> void:
@@ -192,6 +207,7 @@ func _input(event: InputEvent) -> void:
 
 func restart_game() -> void:
 	can_restart = false
+	GameSettings.clear_god_mode()
 	var root = get_tree().root
 	
 	var current_main = root.get_node_or_null("Main")
@@ -216,6 +232,24 @@ func restart_game() -> void:
 	await get_tree().create_timer(0.5).timeout
 	AudioManager.hypertype_voice.play()
 	queue_free()
+
+func _on_back_to_main_menu_button_pressed() -> void:
+	if not can_restart:
+		return
+
+	GameSettings.clear_god_mode()
+	get_tree().change_scene_to_file("res://scenes/intro_screen.tscn")
+	queue_free()
+
+func _show_back_to_main_menu_link() -> void:
+	back_to_main_menu_button.show()
+	back_to_main_menu_button.modulate = Color(1, 1, 1, 0)
+	back_to_main_menu_button.position = back_to_main_menu_rest_position + Vector2(0, 26)
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(back_to_main_menu_button, "position", back_to_main_menu_rest_position, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(back_to_main_menu_button, "modulate:a", 1.0, 0.22)
+	await tween.finished
 
 
 func _on_difficulty_select_item_selected(index: int):

@@ -3,6 +3,8 @@ extends Node
 signal achievement_unlocked(achievement_id)
 
 const DEFAULT_BADGE = "res://assets/sprites/badges/cup.png"
+var _badge_cache: Dictionary = {}
+var _voice_cache: Dictionary = {}
 
 # ------------------------------------------------------------------
 # Persistent Achievements (saved across runs)
@@ -590,27 +592,64 @@ func unlock_achievement(id: String):
 func is_unlocked(id: String) -> bool:
 	return unlocked_achievements.get(id, false)
 
+func get_achievement_data(achievement_id: String) -> Dictionary:
+	if ACHIEVEMENTS.has(achievement_id):
+		return ACHIEVEMENTS[achievement_id]
+	if RUN_ACHIEVEMENTS.has(achievement_id):
+		return RUN_ACHIEVEMENTS[achievement_id]
+	return {}
+
 # ============================================================================
 # GET BADGE TEXTURE (returns a Texture2D for the given achievement)
 # ============================================================================
 func get_badge_texture(achievement_id: String) -> Texture2D:
-	if ACHIEVEMENTS.has(achievement_id):
-		var achievement = ACHIEVEMENTS[achievement_id]
-		if achievement.has("badge"):
-			if not ResourceLoader.exists(achievement.badge, "Texture2D"):
-				return load(DEFAULT_BADGE) as Texture2D
-			var badge = load(achievement.badge) as Texture2D
+	if _badge_cache.has(achievement_id):
+		return _badge_cache[achievement_id] as Texture2D
+
+	var achievement := get_achievement_data(achievement_id)
+	if achievement.has("badge"):
+		var badge_path := str(achievement.badge)
+		if ResourceLoader.exists(badge_path, "Texture2D"):
+			var badge := load(badge_path) as Texture2D
 			if badge:
+				_badge_cache[achievement_id] = badge
 				return badge
-	elif RUN_ACHIEVEMENTS.has(achievement_id):
-		var achievement = RUN_ACHIEVEMENTS[achievement_id]
-		if achievement.has("badge"):
-			if not ResourceLoader.exists(achievement.badge, "Texture2D"):
-				return load(DEFAULT_BADGE) as Texture2D
-			var badge = load(achievement.badge) as Texture2D
-			if badge:
-				return badge
-	return load(DEFAULT_BADGE) as Texture2D
+
+	var default_badge := _get_default_badge()
+	_badge_cache[achievement_id] = default_badge
+	return default_badge
+
+func get_voice_stream(achievement_id: String) -> AudioStream:
+	if _voice_cache.has(achievement_id):
+		return _voice_cache[achievement_id] as AudioStream
+
+	var achievement := get_achievement_data(achievement_id)
+	if achievement.has("voice_file"):
+		var voice_path := str(achievement.voice_file)
+		if ResourceLoader.exists(voice_path, "AudioStream"):
+			var voice_stream := load(voice_path) as AudioStream
+			if voice_stream:
+				_voice_cache[achievement_id] = voice_stream
+				return voice_stream
+
+	return null
+
+func warm_up_popup_assets() -> void:
+	_get_default_badge()
+	for achievement_id in ACHIEVEMENTS.keys():
+		get_badge_texture(achievement_id)
+		get_voice_stream(achievement_id)
+	for achievement_id in RUN_ACHIEVEMENTS.keys():
+		get_badge_texture(achievement_id)
+		get_voice_stream(achievement_id)
+
+func _get_default_badge() -> Texture2D:
+	if _badge_cache.has(DEFAULT_BADGE):
+		return _badge_cache[DEFAULT_BADGE] as Texture2D
+
+	var default_badge := load(DEFAULT_BADGE) as Texture2D
+	_badge_cache[DEFAULT_BADGE] = default_badge
+	return default_badge
 
 # ============================================================================
 # SAVE / LOAD FUNCTIONS (Persistent stats only)

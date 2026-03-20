@@ -421,9 +421,29 @@ color = Color(1, 0, 1, 0.4)
 [node name="QuitButton" parent="ColorRect/MainContainer" unique_id=1776278840 instance=ExtResource("3_fn42x")]
 custom_minimum_size = Vector2(260, 60)
 layout_mode = 2
-size_flags_horizontal = 4
 text = "Quit"
 hover_rotation = 0.0
+
+[node name="GodModeNotice" type="Label" parent="ColorRect" unique_id=1734012450]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -318.0
+offset_top = 203.0
+offset_right = 318.0
+offset_bottom = 247.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5hhq5")
+theme_override_colors/font_color = Color(1, 0, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "GOD MODE ENABLED FOR THE NEXT ROUND"
+horizontal_alignment = 1
 
 [node name="AuthContainer" type="VBoxContainer" parent="ColorRect" unique_id=725194425]
 visible = false
@@ -483,16 +503,14 @@ text = "Back"
 [node name="AuthToggleButton" type="LinkButton" parent="ColorRect/AuthContainer" unique_id=1002301687]
 layout_mode = 2
 size_flags_horizontal = 4
-theme = ExtResource("1_5hhq5")
-text = "(Create account)"
-text_direction = 2
-underline = 0
 focus_mode = 0
+theme = ExtResource("1_5hhq5")
 theme_override_colors/font_color = Color(1, 0, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.55, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.35, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.35, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 0.55, 1, 1)
-text_alignment = 1
+text = "(Create account)"
+text_direction = 2
 
 [node name="Message" type="Label" parent="ColorRect/AuthContainer" unique_id=1077190307]
 layout_mode = 2
@@ -531,15 +549,14 @@ text = "Playing as: Username"
 
 [node name="LogoutButton" type="LinkButton" parent="ColorRect/DifficultyContainer/UserInfo" unique_id=1991001718]
 layout_mode = 2
-theme = ExtResource("1_5hhq5")
-text = "(Logout)"
-text_direction = 2
-underline = 0
 focus_mode = 0
+theme = ExtResource("1_5hhq5")
 theme_override_colors/font_color = Color(1, 0, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.55, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.35, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.35, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 0.55, 1, 1)
+text = "(Logout)"
+text_direction = 2
 
 [node name="Difficulty" type="Label" parent="ColorRect/DifficultyContainer" unique_id=1320386573]
 layout_mode = 2
@@ -594,9 +611,8 @@ hover_rotation = 0.0
 
 [node name="GuestBackButton" parent="ColorRect/DifficultyContainer" unique_id=1435769919 instance=ExtResource("3_fn42x")]
 visible = false
-layout_mode = 2
 custom_minimum_size = Vector2(360, 60)
-size_flags_horizontal = 4
+layout_mode = 2
 text = "Back to main menu"
 hover_rotation = 0.0
 
@@ -609,7 +625,6 @@ color = Color(1, 0, 1, 0.4)
 [node name="QuitButton" parent="ColorRect/DifficultyContainer" unique_id=160902421 instance=ExtResource("3_fn42x")]
 custom_minimum_size = Vector2(260, 60)
 layout_mode = 2
-size_flags_horizontal = 4
 text = "Quit"
 hover_rotation = 0.0
 

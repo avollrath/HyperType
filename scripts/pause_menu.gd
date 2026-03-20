@@ -43,6 +43,7 @@ func resume_game():
 
 func _on_return_to_main_menu_pressed() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	GameSettings.clear_god_mode()
 	var tree := get_tree()
 	var root := tree.root
 	var main_scene := root.get_node_or_null("Main")
@@ -59,6 +60,7 @@ func _on_return_to_main_menu_pressed() -> void:
 
 func _on_restart_pressed() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	GameSettings.clear_god_mode()
 	var tree := get_tree()
 	var root := tree.root
 	var current_main := root.get_node_or_null("Main")
